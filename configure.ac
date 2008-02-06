@@ -2,7 +2,10 @@
 # $Id$
 # Process this file with autoconf to produce a configure script.
 
-DUNE_AC_INIT # gets module version from dune.module file
+# get module version from dune.module file
+m4_define([DUNE_MOD_VERSION],
+  [m4_esyscmd([grep ^Version: dune.module | tr '\n' ' ' | sed -e 's/^.*://' -e 's/\s*//'])])
+AC_INIT(dune-common, DUNE_MOD_VERSION, dune@dune-project.org)
 AM_INIT_AUTOMAKE
 AC_CONFIG_SRCDIR([common/stdstreams.cc])
 AM_CONFIG_HEADER([config.h])
@@ -11,7 +14,7 @@ AM_CONFIG_HEADER([config.h])
 DUNE_CHECK_ALL_M
 
 # preset variable to path such that #include <dune/...> works
-AC_SUBST([DUNE_COMMON_ROOT], '$(top_builddir)')
+AC_SUBST([DUNE_COMMON_ROOT], '$(top_srcdir)')
 AC_SUBST([AM_CPPFLAGS], '-I$(top_srcdir)')
 AC_SUBST([LOCAL_LIBS], '$(top_builddir)/common/libcommon.la')
 

@@ -16,39 +16,10 @@
 #    In addition to DUNE_CHECK_ALL it run some additional tests
 #    and sets up some things needed for modules (i.e. the 'dune' symlink)
 
-m4_define([DUNE_PARSE_MODULE_FILE],[
-  m4_define([DUNE_MOD_VERSION], 
-    [m4_esyscmd([grep ^Version: dune.module | tr '\n' ' ' | sed -e 's/^.*://' -e 's/\s*//'])])
-  m4_define([DUNE_MOD_NAME], 
-    [m4_esyscmd([grep ^Module: dune.module | tr '\n' ' ' | sed -e 's/^.*://' -e 's/\s*//'])])
-])
-
-m4_define([DUNE_AC_INIT],[
-PARSE_MODULE_FILE
-AC_INIT(DUNE_MOD_NAME, DUNE_MOD_VERSION, dune@dune-project.org)
-])
-
-AC_DEFUN([DUNE_CHECK_DEPENDENCIES], [
-  AC_REQUIRE([PKG_PROG_PKG_CONFIG])
-  DUNE_PARSE_MODULE_FILE
-  DUNE_MODULE_DEPENDENCIES(DUNE_MOD_NAME)
-])
-
 AC_DEFUN([DUNE_CHECK_ALL],[
   AC_LANG_PUSH([C++])
-  dnl check for programs
-  AC_REQUIRE([AC_PROG_CC])
-  # add -Wall if the compiler is gcc
-  if test "$ac_test_CFLAGS" != set && \
-    test "$GCC" = yes; then
-    CFLAGS="$CFLAGS -Wall"
-  fi
-  # add -Wall if the compiler is g++
+dnl check for programs
   AC_REQUIRE([AC_PROG_CXX])
-  if test "$ac_test_CXXFLAGS" != set && \
-    test "$GXX" = yes; then
-    CXXFLAGS="$CXXFLAGS -Wall"
-  fi
   AC_REQUIRE([AC_PROG_CPP])
   AC_REQUIRE([AC_PROG_CXXCPP])
   AC_REQUIRE([DUNE_CHECK_COMPILER])
@@ -120,8 +91,7 @@ fi
 AC_SUBST(DUNEWEBDIR, $with_duneweb)
 
   dnl check all components
-  AC_REQUIRE([PKG_PROG_PKG_CONFIG])
-  AC_REQUIRE([DUNE_CHECK_DEPENDENCIES])
+  DUNE_MODULE_DEPENDENCIES($@)
   AC_REQUIRE([DUNE_SET_MINIMAL_DEBUG_LEVEL])
   AC_REQUIRE([DUNE_PATH_XDR])
   AC_REQUIRE([DUNE_GRID_DIMENSION])
@@ -222,6 +192,7 @@ AC_DEFUN([DUNE_CHECK_ALL_M],[
   if test "x$with_revision" = "xno" ; then with_revision=bar; fi
   AC_SUBST(revision, $with_revision)
 
+  DUNE_MODULE_DEPENDENCIES($@)
   AC_REQUIRE([DUNE_CHECK_ALL])
   AC_REQUIRE([DUNE_DEV_MODE])
   AC_REQUIRE([DUNE_PKG_CONFIG_REQUIRES])
