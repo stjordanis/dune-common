@@ -80,11 +80,11 @@ AC_DEFUN([DUNE_CHECK_MODULES],[
     if AC_RUN_LOG([$PKG_CONFIG --exists --print-errors "$1"]); then
       _DUNE_MODULE[]_CPPFLAGS="`$PKG_CONFIG --cflags _dune_name`" 2>/dev/null
       _DUNE_MODULE[]_ROOT="`$PKG_CONFIG --variable=prefix _dune_name`" 2>/dev/null 
+      _DUNE_MODULE[]_VERSION="`$PKG_CONFIG --modversion _dune_name`" 2>/dev/null
       ifelse(_dune_symbol,,,[
         _DUNE_MODULE[]_LDFLAGS="-L`$PKG_CONFIG --variable=libdir _dune_name`" 2>/dev/null 
         _DUNE_MODULE[]_LIBS="-l[]_dune_lib"
       ])
-      dune_is_installed=1
       AC_MSG_RESULT([
         global installation in $_DUNE_MODULE[]_ROOT])
     else
@@ -101,10 +101,11 @@ AC_DEFUN([DUNE_CHECK_MODULES],[
       # expand search path (otherwise empty CPPFLAGS)
       if test -d $_DUNE_MODULE[]_ROOT/include/dune; then
         # Dune was installed into directory given by with-dunecommon
-        dune_is_installed=1
         _DUNE_MODULE[]_CPPFLAGS="-I$_DUNE_MODULE[]_ROOT/include"
+		_DUNE_MODULE[]_VERSION="`PKG_CONFIG_PATH=$PKG_CONFIG_PATH:$_DUNE_MODULE[]_ROOT/lib/pkgconfig $PKG_CONFIG --modversion _dune_name`" 2>/dev/null
       else
         _DUNE_MODULE[]_CPPFLAGS="-I$_DUNE_MODULE[]_ROOT"
+		_DUNE_MODULE[]_VERSION="`grep Version $_DUNE_MODULE[]_ROOT/dune.module | sed -e 's/^Version: *//'`" 2>/dev/null
       fi
       ifelse(_dune_symbol,,,[
         _DUNE_MODULE[]_LDFLAGS="-L$_DUNE_MODULE[]_ROOT/lib"
@@ -185,6 +186,7 @@ AC_DEFUN([DUNE_CHECK_MODULES],[
     AC_SUBST(_DUNE_MODULE[]_LIBS, "$_DUNE_MODULE[]_LIBS")
     AC_SUBST(_DUNE_MODULE[]_ROOT, "$_DUNE_MODULE[]_ROOT")
     AC_DEFINE(HAVE_[]_DUNE_MODULE, 1, [Define to 1 if _dune_module was found])
+    AC_DEFINE_UNQUOTED(_DUNE_MODULE[]_VERSION, "$_DUNE_MODULE[]_VERSION", [Define to the version of _dune_module.])
 
     # set DUNE_* variables
     AC_SUBST(DUNE_CPPFLAGS, "$DUNE_CPPFLAGS")
@@ -207,6 +209,19 @@ AC_DEFUN([DUNE_CHECK_MODULES],[
   CPPFLAGS="$ac_save_CPPFLAGS"
   LIBS="$ac_save_LIBS"
 
+  # add this module to DUNE_SUMMARY
+  txt=_dune_name
+  len=${#txt}
+  let len=17-$len
+  txt="$txt`for i in \`seq $len\`; do echo -n '.'; done`: $with_[]_dune_module"
+  if test "x$_DUNE_MODULE[]_ROOT" != "x"; then
+	txt="$txt ($_DUNE_MODULE[]_ROOT)"
+  fi
+  if test "x$_DUNE_MODULE[]_VERSION" != "x"; then
+	txt="$txt version $_DUNE_MODULE[]_VERSION"
+  fi
+  DUNE_SUMMARY="$DUNE_SUMMARY echo '$txt';"
+
   # remove local variables
   m4_popdef([_dune_name])
   m4_popdef([_dune_module])
@@ -221,6 +236,8 @@ AC_DEFUN([DUNE_CHECK_MODULES],[
 ])
 
 AC_DEFUN([DUNE_CHECK_DISPATCH],[
+  m4_syscmd(test -n "$1" \
+    && echo "   dune.m4: adding dependency check for $1" > /dev/stderr)
   ifelse([$1], [], [],
          [$1], [dune-common],[
           #DUNE_CHECK_MODULES(module_name, test_header, test_symbol)
@@ -242,9 +259,13 @@ AC_DEFUN([DUNE_CHECK_DISPATCH],[
          [AC_MSG_ERROR([Unknown module $1])])
 ])
 
-AC_DEFUN([DUNE_MODULE_DEPENDENCIES],[
-  ifelse($#, 0, , $#, 1, [DUNE_CHECK_DISPATCH($1)], [DUNE_CHECK_DISPATCH($1) DUNE_MODULE_DEPENDENCIES(m4_shift($@))])
+AC_DEFUN([_DUNE_MODULE_DEPENDENCIES],[
+  ifelse($#, 0, , $#, 1, [DUNE_CHECK_DISPATCH($1)], [DUNE_CHECK_DISPATCH($1) _DUNE_MODULE_DEPENDENCIES(m4_shift($@))])
 ])
+
+AC_DEFUN([DUNE_MODULE_DEPENDENCIES],[
+   m4_syscmd(echo "   dune.m4: getting dependencies for $@" > /dev/stderr)
+   _DUNE_MODULE_DEPENDENCIES(m4_esyscmd(dunecontrol --only=$@ m4depends))])
 
 AC_DEFUN([DUNE_DEV_MODE],[
   AC_ARG_ENABLE(dunedevel,

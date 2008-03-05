@@ -16,10 +16,41 @@
 #    In addition to DUNE_CHECK_ALL it run some additional tests
 #    and sets up some things needed for modules (i.e. the 'dune' symlink)
 
+m4_define([DUNE_PARSE_MODULE_FILE],[
+  m4_define([DUNE_MOD_VERSION], 
+    [m4_esyscmd([grep ^Version: dune.module | tr '\n' ' ' | sed -e 's/^.*://' -e 's/\s*//g'])])
+  m4_define([DUNE_MOD_NAME], 
+    [m4_esyscmd([grep ^Module: dune.module | tr '\n' ' ' | sed -e 's/^.*://' -e 's/\s*//g'])])
+  m4_define([DUNE_MAINTAINER_NAME], 
+    [m4_esyscmd([grep ^Email: dune.module | tr '\n' ' ' | sed -e 's/^.*://' -e 's/\s*//g'])])
+])
+
+m4_define([DUNE_AC_INIT],[
+DUNE_PARSE_MODULE_FILE
+AC_INIT(DUNE_MOD_NAME, DUNE_MOD_VERSION, DUNE_MAINTAINER_NAME) 
+])
+
+AC_DEFUN([DUNE_CHECK_DEPENDENCIES], [
+  AC_REQUIRE([PKG_PROG_PKG_CONFIG])
+  DUNE_PARSE_MODULE_FILE
+  DUNE_MODULE_DEPENDENCIES(DUNE_MOD_NAME)
+])
+
 AC_DEFUN([DUNE_CHECK_ALL],[
   AC_LANG_PUSH([C++])
-dnl check for programs
+  dnl check for programs
+  AC_REQUIRE([AC_PROG_CC])
+  # add -Wall if the compiler is gcc
+  if test "$ac_test_CFLAGS" != set && \
+    test "$GCC" = yes; then
+    CFLAGS="$CFLAGS -Wall"
+  fi
+  # add -Wall if the compiler is g++
   AC_REQUIRE([AC_PROG_CXX])
+  if test "$ac_test_CXXFLAGS" != set && \
+    test "$GXX" = yes; then
+    CXXFLAGS="$CXXFLAGS -Wall"
+  fi
   AC_REQUIRE([AC_PROG_CPP])
   AC_REQUIRE([AC_PROG_CXXCPP])
   AC_REQUIRE([DUNE_CHECK_COMPILER])
@@ -91,7 +122,8 @@ fi
 AC_SUBST(DUNEWEBDIR, $with_duneweb)
 
   dnl check all components
-  DUNE_MODULE_DEPENDENCIES($@)
+  AC_REQUIRE([PKG_PROG_PKG_CONFIG])
+  AC_REQUIRE([DUNE_CHECK_DEPENDENCIES])
   AC_REQUIRE([DUNE_SET_MINIMAL_DEBUG_LEVEL])
   AC_REQUIRE([DUNE_PATH_XDR])
   AC_REQUIRE([DUNE_GRID_DIMENSION])
@@ -107,6 +139,7 @@ AC_SUBST(DUNEWEBDIR, $with_duneweb)
   AC_REQUIRE([DUNE_PATH_PARMETIS])
   AC_REQUIRE([DUNE_PATH_SUPERLU])
   AC_REQUIRE([DUNE_PATH_SUPERLU_DIST])
+  AC_REQUIRE([DUNE_PARDISO])
   AC_REQUIRE([__AC_FC_NAME_MANGLING])
   AC_REQUIRE([ACX_BLAS])
   AC_REQUIRE([DUNE_PATH_ALUGRID])
@@ -122,15 +155,6 @@ AC_SUBST(DUNEWEBDIR, $with_duneweb)
   AC_SUBST(am_dir, $DUNE_COMMON_ROOT/am)
 ])
 
-AC_DEFUN([DUNE_SUMMARY],[
-  if test xyes == x$2 || test xno == x$2; then
-    echo -n "$1"
-    echo -n "$2"
-    if test x$3 != x; then echo " ($3)"
-    else echo; fi
-  fi
-])
-
 AC_DEFUN([DUNE_SUMMARY_ALL],[
   # show search results
 
@@ -139,11 +163,7 @@ AC_DEFUN([DUNE_SUMMARY_ALL],[
   echo
   echo "-----------------------------"
   echo  
-  DUNE_SUMMARY([Dune-common......: ], [$with_dune_common], [$DUNE_COMMON_ROOT])
-  DUNE_SUMMARY([Dune-grid........: ], [$with_dune_grid], [$DUNE_GRID_ROOT])
-  DUNE_SUMMARY([Dune-istl........: ], [$with_dune_istl], [$DUNE_ISTL_ROOT])
-  DUNE_SUMMARY([Dune-disc........: ], [$with_dune_disc], [$DUNE_DISC_ROOT])
-  DUNE_SUMMARY([Dune-fem.........: ], [$with_dune_fem], [$DUNE_FEM_ROOT])
+  eval $DUNE_SUMMARY
   echo "ALBERTA..........: $with_alberta"
   echo "ALUGrid..........: $with_alugrid"
   echo "AmiraMesh........: $with_amiramesh"
@@ -192,7 +212,6 @@ AC_DEFUN([DUNE_CHECK_ALL_M],[
   if test "x$with_revision" = "xno" ; then with_revision=bar; fi
   AC_SUBST(revision, $with_revision)
 
-  DUNE_MODULE_DEPENDENCIES($@)
   AC_REQUIRE([DUNE_CHECK_ALL])
   AC_REQUIRE([DUNE_DEV_MODE])
   AC_REQUIRE([DUNE_PKG_CONFIG_REQUIRES])
