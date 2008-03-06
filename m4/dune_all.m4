@@ -22,7 +22,7 @@ m4_define([DUNE_PARSE_MODULE_FILE],[
   m4_define([DUNE_MOD_NAME], 
     [m4_esyscmd([grep ^Module: dune.module | tr '\n' ' ' | sed -e 's/^.*://' -e 's/\s*//g'])])
   m4_define([DUNE_MAINTAINER_NAME], 
-    [m4_esyscmd([grep ^Email: dune.module | tr '\n' ' ' | sed -e 's/^.*://' -e 's/\s*//g'])])
+    [m4_esyscmd([grep ^Maintainer: dune.module | tr '\n' ' ' | sed -e 's/^.*://' -e 's/\s*//g'])])
 ])
 
 m4_define([DUNE_AC_INIT],[
