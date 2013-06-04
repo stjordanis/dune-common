@@ -299,7 +299,7 @@ AC_DEFUN([DUNE_CHECK_MODULES],[
   ac_save_LIBS="$LIBS"
   ac_save_LDFLAGS="$LDFLAGS"
   CPPFLAGS=""
-  LIBS=""
+  LIBS="$4"
 
   # if DUNE_LDFLAGS have a pre-assigned value (e.g. -all-static), 
   # also store it in DUNE_LDFLAGS_TMP to be consistent with DUNE_LDFLAGS
@@ -380,9 +380,9 @@ AC_DEFUN([DUNE_CHECK_MODULES],[
         _DUNE_MODULE[]_VERSION="`grep Version $_DUNE_MODULE[]_SRCDIR/dune.module | sed -e 's/^Version: *//'`" 2>/dev/null
         AS_IF([test -f "$_DUNE_MODULE[]_LIBDIR[]/lib[]_dune_lib[].la"], [
           # local modules is linked directly via the .la file
-          _dune_cm_LIBS="$_DUNE_MODULE[]_LIBDIR[]/lib[]_dune_lib[].la"],[
+          _dune_cm_LIBS="$_DUNE_MODULE[]_LIBDIR[]/lib[]_dune_lib[].la $LIBS"],[
           # No libtool file. This indicates a module build with CMake. Fall back to direct linking
-          _dune_cm_LIBS="-L$_DUNE_MODULE[]_LIBDIR[]/ -l[]_dune_lib[]"
+          _dune_cm_LIBS="-L$_DUNE_MODULE[]_LIBDIR[]/ -l[]_dune_lib[] $LIBS"
         ])
       ])
       # set expanded module path
