@@ -1,5 +1,7 @@
 install( FILES
          checkpredicate.hh
+         densevector.hh
+         fvector.hh
          integralconstant.hh
          tuples.hh
          tupleutility.hh
