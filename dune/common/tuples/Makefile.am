@@ -7,6 +7,7 @@ tuplesinclude_HEADERS =	checkpredicate.hh \
 			namespace.hh \
 			tuples.hh \
 			tupleutility.hh \
+			typeindexed.hh \
 			typetraits.hh \
 			uniqueelementtype.hh
 
