@@ -2,6 +2,7 @@ install( FILES
          checkpredicate.hh
          containstype.hh
          densevector.hh
+         firstindex.hh
          fvector.hh
          integralconstant.hh
          namespace.hh

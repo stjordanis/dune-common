@@ -1,9 +1,9 @@
 #ifndef DUNE_COMMON_TUPLES_TYPEINDEXED_HH
 #define DUNE_COMMON_TUPLES_TYPEINDEXED_HH
 
+#include <dune/common/tuples/firstindex.hh>
 #include <dune/common/tuples/namespace.hh>
 #include <dune/common/tuples/tuples.hh>
-#include <dune/common/tuples/tupleutility.hh>
 
 namespace Dune
 {
