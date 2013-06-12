@@ -6,6 +6,7 @@ tuplesinclude_HEADERS =	checkpredicate.hh \
 			firstindex.hh \
 			fvector.hh \
 			integralconstant.hh \
+			modifiers.hh \
 			namespace.hh \
 			tuples.hh \
 			tupleutility.hh \

@@ -1,7 +1,7 @@
 #ifndef DUNE_COMMON_TUPLES_UNIQUEELEMENTTYPE_HH
 #define DUNE_COMMON_TUPLES_UNIQUEELEMENTTYPE_HH
 
-#include <dune/common/tupleutility.hh>
+#include <dune/common/tuples/modifiers.hh>
 
 namespace Dune
 {

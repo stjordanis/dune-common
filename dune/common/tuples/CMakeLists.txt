@@ -5,6 +5,7 @@ install( FILES
          firstindex.hh
          fvector.hh
          integralconstant.hh
+         modifiers.hh
          namespace.hh
          tuples.hh
          tupleutility.hh
