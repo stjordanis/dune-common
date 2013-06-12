@@ -1,5 +1,6 @@
 install( FILES
          checkpredicate.hh
+         containstype.hh
          densevector.hh
          fvector.hh
          integralconstant.hh
