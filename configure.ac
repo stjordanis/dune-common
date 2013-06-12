@@ -33,6 +33,7 @@ AC_CONFIG_FILES([Makefile
      dune/common/parallel/Makefile
      dune/common/parallel/test/Makefile
      dune/common/tuples/Makefile
+     dune/common/tuples/test/Makefile
      doc/Makefile
      doc/comm/Makefile
      doc/comm/figures/Makefile
