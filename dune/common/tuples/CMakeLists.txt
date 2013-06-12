@@ -1,5 +1,6 @@
 install( FILES
          checkpredicate.hh
+         integralconstant.hh
          tuples.hh
          tupleutility.hh
          typetraits.hh

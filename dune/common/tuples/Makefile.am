@@ -1,6 +1,7 @@
 tuplesincludedir = $(includedir)/dune/common/tuples
 
 tuplesinclude_HEADERS =	checkpredicate.hh \
+			integralconstant.hh \
 			tuples.hh \
 			tupleutility.hh \
 			typetraits.hh \
