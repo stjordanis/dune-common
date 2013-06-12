@@ -1,6 +1,6 @@
 # $Id$
 
-SUBDIRS = . test parallel
+SUBDIRS = . test parallel tuples
 
 # the standard debug streams are put into the libdune
 noinst_LTLIBRARIES = libcommon.la
