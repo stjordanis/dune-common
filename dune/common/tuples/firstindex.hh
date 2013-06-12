@@ -93,6 +93,43 @@ namespace Dune
     typedef typename FirstPredicateIndex<Tuple, IsSameTypePredicate, start >::type type;
   };
 
+
+
+  // FirstTypeIndexTuple
+  // -------------------
+
+  /** \class FirstTypeIndexTuple
+   *
+   * \brief Please doc me.
+   */
+  template< class Tuple, class SubTuple,
+            class Seed = tuple<>, int index = 0,
+            int size = tuple_size< SubTuple >::value >
+  class FirstTypeIndexTuple
+  {
+    dune_static_assert( (index == tuple_size< Seed >::value),
+                        "The \"index\" template parameter of FirstTypeIndexTuple"
+                        "is an implementation detail and should never be "
+                        "set explicitly!" );
+
+    // get element from selector
+    typedef typename tuple_element< index, SubTuple >::type Element;
+    // find element in pass id tuple
+    typedef typename FirstTypeIndex< Tuple, Element >::type Position;
+    // add value to seed
+    typedef typename PushBackTuple< Seed, Position >::type NextSeed;
+
+  public:
+    // result type is a tuple of integral constants
+    typedef typename FirstTypeIndexTuple< Tuple, SubTuple, NextSeed, (index+1) >::type type;
+  };
+
+  template< class Tuple, class SubTuple, class Seed, int size >
+  struct FirstTypeIndexTuple< Tuple, SubTuple, Seed, size, size >
+  {
+    typedef Seed type;
+  };
+
 } // namespace Dune
 
 #endif // #ifndef DUNE_COMMON_TUPLES_FIRSTINDEX_HH
