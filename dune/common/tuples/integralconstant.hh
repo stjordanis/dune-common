@@ -80,17 +80,17 @@ namespace Dune
       typedef typename PushBackTuple< Seed, integral_constant< T, u1 > >::type Accumulated;
 
     public:
-      typedef typename Create< u2, u3, u4, u5, u6, u7, u8, u9, unused, Accumulated>::type type;
+      typedef typename Create< u2, u3, u4, u5, u6, u7, u8, u9, unused, Accumulated>::Type Type;
     };
 
     template< class Seed >
     struct Create< unused, unused, unused, unused, unused, unused, unused, unused, unused, Seed >
     {
-      typedef Seed type;
+      typedef Seed Type;
     };
 
   public:
-    typedef typename Create< v, w1, w2, w3, w4, w5, w6, w7, w8 >::type Type;
+    typedef typename Create< v, w1, w2, w3, w4, w5, w6, w7, w8 >::Type Type;
   };
 
 #endif // #if HAVE_VARIADIC_TEMPLATES
