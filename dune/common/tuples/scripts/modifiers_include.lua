@@ -1,6 +1,6 @@
 ----------------------------------------------------------------------
 -- Description:
---   This script writes out the definition of Dune::tuple related
+--   This script provides the definition of the Dune::tuple related
 --   functions:
 --     tuple_push_back
 --     tuple_push_front
@@ -11,7 +11,57 @@
 -- Date: 2013-06-12
 ----------------------------------------------------------------------
 
-dofile( "common.lua" )
+function general_list ( length, prefix, begin )
+  begin = ( begin ) and begin or 1       -- use default value begin = 1
+  prefix = ( prefix ) and prefix or "T"  -- use default value "T"
+
+  if length == 0 then
+    return ""
+  end
+
+  line = prefix .. begin
+  for j = (begin+1), (begin+length-1) do
+    line = line .. ", " .. prefix .. j
+  end
+  return line
+end
+
+
+function template_list ( length, begin )
+  prefix = "class T"
+  if length == 0 then
+    return "template<>"
+  else
+    return "template< " .. general_list( length, prefix, begin ) .. " >"
+  end
+end
+
+
+function tuple ( length, begin )
+  if length == 0 then
+    return "Dune::tuple<>"
+  else
+    return "Dune::tuple< " .. general_list( length, "T", begin ) .. " >"
+  end
+end
+
+
+function tuple_get_elements ( length, begin )
+  begin = ( begin ) and begin or 1 -- use default value begin = 1
+
+  if length == 0 then
+    return ""
+  end
+
+  line = ""
+  last = (begin+length-1)
+  for j = begin, last do
+    line = line .. "get< " .. j-1 .. " >( t )"
+    line = line .. ( ( j == last ) and "" or ", " )
+  end
+  return line
+end
+
 
 function tuple_push_back ( i, indent )
   indent = ( indent ) and indent or ""  -- use default value ""
@@ -27,6 +77,7 @@ function tuple_push_back ( i, indent )
   return body
 end
 
+
 function tuple_push_front ( i, indent )
   indent = ( indent ) and indent or ""  -- use default value ""
   body = indent .. "template< " .. general_list( i, "class T" ) .. " >\n"
@@ -41,6 +92,7 @@ function tuple_push_front ( i, indent )
   return body
 end
 
+
 function tuple_pop_back ( i, indent )
   indent = ( indent ) and indent or ""  -- use default value ""
   body = indent .. template_list( i ) .. "\n"
@@ -54,6 +106,7 @@ function tuple_pop_back ( i, indent )
   body = body .. indent .. "}"
   return body
 end
+
 
 function tuple_pop_front ( i, indent )
   indent = ( indent ) and indent or ""  -- use default value ""
