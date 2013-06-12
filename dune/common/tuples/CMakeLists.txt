@@ -8,6 +8,7 @@ install( FILES
          modifiers.hh
          modifiers_include.hh
          namespace.hh
+         subtuple.hh
          tuples.hh
          tupleutility.hh
          typeindexed.hh
