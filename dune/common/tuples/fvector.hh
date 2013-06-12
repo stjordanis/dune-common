@@ -7,6 +7,7 @@
 
 #include <dune/common/tuples/densevector.hh>
 #include <dune/common/tuples/integralconstant.hh>
+#include <dune/common/tuples/namespace.hh>
 #include <dune/common/tuples/uniqueelementtype.hh>
 
 namespace Dune
@@ -108,6 +109,51 @@ namespace Dune
     typename Base::tuple tuple_;
   };
 
+
+
+  // get for FieldVectorTuple
+  // ------------------------
+
+  template< int i, class Field, class Dimensions >
+  typename tuple_element< i, typename DenseVectorTupleTraits< FieldVectorTuple< Field, Dimensions > >::tuple >::type &
+  get ( Dune::FieldVectorTuple< Field, Dimensions > &tuple )
+  {
+    return get< i >( static_cast< typename DenseVectorTupleTraits< FieldVectorTuple< Field, Dimensions > >::tuple & >( tuple ) );
+  }
+
+  template< int i, class Field, class Dimensions >
+  const typename tuple_element< i, typename DenseVectorTupleTraits< FieldVectorTuple< Field, Dimensions > >::tuple >::type &
+  get ( const Dune::FieldVectorTuple< Field, Dimensions > &tuple )
+  {
+    return get< i >( static_cast< const typename DenseVectorTupleTraits< FieldVectorTuple< Field, Dimensions > >::tuple & >( tuple ) );
+  }
+
 } // namespace Dune
+
+
+
+DUNE_OPEN_TUPLE_NAMESPACE
+
+  // tuple_element for FieldectorTuple
+  // ---------------------------------
+
+  template< size_t i, class Field, class Dimensions >
+  struct tuple_element< i, Dune::FieldVectorTuple< Field, Dimensions > >
+  {
+    typedef typename tuple_element< i, typename Dune::DenseVectorTupleTraits< Dune::FieldVectorTuple< Field, Dimensions > >::tuple >::type type;
+  };
+
+
+
+  // tuple_size for FieldVectorTuple
+  // -------------------------------
+
+  template< class Field, class Dimensions >
+  struct tuple_size< Dune::FieldVectorTuple< Field, Dimensions > >
+  {
+    enum { value = Dune::FieldVectorTuple< Field, Dimensions >::tuple_size };
+  };
+
+DUNE_CLOSE_TUPLE_NAMESPACE
 
 #endif // #ifndef DUNE_COMMON_TUPLES_FVECTOR_HH

@@ -8,6 +8,7 @@
 #include <dune/common/genericiterator.hh>
 #include <dune/common/nullptr.hh>
 
+#include <dune/common/tuples/namespace.hh>
 #include <dune/common/tuples/tuples.hh>
 
 namespace Dune
@@ -465,6 +466,25 @@ namespace Dune
 
 
 
+  // get for DenseVectorTuple
+  // ------------------------
+
+  template< int i, class Imp >
+  typename tuple_element< i, typename DenseVectorTupleTraits< Imp >::tuple >::type &
+  get ( Dune::DenseVectorTuple< Imp > &tuple )
+  {
+    return get< i >( static_cast< typename DenseVectorTupleTraits< Imp >::tuple & >( tuple ) );
+  }
+
+  template< int i, class Imp >
+  const typename tuple_element< i, typename DenseVectorTupleTraits< Imp >::tuple >::type &
+  get ( const Dune::DenseVectorTuple< Imp > &tuple )
+  {
+    return get< i >( static_cast< const typename DenseVectorTupleTraits< Imp >::tuple & >( tuple ) );
+  }
+
+
+
   // std::ostream &operator<< for DenseVectorTuple
   // ---------------------------------------------
 
@@ -493,5 +513,34 @@ namespace Dune
   }
 
 } // namespace Dune
+
+
+
+// Some specializations for tuple access
+// -------------------------------------
+
+DUNE_OPEN_TUPLE_NAMESPACE
+
+  // tuple_element for DenseVectorTuple
+  // ----------------------------------
+
+  template< size_t i, class Imp >
+  struct tuple_element< i, Dune::DenseVectorTuple< Imp > >
+  {
+    typedef typename tuple_element< i, typename Dune::DenseVectorTupleTraits< Imp >::tuple >::type type;
+  };
+
+
+
+  // tuple_size for DenseVectorTuple
+  // -------------------------------
+
+  template< class Imp >
+  struct tuple_size< Dune::DenseVectorTuple< Imp > >
+  {
+    enum { value = Dune::DenseVectorTuple< Imp >::tuple_size };
+  };
+
+DUNE_CLOSE_TUPLE_NAMESPACE
 
 #endif // #ifndef DUNE_COMMON_TUPLES_DENSEVECTOR_HH
