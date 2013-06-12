@@ -1,6 +1,7 @@
 tuplesincludedir = $(includedir)/dune/common/tuples
 
-tuplesinclude_HEADERS =	tuples.hh \
+tuplesinclude_HEADERS =	checkpredicate.hh \
+			tuples.hh \
 			tupleutility.hh \
 			uniqueelementtype.hh
 
