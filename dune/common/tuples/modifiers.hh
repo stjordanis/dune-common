@@ -204,6 +204,89 @@ namespace Dune
 
 #endif
 
+
+
+#ifndef DOXYGEN
+
+  namespace
+  {
+    // CutOutTuple
+    // -----------
+
+    template< class Tuple, int begin, int length,
+              class StartType = Dune::tuple<> >
+    class CutOutTuple
+    {
+      dune_static_assert( (begin+length <= Dune::tuple_size< Tuple >::value),
+                          "Can not cut out tuple of given length" );
+      typedef typename Dune::PushBackTuple< StartType, Dune::tuple_element< begin, Tuple > >::type NextType;
+
+    public:
+      typedef typename CutOutTuple< Tuple, (begin+1), (length-1), NextType >::type type;
+    };
+
+    template< class Tuple, int begin, class ResultType >
+    struct CutOutTuple< Tuple, begin, 0, ResultType >
+    {
+      typedef ResultType type;
+    };
+
+  } // namespace
+
+#endif // #ifndef DOXYGEN
+
+
+
+  // PopFrontTuple
+  // -------------
+
+  /** \class PopFrontTuple
+   *
+   *  \brief Please doc me.
+   */
+  template< class Tuple, int size = Dune::tuple_size< Tuple >::value >
+  struct PopFrontTuple
+  {
+    dune_static_assert( (size == Dune::tuple_size< Tuple >::value),
+                        "The \"size\" template parameter of PopFrontTuple "
+                        "is an implementation detail and should never be "
+                        "set explicitly!" );
+
+    typedef typename CutOutTuple< Tuple, 1, (Dune::tuple_size< Tuple >::value - 1) >::type type;
+  };
+
+  template< class Tuple >
+  struct PopFrontTuple< Tuple, 0 >
+  {
+    typedef Tuple type;
+  };
+
+
+
+  // PopBackTuple
+  // ------------
+
+  /** \class PopBackTuple
+   *
+   *  \brief Please doc me.
+   */
+  template< class Tuple, int size = Dune::tuple_size< Tuple >::value >
+  struct PopBackTuple
+  {
+    dune_static_assert( (size == Dune::tuple_size< Tuple >::value),
+                        "The \"size\" template parameter of PopBackTuple "
+                        "is an implementation detail and should never be "
+                        "set explicitly!" );
+
+    typedef typename CutOutTuple< Tuple, 0, (Dune::tuple_size< Tuple >::value - 1) >::type type;
+  };
+
+  template< class Tuple >
+  struct PopBackTuple< Tuple, 0 >
+  {
+    typedef Tuple type;
+  };
+
 } // namespace Dune
 
 #endif // #ifndef DUNE_COMMON_TUPLES_MODIFIERS_HH
