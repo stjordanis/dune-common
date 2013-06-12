@@ -5,7 +5,7 @@
 
 #include <dune/common/tuples/checkpredicate.hh>
 #include <dune/common/tuples/tuples.hh>
-#include <dune/common/tuples/uniqueelementtype.hh>
+#include <dune/common/tuples/tupleutility.hh>
 
 namespace Dune
 {
@@ -40,10 +40,7 @@ namespace Dune
   public:
     static const bool isPointerTuple = CheckPredicate< Tuple, IsPointerPredicate >::value;
 
-    typedef typename SelectType< isPointerTuple,
-        typename ForEachType< IsPointerPredicate, Tuple >::Type,
-        UniqueElementTypeTuple< Empty, tuple_size< Tuple >::value >
-      >::Type PointeeTupleType;
+    typedef typename ForEachType< IsPointerPredicate, Tuple >::Type PointeeTupleType;
 
     static const bool isReferenceTuple = CheckPredicate< Tuple, IsReferencePredicate >::value;
 
