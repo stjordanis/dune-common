@@ -289,4 +289,6 @@ namespace Dune
 
 } // namespace Dune
 
+#include "modifiers_include.hh"
+
 #endif // #ifndef DUNE_COMMON_TUPLES_MODIFIERS_HH
