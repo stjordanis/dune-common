@@ -1,7 +1,8 @@
 tuplesincludedir = $(includedir)/dune/common/tuples
-tuplesinclude_HEADERS =				\
-	tuples.hh				\
-	tupleutility.hh
+
+tuplesinclude_HEADERS =	tuples.hh \
+			tupleutility.hh \
+			uniqueelementtype.hh
 
 EXTRA_DIST = CMakeLists.txt
 
