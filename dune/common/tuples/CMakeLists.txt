@@ -3,6 +3,7 @@ install( FILES
          densevector.hh
          fvector.hh
          integralconstant.hh
+         namespace.hh
          tuples.hh
          tupleutility.hh
          typetraits.hh
