@@ -6,9 +6,9 @@
 #include <dune/common/fvector.hh>
 
 #include <dune/common/tuples/densevector.hh>
+#include <dune/common/tuples/foreach.hh>
 #include <dune/common/tuples/integralconstant.hh>
 #include <dune/common/tuples/namespace.hh>
-#include <dune/common/tuples/tupleutility.hh>
 #include <dune/common/tuples/uniqueelementtype.hh>
 
 namespace Dune

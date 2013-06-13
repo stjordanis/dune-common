@@ -4,8 +4,8 @@
 #include <dune/common/typetraits.hh>
 
 #include <dune/common/tuples/checkpredicate.hh>
+#include <dune/common/tuples/foreach.hh>
 #include <dune/common/tuples/tuples.hh>
-#include <dune/common/tuples/tupleutility.hh>
 
 namespace Dune
 {
