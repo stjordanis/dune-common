@@ -3,6 +3,7 @@ install( FILES
          containstype.hh
          densevector.hh
          firstindex.hh
+         foreach.hh
          fvector.hh
          integralconstant.hh
          modifiers.hh
