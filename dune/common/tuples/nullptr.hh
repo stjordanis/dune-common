@@ -14,6 +14,17 @@ namespace Dune
   // NullPointerTuple
   // ----------------
 
+  /** \class NullPointerTuple
+   *
+   *  \brief Initialize a tuple of pointers with nullptr.
+   *
+   *  \tparam  Tuple  A tuple consisting of pointer types.
+   *
+   * Usage:
+\code
+  Tuple tuple = Dune::NullPointerTuple< Tuple >();
+\endcode
+   */
   template< class Tuple >
   class NullPointerTuple
   {
@@ -32,19 +43,20 @@ namespace Dune
   // NullPointerInitialiser
   // ----------------------
 
-  /**
-   * @brief A helper template that initializes a tuple consisting of pointers
-   * to NULL.
+  /** \class NullPointerInitialiser
    *
-   * A tuple of NULL pointers may be useful when you use a tuple of pointers
-   * in a class which you can only initialise in a later stage.
+   * \brief Compatibility class; forwards to NullPointerTuple.
+   *
    */
   template <class Tuple>
   struct NullPointerInitialiser
   {
     typedef Tuple ResultType;
 
-    static ResultType apply() DUNE_DEPRECATED { return NullPointerTuple< ResultType >(); }
+    static ResultType apply() DUNE_DEPRECATED
+    {
+      return NullPointerTuple< ResultType >();
+    }
   };
 
 } // namespace Dune
