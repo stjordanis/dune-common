@@ -17,15 +17,14 @@ namespace Dune
   // DenseVectorTupleTraits
   // ----------------------
 
-  /* \class DenseVectorTupleTraits
+  /** \ingroup Tuples_DenseVector
    *
-   * \brief Traits class for a dense vector tuple
-   *        implementation.
+   *  \brief Traits class for a dense vector tuple
+   *         implementation.
    *
-   *  For each implementation of a dense vector tuple a
-   *  template specialization of this class is needed.
-   *
-   * \note The following typedefs are needed:
+   * \note For each implementation of a dense vector tuple a template
+   *       specialization of this class is needed. The following typedefs
+   *       are needed:
 \code
   template< Implementation >
   struct DenseVectorTupleTraits< Implementation >
@@ -52,17 +51,17 @@ namespace Dune
   // DenseVectorTuple
   // ----------------
 
-  /* \class DenseVectorTuple
+  /** \ingroup Tuples_DenseVector
    *
-   * \brief Facade class for dense vector tuples.
+   *  \brief Facade class for dense vector tuples.
    *
-   * This facade class adds support for a large number
-   * of dense vector capabilities.
+   *  This facade class adds support for a large number
+   *  of dense vector functionality (cf. Dune::DenseVector).
    *
-   * \tparam  Imp  Implementation type
+   *  \tparam  Imp  Implementation type
    *
-   * \note For implementors: The implementation is
-   *       expected to provide the following methods:
+   *  \note For implementors: The implementation is
+   *        expected to provide the following methods:
 \code
   class DenseVectorTupleImp
   {
@@ -182,8 +181,8 @@ namespace Dune
      *
      *  \param[in]  function  function object
      *
-     *  The argument must be copyable and is expected to fulfill the
-     *  following interface:
+     *  \note The argument must be copyable and is expected to fulfill the
+     *        following interface:
 \code
   struct Function
   {
@@ -207,8 +206,8 @@ namespace Dune
      *
      *  \param[in]  function  function object
      *
-     *  The argument must be copyable and is expected to fulfill the
-     *  following interface:
+     *  \note The argument must be copyable and is expected to fulfill the
+     *        following interface:
 \code
   struct Function
   {

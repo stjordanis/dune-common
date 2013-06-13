@@ -1,0 +1,32 @@
+/**  @defgroup Tuples STL Tuples and Extensions
+     @ingroup Common
+
+     @brief STL tuples and extensions
+*/
+/** @defgroup Tuples_DenseVector Dense Vector Tuples
+    @ingroup Tuples
+
+    @brief Facace classes and implementations for tuples of dense vectors
+
+    In a dense vector tuple each element is an implementation of
+    Dune::DenseVector. The facade class Dune::DenseVectorTuple adds
+    functionality to expected by any dense vector to the tuple. In
+    particular, vector space operations are provided by a number of
+    overloaded operators (\f$+, -, +=, -=, *=\f$, etc.).
+
+*/
+/** @defgroup Tuples_Traits Type Traits
+    @ingroup Tuples
+
+    @brief Generalizations of Dune::TypeTraits for STL tuples
+*/
+/** @defgroup Tuples_MetaProgramming Meta Programming
+    @ingroup Tuples
+
+    @brief Static type modification and mappings
+*/
+/** @defgroup Tuples_Algorithms Algorithms
+    @ingroup Tuples
+
+    @brief Generic algorighms
+*/

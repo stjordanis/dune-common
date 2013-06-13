@@ -12,11 +12,30 @@
 namespace Dune
 {
 
-#if HAVE_VARIADIC_TEMPLATES
+#if HAVE_VARIADIC_TEMPLATES || DOXYGEN
 
   // IntegralConstantTuple
   // ---------------------
 
+  /** \ingroup Tuples_Traits
+   *
+   *  \brief Convenient setup of a Dune::tuple consisting
+   *         of Dune::integral_constant.
+   *
+\code
+  typedef typename Dune::IntegralConstantTuple< int, 1, 2, 3 >::Type Type;
+  // 'Type' corresponds to:
+  // Dune::tuple< Dune::integral_constant< int, 1 >,
+  //              Dune::integral_constant< int, 2 >,
+  //              Dune::integral_constant< int, 3 > >
+\endcode
+   *
+   *  \note This documentations covers the implementation
+   *        of Dune::IntegralConstantTuple if variadic
+   *        templates are available. There is a fallback
+   *        implementations for older compilers, which limits
+   *        the number of template values to 9.
+   */
   template< class T, T v, T... w >
   class IntegralConstantTuple
   {

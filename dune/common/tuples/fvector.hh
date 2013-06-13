@@ -53,14 +53,17 @@ namespace Dune
   // FieldVectorTuple
   // ----------------
 
-  /** \class FieldVectorTuple
+  /** \ingroup Tuples_DenseVector
    *
-   *  \brief Provide type of Dune::tuple consisting of
-   *         Dune::FieldVector and given dimensions
+   *  \brief Implementation of Dune::DenseVectorTuple.
+   *         Each element of Dune::FieldVectorTuple is of
+   *         type Dune::FieldVector.
    *
-   *  \tparam  Field       field type
-   *  \tparam  Dimensions  tuple of integral constants
-     */
+   *  \tparam  Field       Field type
+   *  \tparam  Dimensions  Tuple of integral constants using \c int.
+   *                       See Dune::IntegralConstantTuple for a
+   *                       convenient construction.
+   */
   template< class Field, class Dimensions >
   class FieldVectorTuple
   : public DenseVectorTuple< FieldVectorTuple< Field, Dimensions > >

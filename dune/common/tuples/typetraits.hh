@@ -13,12 +13,12 @@ namespace Dune
   // TupleTypeTraits
   // ---------------
 
-  /** \class TupleTypeTraits
+  /** \ingroup Tuples_Traits
    *
    *  \brief This class mimicks the Dune::TypeTraits class
-   *  (see dune/common/typetraits.hh) for tuples.
+   *         for tuples.
    *
-   *  \tparam  Tuple  Some tuple type
+   *  \tparam  Tuple  Some Dune::tuple type.
    */
   template< class Tuple >
   class TupleTypeTraits
@@ -38,12 +38,14 @@ namespace Dune
     };
 
   public:
+    //! \brief value is \b true, if each element in template argument tuple is of pointer type
     static const bool isPointerTuple = CheckPredicate< Tuple, IsPointerPredicate >::value;
-
+    //! \brief a Dune::tuple type; strip away pointer symbols in a pointer tuple
     typedef typename ForEachType< IsPointerPredicate, Tuple >::Type PointeeTupleType;
 
+    //! \brief value is \b true, if each element in template argument tuple is of reference type
     static const bool isReferenceTuple = CheckPredicate< Tuple, IsReferencePredicate >::value;
-
+    //! \brief a Dune::tuple type; strip away reference symbols in a reference tuple
     typedef typename ForEachType< IsReferencePredicate, Tuple >::Type ReferredTupleType;
   };
 
