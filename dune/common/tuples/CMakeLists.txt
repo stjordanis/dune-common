@@ -6,6 +6,7 @@ install( FILES
          firstindex.hh
          foreach.hh
          fvector.hh
+         instantiate.hh
          integralconstant.hh
          modifiers.hh
          modifiers_include.hh
