@@ -23,7 +23,7 @@ namespace Dune
   template< class T >
   struct Predicate
   {
-    static const bool v = ...;
+    static const bool value = ...;
   };
 \endcode
    */
