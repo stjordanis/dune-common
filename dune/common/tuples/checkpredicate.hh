@@ -19,13 +19,13 @@ namespace Dune
    *
    *  The predicate is expected to provide a static boolean member
    *  \c v, i.e.,
-\code
-  template< class T >
-  struct Predicate
-  {
-    static const bool value = ...;
-  };
-\endcode
+   *  @code
+   *  template< class T >
+   *  struct Predicate
+   *  {
+   *    static const bool value = ...;
+   *  };
+   *  @endcode
    */
   template< class Tuple, template< class > class Predicate,
             int N = Dune::tuple_size< Tuple >::value >
