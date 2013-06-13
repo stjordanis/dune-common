@@ -226,13 +226,17 @@ namespace Dune
       return function;
     }
 
-    //! \brief random access to scalar entries in dense vector tuple
+  protected:
+    // random access to scalar entries is too expensive
+    // currently, we need it to implement methods begin(), end()
+
+    template< class, class, class, class, template< class, class, class, class > class > friend class GenericIterator;
+
     field_type &operator[] ( size_type i )
     {
       return const_cast< field_type & >( static_cast< const This & >( *this ).operator[]( i ) );
     }
 
-    //! \brief random access to scalar entries in dense vector tuple
     const field_type &operator[] ( size_type i ) const
     {
       const field_type *f = nullptr;
@@ -241,6 +245,7 @@ namespace Dune
       return *f;
     }
 
+  public:
     //! \brief return begin iterator
     iterator begin () { return iterator( *this, 0 ); }
     //! \brief return end iterator
