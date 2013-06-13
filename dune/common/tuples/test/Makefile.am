@@ -1,4 +1,4 @@
-TESTPROGS = test-densevectortuple test-pointertuple
+TESTPROGS = test-densevectortuple test-pointertuple test-subtuple
 
 EXTRA_PROGRAMS =
 
@@ -14,6 +14,8 @@ testinclude_HEADERS =
 test_densevectortuple_SOURCES = test-densevectortuple.cc
 
 test_pointertuple_SOURCES = test-pointertuple.cc
+
+test_subtuple_SOURCES = test-subtuple.cc
 
 EXTRA_DIST =
 
