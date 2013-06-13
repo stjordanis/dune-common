@@ -121,13 +121,15 @@ namespace Dune
 
   public:
     // result type is a tuple of integral constants
-    typedef typename FirstTypeIndexTuple< Tuple, SubTuple, NextSeed, (index+1) >::type type;
+    typedef typename FirstTypeIndexTuple< Tuple, SubTuple, NextSeed, (index+1) >::Type Type;
+    typedef Type type;  // to be consistent with FirstTypeIndex
   };
 
   template< class Tuple, class SubTuple, class Seed, int size >
   struct FirstTypeIndexTuple< Tuple, SubTuple, Seed, size, size >
   {
-    typedef Seed type;
+    typedef Seed Type;
+    typedef Type type;  // to be consistent with FirstTypeIndex
   };
 
 } // namespace Dune
