@@ -11,6 +11,7 @@ install( FILES
          modifiers.hh
          modifiers_include.hh
          namespace.hh
+         nullptr.hh
          pointer.hh
          subtuple.hh
          transform.hh

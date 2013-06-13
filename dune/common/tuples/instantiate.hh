@@ -14,18 +14,16 @@ namespace Dune
    *         constructors.
    *
    *  \tparam  Tuple  tuple type
-   *  \tparam  Key    type of argument to be passed to each constructor
    *  \tparam  Seed   internal template argument
    *  \tparam  len    internal template argument
    *
    * Sample usage:
 \code
-  Tuple tuple = InstantiateTuple< Tuple, Key >::apply( key );
+  Tuple tuple = InstantiateTuple< Tuple >::apply( key );
 \endcode
    *  Note that the tuple object is required to be copyable.
    */
   template< class Tuple,
-            class Key,
             class Seed = Dune::tuple<>,
             int len = Dune::tuple_size< Tuple >::value
           >
@@ -33,8 +31,11 @@ namespace Dune
   {
     /** \brief create tuple instance
      *
+     *  \tparam  Key    type of argument to be passed to each constructor
+     *
      *  \param[in]  key  argument passed to each constructor
      */
+    template< class Key >
     static Tuple apply ( const Key &key = Key() )
     {
       Seed seed;
@@ -42,8 +43,9 @@ namespace Dune
     }
 
   private:
-    template< class, class, class, int > friend class InstantiateTuple;
+    template< class, class, int > friend class InstantiateTuple;
 
+    template< class Key >
     static Tuple append ( const Key &key, Seed &seed )
     {
       static const int index = Dune::tuple_size< Tuple >::value - len;
@@ -52,18 +54,20 @@ namespace Dune
       typedef typename Dune::PushBackTuple< Seed, AppendType >::type AccumulatedType;
 
       AccumulatedType next = Dune::tuple_push_back< AppendType >( seed, AppendType( key ) );
-      return InstantiateTuple< Tuple, Key, AccumulatedType, len-1 >::append( key, next );
+      return InstantiateTuple< Tuple, AccumulatedType, len-1 >::append( key, next );
     }
   };
 
-  template< class Tuple, class Key, class Seed >
-  struct InstantiateTuple< Tuple, Key, Seed, 0 >
+  template< class Tuple, class Seed >
+  struct InstantiateTuple< Tuple, Seed, 0 >
   {
+    template< class Key >
     static Tuple apply ( const Key &key = Key() ) { return Tuple(); }
 
   private:
-    template< class, class, class, int > friend class InstantiateTuple;
+    template< class, class, int > friend class InstantiateTuple;
 
+    template< class Key >
     static Seed append ( const Key &key, Seed &seed ) { return seed; }
   };
 
