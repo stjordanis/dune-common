@@ -10,7 +10,7 @@ namespace Dune
   // SubTuple
   // --------
 
-  /** \class SubTuple
+  /** \ingroup Tuples_MetaProgramming
    *
    *  \brief Please doc me.
    */
@@ -46,6 +46,7 @@ namespace Dune
     }
   };
 
+#ifndef DOXYGEN
   template< class Tuple, class Positions, class Seed, int size >
   class SubTuple< Tuple, Positions, Seed, size, size >
   {
@@ -58,6 +59,7 @@ namespace Dune
 
     static Type apply ( Tuple & ) { return Type(); }
   };
+#endif // #ifndef DOXYGEN
 
 } // namespace Dune
 

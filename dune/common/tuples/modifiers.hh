@@ -7,24 +7,25 @@
 
 namespace Dune
 {
-
-  /** \class PushBackTuple
+  /** @addtogroup Tuples_MetaProgramming
    *
-   *  \brief Helper template to append a type to a tuple
+   * @{
+   */
+
+  /** \brief Helper template to append a type to a tuple
    *
    *  \tparam Tuple The tuple type to extend
    *  \tparam T     The type to be appended to the tuple
    *
    *  With variadic templates the generic specialization would be:
    *
-   *  \code
+   *  @code
    *  template<class... TupleArgs, class T>
    *  struct PushBackTuple<typename Dune::tuple<TupleArgs...>, T>
    *  {
    *    typedef typename Dune::tuple<TupleArgs..., T> type;
    *  };
-   *  \endcode
-   *
+   *  @endcode
    */
   template< class Tuple, class T>
   struct PushBackTuple
@@ -107,23 +108,20 @@ namespace Dune
 
 
 
-  /** \class PushFrontTuple
-   *
-   *  \brief Helper template to prepend a type to a tuple
+  /** \brief Helper template to prepend a type to a tuple
    *
    *  \tparam Tuple The tuple type to extend
    *  \tparam T     The type to be prepended to the tuple
    *
    *  With variadic templates the generic specialization would be:
    *
-   *  \code
+   *  @code
    *  template<class... TupleArgs, class T>
    *  struct PushFrontTuple<typename Dune::tuple<TupleArgs...>, T>
    *  {
    *    typedef typename Dune::tuple<T, TupleArgs...> type;
    *  };
-   *  \endcode
-   *
+   *  @endcode
    */
   template< class Tuple, class T>
   struct PushFrontTuple
@@ -240,9 +238,8 @@ namespace Dune
   // PopFrontTuple
   // -------------
 
-  /** \class PopFrontTuple
+  /** \brief Please doc me.
    *
-   *  \brief Please doc me.
    */
   template< class Tuple, int size = Dune::tuple_size< Tuple >::value >
   struct PopFrontTuple
@@ -266,9 +263,8 @@ namespace Dune
   // PopBackTuple
   // ------------
 
-  /** \class PopBackTuple
+  /** \brief Please doc me.
    *
-   *  \brief Please doc me.
    */
   template< class Tuple, int size = Dune::tuple_size< Tuple >::value >
   struct PopBackTuple
@@ -281,28 +277,29 @@ namespace Dune
     typedef typename CutOutTuple< Tuple, 0, (Dune::tuple_size< Tuple >::value - 1) >::type type;
   };
 
+#ifndef DOXYGEN
   template< class Tuple >
   struct PopBackTuple< Tuple, 0 >
   {
     typedef Tuple type;
   };
+#endif // #ifndef DOXYGEN
 
 
 
   // ReduceTuple
   // -----------
 
-  /**
-   * \brief Apply reduce with meta binary function to template
+  /** \brief Apply reduce with meta binary function to template
    *
-   * For a tuple\<T0,T1,...,TN-1,TN,...\> the exported result is
+   *  For a tuple\<T0,T1,...,TN-1,TN,...\> the exported result is
    *
-   * F\< ... F\< F\< F\<Seed,T0\>\::type, T1\>\::type, T2\>\::type,  ... TN-1\>\::type
+   *  F\< ... F\< F\< F\<Seed,T0\>\::type, T1\>\::type, T2\>\::type,  ... TN-1\>\::type
    *
-   * \tparam F Binary meta function
-   * \tparam Tuple Apply reduce operation to this tuple
-   * \tparam Seed Initial value for reduce operation
-   * \tparam N Reduce the first N tuple elements
+   *  \tparam F Binary meta function
+   *  \tparam Tuple Apply reduce operation to this tuple
+   *  \tparam Seed Initial value for reduce operation
+   *  \tparam N Reduce the first N tuple elements
    */
   template<
       template <class, class> class F,
@@ -318,26 +315,27 @@ namespace Dune
     typedef typename F<Accumulated, Value>::type type;
   };
 
+#ifndef DOXYGEN
   template< template <class, class> class F, class Tuple, class Seed>
   struct ReduceTuple<F, Tuple, Seed, 0>
   {
     //! Result of the reduce operation
     typedef Seed type;
   };
+#endif // #ifndef DOXYGEN
 
 
 
   // JoinTuples
   // ----------
 
-  /**
-   * \brief Join two tuples
+  /** \brief Join two tuples
    *
-   * For Head=tuple<T0,...,TN> and Tail=tuple<S0,...,SM>
-   * the exported result is tuple<T0,..,TN,S0,...,SM>.
+   *  For Head=tuple<T0,...,TN> and Tail=tuple<S0,...,SM>
+   *  the exported result is tuple<T0,..,TN,S0,...,SM>.
    *
-   * \tparam Head Head of resulting tuple
-   * \tparam Tail Tail of resulting tuple
+   *  \tparam Head Head of resulting tuple
+   *  \tparam Tail Tail of resulting tuple
    */
   template<class Head, class Tail>
   struct JoinTuples
@@ -351,13 +349,12 @@ namespace Dune
   // FlattenTuple
   // ------------
 
-  /**
-   * \brief Flatten a tuple of tuples
+  /** \brief Flatten a tuple of tuples
    *
-   * This flattens a tuple of tuples tuple<tuple<T0,...,TN>, tuple<S0,...,SM> >
-   * and exports tuple<T0,..,TN,S0,...,SM>.
+   *  This flattens a tuple of tuples tuple<tuple<T0,...,TN>, tuple<S0,...,SM> >
+   *  and exports tuple<T0,..,TN,S0,...,SM>.
    *
-   * \tparam TupleTuple A tuple of tuples
+   *  \tparam TupleTuple A tuple of tuples
    */
   template<class TupleTuple>
   struct FlattenTuple
@@ -365,6 +362,8 @@ namespace Dune
     //! Result of the flatten operation
     typedef typename ReduceTuple< JoinTuples, TupleTuple>::type type;
   };
+
+  /** @} */
 
 } // namespace Dune
 

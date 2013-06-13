@@ -12,26 +12,27 @@ namespace Dune
   // ForEachType
   // -----------
 
-  /**
-   * @brief Helper template to clone the type definition of a tuple with the
-   * storage types replaced by a user-defined rule.
+  /** @ingroup Tuples_MetaProgramming
    *
-   * Suppose all storage types A_i in a tuple define a type A_i::B. You can
-   * build up a pair consisting of the types defined by A_i::B in the following
-   * way:
-   * \code
-   * template <class A>
-   * struct MyEvaluator {
-   *   typedef typename A::B Type;
-   * };
+   *  @brief Helper template to clone the type definition of a tuple with the
+   *  storage types replaced by a user-defined rule.
    *
-   * typedef ForEachType<MyEvaluator, ATuple>::Type BTuple;
-   * \endcode
-   * Here, MyEvaluator is a helper struct that extracts the correct type from
-   * the storage types of the tuple defined by the tuple ATuple.
+   *  Suppose all storage types A_i in a tuple define a type A_i::B. You can
+   *  build up a pair consisting of the types defined by A_i::B in the following
+   *  way:
+   *  \code
+   *  template <class A>
+   *  struct MyEvaluator {
+   *    typedef typename A::B Type;
+   *  };
    *
-   * \sa AddRefTypeEvaluator, AddPtrTypeEvaluator, genericTransformTuple(),
-   *     and transformTuple().
+   *  typedef ForEachType<MyEvaluator, ATuple>::Type BTuple;
+   *  \endcode
+   *  Here, MyEvaluator is a helper struct that extracts the correct type from
+   *  the storage types of the tuple defined by the tuple ATuple.
+   *
+   *  \sa AddRefTypeEvaluator, AddPtrTypeEvaluator, genericTransformTuple(),
+   *      and transformTuple().
    */
   template <template <class> class TypeEvaluator, class TupleType>
   class ForEachType {
@@ -182,39 +183,40 @@ namespace Dune
   // ForEachValue
   // ------------
 
-  /**
-   * @brief Helper template which implements iteration over all storage
-   * elements in a tuple.
+  /** @ingroup Tuples_MetaProgramming
    *
-   * Compile-time constructs that allows to process all elements in a tuple.
-   * The exact operation performed on an element is defined by a function
-   * object, which needs to implement a visit method which is applicable to
-   * all storage elements of a tuple.  Each tuple element is visited once, and
-   * the iteration is done in ascending order.
+   *  @brief Helper template which implements iteration over all storage
+   *  elements in a tuple.
    *
-   * The following example implements a function object which counts the
-   * elements in a tuple
-   * \code
-   * template <class T>
-   * struct Counter {
-   * Counter() : result_(0) {}
+   *  Compile-time constructs that allows to process all elements in a tuple.
+   *  The exact operation performed on an element is defined by a function
+   *  object, which needs to implement a visit method which is applicable to
+   *  all storage elements of a tuple.  Each tuple element is visited once, and
+   *  the iteration is done in ascending order.
    *
-   * template <class T>
-   * void visit(T& elem) { ++result_; }
+   *  The following example implements a function object which counts the
+   *  elements in a tuple
+   *  \code
+   *  template <class T>
+   *  struct Counter {
+   *  Counter() : result_(0) {}
    *
-   * int result_;
-   * };
-   * \endcode
-   * The number of elements in the tuple are stored in the member variable
-   * result_. The Counter can be used as follows, assuming a tuple t of type
-   * MyTuple is given:
-   * \code
-   * Counter c;
-   * ForEachValue<MyTuple> forEach(t);
+   *  template <class T>
+   *  void visit(T& elem) { ++result_; }
    *
-   * forEach.apply(c);
-   * std::cout << "Number of elements is: " << c.result_ << std::endl;
-   * \endcode
+   *  int result_;
+   *  };
+   *  \endcode
+   *  The number of elements in the tuple are stored in the member variable
+   *  result_. The Counter can be used as follows, assuming a tuple t of type
+   *  MyTuple is given:
+   *  \code
+   *  Counter c;
+   *  ForEachValue<MyTuple> forEach(t);
+   *
+   *  forEach.apply(c);
+   *  std::cout << "Number of elements is: " << c.result_ << std::endl;
+   *  \endcode
    */
   template <class TupleType>
   class ForEachValue {
@@ -241,18 +243,19 @@ namespace Dune
   //- Definition ForEachValuePair class
   // Assertion: both tuples have the same length and the contained types are
   // compatible in the sense of the applied function object
-  /**
-   * @brief Extension of ForEachValue to two tuples...
+  /** @ingroup Tuples_MetaProgramming
    *
-   * This class provides the framework to process two tuples at once. It works
-   * the same as ForEachValue, just that the corresponding function object
-   * takes one argument from the first tuple and one argument from the second.
+   *  @brief Extension of ForEachValue to two tuples...
    *
-   * \note You have to ensure that the two tuples you provide are compatible
-   * in the sense that they have the same length and that the objects passed
-   * to the function objects are related in meaningful way. The best way to
-   * enforce it is to build the second tuple from the existing first tuple
-   * using ForEachType.
+   *  This class provides the framework to process two tuples at once. It works
+   *  the same as ForEachValue, just that the corresponding function object
+   *  takes one argument from the first tuple and one argument from the second.
+   *
+   *  \note You have to ensure that the two tuples you provide are compatible
+   *  in the sense that they have the same length and that the objects passed
+   *  to the function objects are related in meaningful way. The best way to
+   *  enforce it is to build the second tuple from the existing first tuple
+   *  using ForEachType.
    */
   template <class TupleType1, class TupleType2>
   class ForEachValuePair {

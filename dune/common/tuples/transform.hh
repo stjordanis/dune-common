@@ -8,14 +8,9 @@
 
 namespace Dune {
 
-  /** @ addtogroup Common
+  /** @addtogroup Tuples_MetaProgramming
    *
    * @{
-   */
-
-  /**
-   * @file
-   * @brief Contains utility classes which can be used with tuples.
    */
 
   //////////////////////////////////////////////////////////////////////
@@ -985,6 +980,8 @@ namespace Dune {
                                                       a7, a8));
   }
 #endif // not defined(DOXYGEN)
+
+  /** @} */
 
 }
 

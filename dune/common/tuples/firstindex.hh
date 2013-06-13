@@ -12,6 +12,10 @@
 namespace Dune
 {
 
+  /** @addtogroup Tuples_Algorithms
+   *  @{
+   */
+
   // FirstPredicateIndex
   // -------------------
 
@@ -127,12 +131,16 @@ namespace Dune
     typedef Type type;  // to be consistent with FirstTypeIndex
   };
 
+#ifndef DOXYGEN
   template< class Tuple, class SubTuple, class Seed, int size >
   struct FirstTypeIndexTuple< Tuple, SubTuple, Seed, size, size >
   {
     typedef Seed Type;
     typedef Type type;  // to be consistent with FirstTypeIndex
   };
+#endif // #ifndef DOXYGEN
+
+  /** @} */
 
 } // namespace Dune
 

@@ -9,7 +9,7 @@ namespace Dune
   // CheckPredicate
   // --------------
 
-  /** \class CheckPredicate
+  /** \ingroup Tuples_Algorithms
    *
    *  \brief Check a static predicate for all tuple elements.
    *
