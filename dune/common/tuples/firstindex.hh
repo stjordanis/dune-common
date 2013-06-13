@@ -60,6 +60,15 @@ namespace Dune
     dune_static_assert(AlwaysFalse<Tuple>::value, "None of the tuple element "
                        "types matches the predicate!");
   };
+
+
+
+  template<class T>
+  struct IsType {
+    //! @brief The actual predicate
+    template<class U>
+    struct Predicate : public is_same<T, U> {};
+  };
 #endif // !DOXYGEN
 
 
@@ -82,16 +91,9 @@ namespace Dune
    *  found, a static_assert is triggered.
    */
   template<class Tuple, class T, std::size_t start = 0>
-  class FirstTypeIndex
-  {
-    template< class U >
-    struct IsSameTypePredicate
-    : public is_same< T, U >
-    {};
-
-  public:
-    typedef typename FirstPredicateIndex<Tuple, IsSameTypePredicate, start >::type type;
-  };
+  struct FirstTypeIndex
+  : public FirstPredicateIndex<Tuple, IsType<T>::template Predicate, start>
+  {};
 
 
 
