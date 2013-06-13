@@ -252,12 +252,13 @@ namespace Dune
     typedef typename CutOutTuple< Tuple, 1, (Dune::tuple_size< Tuple >::value - 1) >::type type;
   };
 
+#ifndef DOXYGEN
   template< class Tuple >
   struct PopFrontTuple< Tuple, 0 >
   {
     typedef Tuple type;
   };
-
+#endif // #ifndef DOXYGEN
 
 
   // PopBackTuple
