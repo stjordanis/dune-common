@@ -67,6 +67,9 @@ int main ( int argc, char **argv )
   Assign< double, dimension > function( vector );
   t1.for_each( function );
 
+  // iterators
+  std::fill( t1.begin(), t1.end(), field_type( 0 ) );
+
   // check norms
   t1.one_norm();
   t1.one_norm_real();
