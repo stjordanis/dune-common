@@ -1,0 +1,9 @@
+The contents of the header
+
+  dune/common/tuples/modifiers_include.hh
+
+can be generated using Lua (>= 5.2.1) by running
+
+  lua generate_header.lua
+
+in this folder.
