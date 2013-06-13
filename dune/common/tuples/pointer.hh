@@ -6,7 +6,6 @@
 
 #include <dune/common/tuples/foreach.hh>
 #include <dune/common/tuples/modifiers.hh>
-#include <dune/common/tuples/nullptr.hh>
 #include <dune/common/tuples/tuples.hh>
 #include <dune/common/tuples/typetraits.hh>
 
