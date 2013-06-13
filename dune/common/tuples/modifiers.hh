@@ -287,6 +287,85 @@ namespace Dune
     typedef Tuple type;
   };
 
+
+
+  // ReduceTuple
+  // -----------
+
+  /**
+   * \brief Apply reduce with meta binary function to template
+   *
+   * For a tuple\<T0,T1,...,TN-1,TN,...\> the exported result is
+   *
+   * F\< ... F\< F\< F\<Seed,T0\>\::type, T1\>\::type, T2\>\::type,  ... TN-1\>\::type
+   *
+   * \tparam F Binary meta function
+   * \tparam Tuple Apply reduce operation to this tuple
+   * \tparam Seed Initial value for reduce operation
+   * \tparam N Reduce the first N tuple elements
+   */
+  template<
+      template <class, class> class F,
+      class Tuple,
+      class Seed=tuple<>,
+      int N=tuple_size<Tuple>::value>
+  struct ReduceTuple
+  {
+    typedef typename ReduceTuple<F, Tuple, Seed, N-1>::type Accumulated;
+    typedef typename tuple_element<N-1, Tuple>::type Value;
+
+    //! Result of the reduce operation
+    typedef typename F<Accumulated, Value>::type type;
+  };
+
+  template< template <class, class> class F, class Tuple, class Seed>
+  struct ReduceTuple<F, Tuple, Seed, 0>
+  {
+    //! Result of the reduce operation
+    typedef Seed type;
+  };
+
+
+
+  // JoinTuples
+  // ----------
+
+  /**
+   * \brief Join two tuples
+   *
+   * For Head=tuple<T0,...,TN> and Tail=tuple<S0,...,SM>
+   * the exported result is tuple<T0,..,TN,S0,...,SM>.
+   *
+   * \tparam Head Head of resulting tuple
+   * \tparam Tail Tail of resulting tuple
+   */
+  template<class Head, class Tail>
+  struct JoinTuples
+  {
+    //! Result of the join operation
+    typedef typename ReduceTuple< PushBackTuple, Tail, Head>::type type;
+  };
+
+
+
+  // FlattenTuple
+  // ------------
+
+  /**
+   * \brief Flatten a tuple of tuples
+   *
+   * This flattens a tuple of tuples tuple<tuple<T0,...,TN>, tuple<S0,...,SM> >
+   * and exports tuple<T0,..,TN,S0,...,SM>.
+   *
+   * \tparam TupleTuple A tuple of tuples
+   */
+  template<class TupleTuple>
+  struct FlattenTuple
+  {
+    //! Result of the flatten operation
+    typedef typename ReduceTuple< JoinTuples, TupleTuple>::type type;
+  };
+
 } // namespace Dune
 
 #include "modifiers_include.hh"

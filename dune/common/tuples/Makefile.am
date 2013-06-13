@@ -1,6 +1,7 @@
 tuplesincludedir = $(includedir)/dune/common/tuples
 
-tuplesinclude_HEADERS =	checkpredicate.hh \
+tuplesinclude_HEADERS =	access.hh \
+			checkpredicate.hh \
 			containstype.hh \
 			densevector.hh \
 			firstindex.hh \

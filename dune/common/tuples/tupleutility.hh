@@ -1178,49 +1178,6 @@ namespace Dune {
   };
 
 
-
-  //- Reverse element access
-  /**
-   * @brief Type for reverse element access.
-   *
-   * Counterpart to ElementType for reverse element access.
-   */
-  template <int N, class Tuple>
-  struct AtType {
-    typedef typename tuple_element<tuple_size<Tuple>::value - N - 1,
-        Tuple>::type Type;
-  };
-
-  /**
-   * @brief Reverse element access.
-   *
-   * While Element<...> gives you the arguments beginning at the front of a
-   * tuple, At<...> starts at the end, which may be more convenient, depending
-   * on how you built your tuple.
-   */
-  template <int N>
-  struct At
-  {
-
-    template<typename Tuple>
-    static
-    typename TupleAccessTraits<typename AtType<N, Tuple>::Type>::NonConstType
-    get(Tuple& t)
-    {
-      return Dune::get<tuple_size<Tuple>::value - N - 1>(t);
-    }
-
-    template<typename Tuple>
-    static
-    typename TupleAccessTraits<typename AtType<N, Tuple>::Type>::ConstType
-    get(const Tuple& t)
-    {
-      return Dune::get<tuple_size<Tuple>::value - N - 1>(t);
-    }
-  };
-
-
-
   /**
    * @brief Deletes all objects pointed to in a tuple of pointers.
    *
@@ -1239,89 +1196,6 @@ namespace Dune {
       static Deletor deletor;
       ForEachValue<Tuple>(t).apply(deletor);
     }
-  };
-
-
-
-  /**
-   * \brief Apply reduce with meta binary function to template
-   *
-   * For a tuple\<T0,T1,...,TN-1,TN,...\> the exported result is
-   *
-   * F\< ... F\< F\< F\<Seed,T0\>\::type, T1\>\::type, T2\>\::type,  ... TN-1\>\::type
-   *
-   * \tparam F Binary meta function
-   * \tparam Tuple Apply reduce operation to this tuple
-   * \tparam Seed Initial value for reduce operation
-   * \tparam N Reduce the first N tuple elements
-   */
-  template<
-      template <class, class> class F,
-      class Tuple,
-      class Seed=tuple<>,
-      int N=tuple_size<Tuple>::value>
-  struct ReduceTuple
-  {
-    typedef typename ReduceTuple<F, Tuple, Seed, N-1>::type Accumulated;
-    typedef typename tuple_element<N-1, Tuple>::type Value;
-
-    //! Result of the reduce operation
-    typedef typename F<Accumulated, Value>::type type;
-  };
-
-  /**
-   * \brief Apply reduce with meta binary function to template
-   *
-   * Specialization for reduction of 0 elements.
-   * The exported result type is Seed.
-   *
-   * \tparam F Binary meta function
-   * \tparam Tuple Apply reduce operation to this tuple
-   * \tparam Seed Initial value for reduce operation
-   */
-  template<
-      template <class, class> class F,
-      class Tuple,
-      class Seed>
-  struct ReduceTuple<F, Tuple, Seed, 0>
-  {
-    //! Result of the reduce operation
-    typedef Seed type;
-  };
-
-
-
-  /**
-   * \brief Join two tuples
-   *
-   * For Head=tuple<T0,...,TN> and Tail=tuple<S0,...,SM>
-   * the exported result is tuple<T0,..,TN,S0,...,SM>.
-   *
-   * \tparam Head Head of resulting tuple
-   * \tparam Tail Tail of resulting tuple
-   */
-  template<class Head, class Tail>
-  struct JoinTuples
-  {
-    //! Result of the join operation
-    typedef typename ReduceTuple< PushBackTuple, Tail, Head>::type type;
-  };
-
-
-
-  /**
-   * \brief Flatten a tuple of tuples
-   *
-   * This flattens a tuple of tuples tuple<tuple<T0,...,TN>, tuple<S0,...,SM> >
-   * and exports tuple<T0,..,TN,S0,...,SM>.
-   *
-   * \tparam TupleTuple A tuple of tuples
-   */
-  template<class TupleTuple>
-  struct FlattenTuple
-  {
-    //! Result of the flatten operation
-    typedef typename ReduceTuple< JoinTuples, TupleTuple>::type type;
   };
 
 }

@@ -1,4 +1,5 @@
 install( FILES
+         access.hh
          checkpredicate.hh
          containstype.hh
          densevector.hh
