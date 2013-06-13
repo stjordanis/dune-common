@@ -11,12 +11,14 @@ tuplesinclude_HEADERS =	access.hh \
 			modifiers.hh \
 			modifiers_include.hh \
 			namespace.hh \
+			pointer.hh \
 			subtuple.hh \
+			transform.hh \
 			tuples.hh \
-			tupleutility.hh \
 			typeindexed.hh \
 			typetraits.hh \
-			uniqueelementtype.hh
+			uniqueelementtype.hh \
+			utility.hh
 
 SUBDIRS = test
 

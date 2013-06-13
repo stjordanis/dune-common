@@ -10,10 +10,12 @@ install( FILES
          modifiers.hh
          modifiers_include.hh
          namespace.hh
+         pointer.hh
          subtuple.hh
+         transform.hh
          tuples.hh
-         tupleutility.hh
          typeindexed.hh
          typetraits.hh
          uniqueelementtype.hh
+         utility.hh
 DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/dune/common/tuples )
