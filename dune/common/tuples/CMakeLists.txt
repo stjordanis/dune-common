@@ -1,3 +1,5 @@
+add_subdirectory("test" EXCLUDE_FROM_ALL)
+
 install( FILES
          access.hh
          checkpredicate.hh
