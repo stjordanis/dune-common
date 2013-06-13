@@ -287,6 +287,62 @@ namespace Dune
 
 
 
+  // tuple_push_back
+  // ---------------
+
+  /** \brief Please doc me.
+   *
+   */
+  template< class T9, class T1, class T2, class T3, class T4, class T5, class T6, class T7, class T8 >
+  inline Dune::tuple< T1, T2, T3, T4, T5, T6, T7, T8, T9 > tuple_push_back ( const Dune::tuple< T1, T2, T3, T4, T5, T6, T7, T8 > &t, T9 t9 )
+  {
+    return Dune::tuple< T1, T2, T3, T4, T5, T6, T7, T8, T9 >( get< 0 >( t ), get< 1 >( t ), get< 2 >( t ), get< 3 >( t ), get< 4 >( t ), get< 5 >( t ), get< 6 >( t ), get< 7 >( t ), t9 );
+  }
+
+
+
+  // tuple_push_front
+  // ----------------
+
+  /** \brief Please doc me.
+   *
+   */
+  template< class T1, class T2, class T3, class T4, class T5, class T6, class T7, class T8, class T9 >
+  inline Dune::tuple< T1, T2, T3, T4, T5, T6, T7, T8, T9 > tuple_push_front ( const Dune::tuple< T2, T3, T4, T5, T6, T7, T8, T9 > &t, T1 t1 )
+  {
+    return Dune::tuple< T1, T2, T3, T4, T5, T6, T7, T8, T9 >( t1, get< 0 >( t ), get< 1 >( t ), get< 2 >( t ), get< 3 >( t ), get< 4 >( t ), get< 5 >( t ), get< 6 >( t ), get< 7 >( t ) );
+  }
+
+
+
+  // tuple_pop_back
+  // --------------
+
+  /** \brief Please doc me.
+   *
+   */
+  template< class T1, class T2, class T3, class T4, class T5, class T6, class T7, class T8, class T9 >
+  inline Dune::tuple< T1, T2, T3, T4, T5, T6, T7, T8 > tuple_pop_back ( const Dune::tuple< T1, T2, T3, T4, T5, T6, T7, T8, T9 > &t )
+  {
+    return Dune::tuple< T1, T2, T3, T4, T5, T6, T7, T8 >( get< 0 >( t ), get< 1 >( t ), get< 2 >( t ), get< 3 >( t ), get< 4 >( t ), get< 5 >( t ), get< 6 >( t ), get< 7 >( t ) );
+  }
+
+
+
+  // tuple_pop_front
+  // ---------------
+
+  /** \brief Please doc me.
+   *
+   */
+  template< class T1, class T2, class T3, class T4, class T5, class T6, class T7, class T8, class T9 >
+  inline Dune::tuple< T2, T3, T4, T5, T6, T7, T8, T9 > tuple_pop_front ( const Dune::tuple< T1, T2, T3, T4, T5, T6, T7, T8, T9 > &t )
+  {
+    return Dune::tuple< T2, T3, T4, T5, T6, T7, T8, T9 >( get< 1 >( t ), get< 2 >( t ), get< 3 >( t ), get< 4 >( t ), get< 5 >( t ), get< 6 >( t ), get< 7 >( t ), get< 8 >( t ) );
+  }
+
+
+
   // ReduceTuple
   // -----------
 
