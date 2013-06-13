@@ -20,6 +20,11 @@
 
     @brief Generalizations of Dune::TypeTraits for STL tuples
 */
+/** @defgroup Tuples_Init Instantiation and Initialization
+    @ingroup Tuples
+
+    @brief Auxiliary methods for creating tuples without a default constructor.
+*/
 /** @defgroup Tuples_MetaProgramming Meta Programming
     @ingroup Tuples
 

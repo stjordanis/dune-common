@@ -14,16 +14,16 @@ namespace Dune
   // NullPointerTuple
   // ----------------
 
-  /** \class NullPointerTuple
+  /** \ingroup Tuples_Init
    *
    *  \brief Initialize a tuple of pointers with nullptr.
    *
-   *  \tparam  Tuple  A tuple consisting of pointer types.
+   *  \tparam Tuple A tuple consisting of pointer types
    *
-   * Usage:
-\code
-  Tuple tuple = Dune::NullPointerTuple< Tuple >();
-\endcode
+   *  Usage:
+   *  @code
+   *  Tuple tuple = Dune::NullPointerTuple< Tuple >();
+   *  @endcode
    */
   template< class Tuple >
   class NullPointerTuple
@@ -43,10 +43,12 @@ namespace Dune
   // NullPointerInitialiser
   // ----------------------
 
-  /** \class NullPointerInitialiser
+  /** \ingroup Tuples_Init
    *
-   * \brief Compatibility class; forwards to NullPointerTuple.
+   *  \brief Initialize a tuple of pointers with nullptr.
    *
+   *  \note This is a compatibility class; the new implementations
+   *        forwards to Dune::NullPointerTuple.
    */
   template <class Tuple>
   struct NullPointerInitialiser

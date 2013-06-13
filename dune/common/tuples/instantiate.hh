@@ -10,17 +10,21 @@ namespace Dune
   // InstantiateTuple
   // ----------------
 
-  /** \brief Instantiate a tuple of elements with identical, simple
-   *         constructors.
+
+  /** \ingroup Tuples_Init
+   *
+   * \brief Instantiate a tuple of elements with identical, simple
+   *        constructors.
    *
    *  \tparam  Tuple  tuple type
    *  \tparam  Seed   internal template argument
    *  \tparam  len    internal template argument
    *
-   * Sample usage:
-\code
-  Tuple tuple = InstantiateTuple< Tuple >::apply( key );
-\endcode
+   *  Sample usage:
+   *  @code
+   *  Tuple tuple = InstantiateTuple< Tuple >::apply( key );
+   *  @endcode
+   *
    *  Note that the tuple object is required to be copyable.
    */
   template< class Tuple,

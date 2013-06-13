@@ -114,8 +114,15 @@ namespace Dune
   // DereferenceTuple
   // ----------------
 
-  /**
-   * \brief Dereference pointer tuple.
+  /** \ingroup Tuples_Init
+   *
+   *  \brief Dereference pointer tuple and return
+   *         tuple of references.
+   *
+   *  \tparam Tuple A tuple consisting of pointer types
+   *  \tparam Seed  implementation internal
+   *  \tparam index implementation internal
+   *  \tparam size  implementation internal
    */
   template< class Tuple,
             class Seed = Dune::tuple<>,

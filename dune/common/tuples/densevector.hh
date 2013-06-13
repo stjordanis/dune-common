@@ -22,26 +22,27 @@ namespace Dune
    *  \brief Traits class for a dense vector tuple
    *         implementation.
    *
+   *  Class outline:
+   *  @code
+   *  template< Implementation >
+   *  struct DenseVectorTupleTraits< Implementation >
+   *  {
+   *    // implementation type
+   *    typedef Implementation derived_type;
+   *    // raw tuple type
+   *    typedef ImplementationDefined tuple;
+   *
+   *    // field type
+   *    typedef ImplementationDefined field_type;
+   *    // size type
+   *    typedef ImplementationDefined size_type;
+   *    // field type tuple of equal length
+   *    typedef ImplementationDefined field_type_tuple;
+   *  };
+   *  @endcode
+   *
    * \note For each implementation of a dense vector tuple a template
-   *       specialization of this class is needed. The following typedefs
-   *       are needed:
-\code
-  template< Implementation >
-  struct DenseVectorTupleTraits< Implementation >
-  {
-    // implementation type
-    typedef Implementation derived_type;
-    // raw tuple type
-    typedef ImplementationDefined tuple;
-
-    // field type
-    typedef ImplementationDefined field_type;
-    // size type
-    typedef ImplementationDefined size_type;
-    // field type tuple of equal length
-    typedef ImplementationDefined field_type_tuple;
-  };
-\endcode
+   *       specialization of this class is needed.
    */
   template< class Imp >
   struct DenseVectorTupleTraits;
@@ -62,16 +63,16 @@ namespace Dune
    *
    *  \note For implementors: The implementation is
    *        expected to provide the following methods:
-\code
-  class DenseVectorTupleImp
-  {
-  protected:
-    friend class Dune::DenseVectorTuple< DenseVectorTupleImp >;
-
-    typename DenseVectorTupleTraits< DenseVectorTupleImp >::tuple &raw ();
-    const typename DenseVectorTupleTraits< DenseVectorTupleImp >::tuple &raw () const;
-  };
-\endcode
+   *  @code
+   *  class DenseVectorTupleImp
+   *  {
+   *  protected:
+   *    friend class Dune::DenseVectorTuple< DenseVectorTupleImp >;
+   *
+   *    typename DenseVectorTupleTraits< DenseVectorTupleImp >::tuple &raw ();
+   *    const typename DenseVectorTupleTraits< DenseVectorTupleImp >::tuple &raw () const;
+   *  };
+   *  @endcode
    */
   template< class Imp >
   class DenseVectorTuple
