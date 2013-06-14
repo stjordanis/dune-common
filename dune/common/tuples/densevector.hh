@@ -1,6 +1,7 @@
 #ifndef DUNE_COMMON_TUPLES_DENSEVECTOR_HH
 #define DUNE_COMMON_TUPLES_DENSEVECTOR_HH
 
+#include <cassert>
 #include <iosfwd>
 
 #include <dune/common/bartonnackmanifcheck.hh>
@@ -157,22 +158,19 @@ namespace Dune
       }
     };
 
-    template< int i >
     struct FindFunctor
     {
-      static void apply( const tuple &t, const field_type *&f, size_type &j, size_type &offset )
+      FindFunctor ( int i, const field_type *&x ) : i_( i ), x_( x ) {}
+
+      void operator() ( const field_type &x, size_type j )
       {
-        if( f != nullptr )
-          return;
-
-        const typename tuple_element< i, tuple >::type &denseVector = get< i >( t );
-        size_type size = denseVector.size();
-
-        if( j < offset+size )
-          f = &( denseVector[ j-offset ] );
-
-        offset += size;
+        if( j == i_ )
+          x_ = &x;
       }
+
+    private:
+      size_type i_;
+      const field_type *&x_;
     };
 
   public:
@@ -239,10 +237,11 @@ namespace Dune
 
     const field_type &operator[] ( size_type i ) const
     {
-      const field_type *f = nullptr;
-      size_type offset = 0;
-      ForLoop< FindFunctor, 0, tuple_size-1 >::apply( static_cast< const tuple & >( *this ), f, i, offset );
-      return *f;
+      const field_type *x = nullptr;
+      FindFunctor functor( i, x );
+      for_each( functor );
+      assert( x );
+      return *x;
     }
 
   public:
