@@ -289,9 +289,10 @@ namespace Dune
     template< int i >
     struct AxpyFunctor
     {
-      static void apply ( tuple &t, const field_type alpha, const tuple &o )
+      template< class other >
+      static void apply ( tuple &x, const field_type alpha, const other &y )
       {
-        get< i >( t ).axpy( alpha, get< i >( o ) );
+        get< i >( x ).axpy( alpha, get< i >( y ) );
       }
     };
 
@@ -368,7 +369,7 @@ namespace Dune
     template< class Other >
     derived_type &axpy ( const field_type &alpha, const DenseVectorTuple< Other > &other )
     {
-      ForLoop< AxpyFunctor, 0, tuple_size-1 >::apply( static_cast< tuple & >( *this ), alpha, static_cast< const tuple & >( other ) );
+      ForLoop< AxpyFunctor, 0, tuple_size-1 >::apply( static_cast< tuple & >( *this ), alpha, static_cast< const typename DenseVectorTuple< Other >::tuple & >( other ) );
       return asImp();
     }
 
