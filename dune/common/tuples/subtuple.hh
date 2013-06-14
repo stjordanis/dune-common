@@ -12,7 +12,29 @@ namespace Dune
 
   /** \ingroup Tuples_MetaProgramming
    *
-   *  \brief Please doc me.
+   *  \brief Create a new tuple type by choosing its element types from
+   *         another tuple.
+   *
+   *  \tparam  Tuple      A tuple type.
+   *  \tparam  Positions  A tuple of integral constants using \c int
+   *                      denoting the positions of the types to be extracted
+   *                      from Tuple.
+   *  \tparam  Seed       (implementation internal)
+   *  \tparam  index      (implementation internal)
+   *  \tparam  size       (implementation internal)
+   *
+   *  Usage (using Dune::IntegralConstantTuple):
+   *  @code
+   *  typedef typename Dune::IntegralConstantTuple< int, 1, 2, 3, 4 >::Type Tuple;
+   *  typedef typename Dune::IntegralConstantTuple< int, 2, 1 >::Type Positions;
+   *  // resulting type is equal to: Dune::IntegralConstantTuple< int, 3, 2 >::Type
+   *  typedef typename Dune::SubTuple< Tuple, Positions >::Type SubTuple;
+   *
+   *  Tuple tuple;
+   *  SubTuple subtuple = Dune::SubTuple< Tuple, Positions >::apply( tuple );
+   *  @endcode
+   *
+   *  See Dune::sub_tuple for a convenient alternative.
    */
   template< class Tuple, class Positions,
             class Seed = tuple<>, int index = 0,
@@ -60,6 +82,34 @@ namespace Dune
     static Type apply ( Tuple & ) { return Type(); }
   };
 #endif // #ifndef DOXYGEN
+
+
+
+  // sub_tuple
+  // ---------
+
+  /** \ingroup Tuples_MetaProgramming
+   *
+   *  \brief Create a new tuple instance by choosing its element from
+   *         another tuple (cf. Dune::SubTuple).
+   *
+   *  \tparam  Tuple      A tuple type.
+   *  \tparam  Positions  A tuple of integral constants using \c int
+   *
+   *  Usage (using Dune::IntegralConstantTuple):
+   *  @code
+   *  typedef typename Dune::IntegralConstantTuple< int, 1, 2, 3, 4 >::Type Tuple;
+   *  typedef typename Dune::IntegralConstantTuple< int, 2, 1 >::Type Positions;
+   *
+   *  Tuple tuple;
+   *  typename Dune::SubTuple< Tuple, Positions >::Type subTuple = Dune::sub_tuple< Positions >( tuple );
+   *  @endcode
+   */
+  template< class Positions, class Tuple >
+  static typename SubTuple< Tuple, Positions >::Type sub_tuple ( Tuple &tuple )
+  {
+     return SubTuple< Tuple, Positions >::apply( tuple );
+  }
 
 } // namespace Dune
 

@@ -238,8 +238,10 @@ namespace Dune
   // PopFrontTuple
   // -------------
 
-  /** \brief Please doc me.
+  /** \brief Remove first element from tuple type.
    *
+   *  \tparam Tuple Tuple type to be modified.
+   *  \tparam size  (implementation internal)
    */
   template< class Tuple, int size = Dune::tuple_size< Tuple >::value >
   struct PopFrontTuple
@@ -264,8 +266,10 @@ namespace Dune
   // PopBackTuple
   // ------------
 
-  /** \brief Please doc me.
+  /** \brief Remove last element from tuple type.
    *
+   *  \tparam Tuple Tuple type to be modified.
+   *  \tparam size  (implementation internal)
    */
   template< class Tuple, int size = Dune::tuple_size< Tuple >::value >
   struct PopBackTuple
@@ -291,8 +295,8 @@ namespace Dune
   // tuple_push_back
   // ---------------
 
-  /** \brief Please doc me.
-   *
+  /** \brief Create new tuple instance from given tuple and element
+   *         to append at the end.
    */
   template< class T9, class T1, class T2, class T3, class T4, class T5, class T6, class T7, class T8 >
   inline Dune::tuple< T1, T2, T3, T4, T5, T6, T7, T8, T9 > tuple_push_back ( const Dune::tuple< T1, T2, T3, T4, T5, T6, T7, T8 > &t, T9 t9 )
@@ -305,8 +309,8 @@ namespace Dune
   // tuple_push_front
   // ----------------
 
-  /** \brief Please doc me.
-   *
+  /** \brief Create new tuple instance from given tuple and element
+   *         to append at the beginning.
    */
   template< class T1, class T2, class T3, class T4, class T5, class T6, class T7, class T8, class T9 >
   inline Dune::tuple< T1, T2, T3, T4, T5, T6, T7, T8, T9 > tuple_push_front ( const Dune::tuple< T2, T3, T4, T5, T6, T7, T8, T9 > &t, T1 t1 )
@@ -319,8 +323,7 @@ namespace Dune
   // tuple_pop_back
   // --------------
 
-  /** \brief Please doc me.
-   *
+  /** \brief Remove last element from tuple.
    */
   template< class T1, class T2, class T3, class T4, class T5, class T6, class T7, class T8, class T9 >
   inline Dune::tuple< T1, T2, T3, T4, T5, T6, T7, T8 > tuple_pop_back ( const Dune::tuple< T1, T2, T3, T4, T5, T6, T7, T8, T9 > &t )
@@ -333,8 +336,7 @@ namespace Dune
   // tuple_pop_front
   // ---------------
 
-  /** \brief Please doc me.
-   *
+  /** \brief Remove first element from tuple.
    */
   template< class T1, class T2, class T3, class T4, class T5, class T6, class T7, class T8, class T9 >
   inline Dune::tuple< T2, T3, T4, T5, T6, T7, T8, T9 > tuple_pop_front ( const Dune::tuple< T1, T2, T3, T4, T5, T6, T7, T8, T9 > &t )
