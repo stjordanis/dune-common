@@ -4,6 +4,7 @@
 #include <dune/common/static_assert.hh>
 #include <dune/common/typetraits.hh>
 
+#include <dune/common/tuples/checkpredicate.hh>
 #include <dune/common/tuples/foreach.hh>
 #include <dune/common/tuples/modifiers.hh>
 #include <dune/common/tuples/tuples.hh>
@@ -51,35 +52,19 @@ namespace Dune
     dune_static_assert( TupleTypeTraits< Tuple >::isPointerTuple,
                         "Can not check non-pointer tuple." );
 
-    struct ValidPointer
+    struct ValidPointerPredicate
     {
-      ValidPointer () : v_( true ) {}
-
-      template< class Ptr >
-      void visit ( Ptr &ptr )
+      template< class T >
+      bool operator() ( T &x )
       {
-        v_ &= bool( ptr );
+        return x;
       }
-
-      operator bool() const { return v_; }
-
-    private:
-      bool v_;
-    };
-
-    template< class T >
-    struct ConstTypeEvaluator
-    {
-      typedef const T Type;
     };
 
   public:
     static bool apply ( Tuple tuple )
     {
-      Dune::ForEachValue< Tuple > forEach( tuple );
-      ValidPointer check;
-      forEach.apply( check );
-      return check;
+      return check_predicate_tuple< ValidPointerPredicate >( tuple );
     }
   };
 
