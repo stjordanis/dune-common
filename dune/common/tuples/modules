@@ -1,7 +1,7 @@
 /**  @defgroup Tuples STL Tuples and Extensions
      @ingroup Common
 
-     @brief STL tuples and extensions
+     @brief STL tuples and Dune-Common extensions
 */
 /** @defgroup Tuples_DenseVector Dense Vector Tuples
     @ingroup Tuples
@@ -23,7 +23,8 @@
 /** @defgroup Tuples_Init Instantiation and Initialization
     @ingroup Tuples
 
-    @brief Auxiliary methods for creating tuples without a default constructor.
+    @brief Auxiliary methods for handling tuples of pointer types and
+           creating tuples without a default constructor.
 */
 /** @defgroup Tuples_MetaProgramming Meta Programming
     @ingroup Tuples

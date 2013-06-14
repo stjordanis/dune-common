@@ -74,7 +74,7 @@ namespace Dune
 
 
 
-  /** \ingroup Tuple_Init
+  /** \ingroup Tuples_Init
    *
    *  \brief Check whether a pointer tuple can be dereferenced.
    *
