@@ -224,6 +224,7 @@ namespace Dune
       return function;
     }
 
+#ifndef DOXYGEN
   protected:
     // random access to scalar entries is too expensive
     // currently, we need it to implement methods begin(), end()
@@ -243,6 +244,7 @@ namespace Dune
       assert( x );
       return *x;
     }
+#endif // #ifndef DOXYGEN
 
   public:
     //! \brief return begin iterator
