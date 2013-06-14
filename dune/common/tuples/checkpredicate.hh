@@ -92,9 +92,7 @@ namespace Dune
       template< class Predicate >
       static bool apply ( const Tuple &tuple, const Predicate &predicate = Predicate() )
       {
-        typedef typename Dune::ForEachType< ConstReferenceTypeEvaluator, Tuple >::Type IntermediaryTuple;
-        IntermediaryTuple intermediary = Dune::transformTuple< ConstReferenceTypeEvaluator >( tuple );
-        Dune::ForEachValue< IntermediaryTuple > forEach( intermediary );
+        Dune::ForEachValue< const Tuple > forEach( tuple );
         CheckPredicateFunctor< Predicate > check( predicate );
         forEach.apply( check );
         return check;

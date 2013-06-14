@@ -51,7 +51,7 @@ namespace Dune
     typedef typename PushBackTuple< Seed, AppendType >::type AccumulatedType;
     typedef SubTuple< Tuple, Positions, AccumulatedType, (index+1), size > NextType;
 
-    static typename NextType::Type append ( Tuple &tuple, Seed &seed )
+    static typename NextType::Type append ( const Tuple &tuple, Seed &seed )
     {
       AppendType append = get< position >( tuple );
       AccumulatedType next = tuple_push_back( seed, append );
@@ -61,7 +61,7 @@ namespace Dune
   public:
     typedef typename NextType::Type Type;
 
-    static Type apply ( Tuple &tuple )
+    static Type apply ( const Tuple &tuple )
     {
       Seed seed;
       return append( tuple, seed );
@@ -74,12 +74,12 @@ namespace Dune
   {
     template< class, class, class, int, int > friend class SubTuple;
 
-    static Seed append ( Tuple &tuple, Seed &seed ) { return seed; }
+    static Seed append ( const Tuple &tuple, Seed &seed ) { return seed; }
 
   public:
     typedef Seed Type;
 
-    static Type apply ( Tuple & ) { return Type(); }
+    static Type apply ( const Tuple & ) { return Type(); }
   };
 #endif // #ifndef DOXYGEN
 
@@ -106,9 +106,9 @@ namespace Dune
    *  @endcode
    */
   template< class Positions, class Tuple >
-  static typename SubTuple< Tuple, Positions >::Type sub_tuple ( Tuple &tuple )
+  static typename SubTuple< Tuple, Positions >::Type sub_tuple ( const Tuple &tuple )
   {
-     return SubTuple< Tuple, Positions >::apply( tuple );
+    return SubTuple< Tuple, Positions >::apply( tuple );
   }
 
 } // namespace Dune

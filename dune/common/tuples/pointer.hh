@@ -62,7 +62,7 @@ namespace Dune
       };
 
     public:
-      static bool apply ( Tuple tuple )
+      static bool apply ( const Tuple &tuple )
       {
         return check_predicate_tuple< ValidPointerPredicate >( tuple );
       }
@@ -85,7 +85,7 @@ namespace Dune
    *  \returns \b true if all elements of \c tuple are non-zero, \b false otherwise
    */
   template< class Tuple >
-  bool valid_pointer_tuple ( Tuple tuple )
+  bool valid_pointer_tuple ( const Tuple &tuple )
   {
     return ValidPointerTupleHelper< Tuple >::apply( tuple );
   }
