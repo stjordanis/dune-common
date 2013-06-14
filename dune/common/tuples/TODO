@@ -25,6 +25,7 @@ dune/common/tuples
   PushBackTuple
   PushFrontTuple
   SubTuple
+  TypeIndexedTuple
   ValidPointerTupleCheck
 
   tuple_pop_back
