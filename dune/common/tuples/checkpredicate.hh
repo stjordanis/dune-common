@@ -8,8 +8,8 @@
 namespace Dune
 {
 
-  // CheckPredicate
-  // --------------
+  // CheckPredicateTuple
+  // -------------------
 
   /** \ingroup Tuples_Algorithms
    *
@@ -31,17 +31,21 @@ namespace Dune
    */
   template< class Tuple, template< class > class Predicate,
             int N = Dune::tuple_size< Tuple >::value >
-  struct CheckPredicate
+  struct CheckPredicateTuple
   {
     static const bool value = ( Predicate< typename Dune::tuple_element< N-1, Tuple >::type >::value
-                                && CheckPredicate< Tuple, Predicate, (N-1) >::value );
+                                && CheckPredicateTuple< Tuple, Predicate, (N-1) >::value );
   };
 
+#ifndef DOXYGEN
+
   template< class Tuple, template< class > class Predicate >
-  struct CheckPredicate< Tuple, Predicate, 0 >
+  struct CheckPredicateTuple< Tuple, Predicate, 0 >
   {
     static const bool value = true;
   };
+
+#endif // #ifndef DOXYGEN
 
 
 
@@ -50,11 +54,11 @@ namespace Dune
   namespace
   {
 
-    // CheckPredicateHelper
-    // --------------------
+    // CheckPredicateTupleHelper
+    // -------------------------
 
     template< class Tuple >
-    class CheckPredicateHelper
+    class CheckPredicateTupleHelper
     {
       template< class Predicate >
       struct CheckPredicateFunctor
@@ -128,7 +132,7 @@ namespace Dune
   template< class Predicate, class Tuple >
   bool check_predicate_tuple ( const Tuple &tuple, const Predicate &predicate = Predicate() )
   {
-    return CheckPredicateHelper< Tuple >::apply( tuple, predicate );
+    return CheckPredicateTupleHelper< Tuple >::apply( tuple, predicate );
   }
 
 } // namespace Dune

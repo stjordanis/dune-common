@@ -39,12 +39,12 @@ namespace Dune
 
   public:
     //! \brief value is \b true, if each element in template argument tuple is of pointer type
-    static const bool isPointerTuple = CheckPredicate< Tuple, IsPointerPredicate >::value;
+    static const bool isPointerTuple = CheckPredicateTuple< Tuple, IsPointerPredicate >::value;
     //! \brief a Dune::tuple type; strip away pointer symbols in a pointer tuple
     typedef typename ForEachType< IsPointerPredicate, Tuple >::Type PointeeTupleType;
 
     //! \brief value is \b true, if each element in template argument tuple is of reference type
-    static const bool isReferenceTuple = CheckPredicate< Tuple, IsReferencePredicate >::value;
+    static const bool isReferenceTuple = CheckPredicateTuple< Tuple, IsReferencePredicate >::value;
     //! \brief a Dune::tuple type; strip away reference symbols in a reference tuple
     typedef typename ForEachType< IsReferencePredicate, Tuple >::Type ReferredTupleType;
   };
