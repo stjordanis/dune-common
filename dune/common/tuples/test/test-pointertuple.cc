@@ -53,7 +53,7 @@ int main ( int argc, char **argv )
 
   // create nullptr-initialized tuple
   PointerTuple pointerTuple = Dune::NullPointerTuple< PointerTuple >();
-  if( Dune::ValidPointerTupleCheck< PointerTuple >::apply( pointerTuple ) )
+  if( Dune::valid_pointer_tuple( pointerTuple ) )
     DUNE_THROW( Dune::InvalidStateException, "Null-pointer tuple must be invalid." );
 
   // strip off pointers from tuple and create instance
@@ -63,7 +63,7 @@ int main ( int argc, char **argv )
 
   // re-initialize pointer tuple with valid entries
   pointerTuple = initialize( tuple );
-  if( !Dune::ValidPointerTupleCheck< PointerTuple >::apply( pointerTuple ) )
+  if( !Dune::valid_pointer_tuple( pointerTuple ) )
     DUNE_THROW( Dune::InvalidStateException, "Non-nullptr tuple must be valid." );
 
   // dereference pointer tuple

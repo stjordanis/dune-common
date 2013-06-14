@@ -38,35 +38,58 @@ namespace Dune
 
 
 
-  // ValidPointerTupleCheck
-  // ----------------------
+#ifndef DOXYGEN
 
-  /**
-   * \brief Check whether a pointer tuple can be dereferenced.
-   *
-   * \tparam  Tuple  tuple of pointer types
-   */
-  template< class Tuple >
-  class ValidPointerTupleCheck
+  namespace
   {
-    dune_static_assert( TupleTypeTraits< Tuple >::isPointerTuple,
-                        "Can not check non-pointer tuple." );
 
-    struct ValidPointerPredicate
+    // ValidPointerTupleHelper
+    // -----------------------
+
+    template< class Tuple >
+    class ValidPointerTupleHelper
     {
-      template< class T >
-      bool operator() ( T &x )
+      dune_static_assert( TupleTypeTraits< Tuple >::isPointerTuple,
+                          "Can not check non-pointer tuple." );
+
+      struct ValidPointerPredicate
       {
-        return x;
+        template< class T >
+        bool operator() ( T &x )
+        {
+          return x;
+        }
+      };
+
+    public:
+      static bool apply ( Tuple tuple )
+      {
+        return check_predicate_tuple< ValidPointerPredicate >( tuple );
       }
     };
 
-  public:
-    static bool apply ( Tuple tuple )
-    {
-      return check_predicate_tuple< ValidPointerPredicate >( tuple );
-    }
-  };
+  } // namespace
+
+#endif // #ifndef DOXYGEN
+
+
+
+  /** \ingroup Tuple_Init
+   *
+   *  \brief Check whether a pointer tuple can be dereferenced.
+   *
+   *  \tparam  Tuple  tuple of pointer types
+   *
+   *  \param[in]  tuple  tuple of pointers
+   *
+   *  \returns \b true if all elements of \c tuple are non-zero, \b false otherwise
+   */
+  template< class Tuple >
+  bool valid_pointer_tuple ( Tuple tuple )
+  {
+    return ValidPointerTupleHelper< Tuple >::apply( tuple );
+  }
+
 
 
 #ifndef DOXYGEN
