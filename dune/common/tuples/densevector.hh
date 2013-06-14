@@ -141,7 +141,7 @@ namespace Dune
       template< class Function >
       static void apply ( const tuple &t, Function function, int &j )
       {
-        typename tuple_element< i, tuple >::type &x = get< i >( t );
+        const typename tuple_element< i, tuple >::type &x = get< i >( t );
         const size_type size = x.size();
         for( size_type k = 0; k < size; ++k )
           function( x[ k ], j++ );
