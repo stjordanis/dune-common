@@ -2,6 +2,7 @@
 #define DUNE_COMMON_TUPLES_CHECKPREDICATE_HH
 
 #include <dune/common/tuples/foreach.hh>
+#include <dune/common/tuples/transform.hh>
 #include <dune/common/tuples/tuples.hh>
 
 namespace Dune
@@ -56,9 +57,9 @@ namespace Dune
     class CheckPredicateHelper
     {
       template< class Predicate >
-      struct CheckPredicate
+      struct CheckPredicateFunctor
       {
-        explicit CheckPredicate ( const Predicate &predicate )
+        explicit CheckPredicateFunctor ( const Predicate &predicate )
         : v_( true )
         {}
 
@@ -75,12 +76,22 @@ namespace Dune
         Predicate predicate_;
       };
 
+      template< class T >
+      struct ConstReferenceTypeEvaluator
+      {
+        typedef const T & Type;
+
+        static Type apply( T &t ) { return t; }
+      };
+
     public:
       template< class Predicate >
-      static bool apply ( Tuple tuple, const Predicate &predicate = Predicate() )
+      static bool apply ( const Tuple &tuple, const Predicate &predicate = Predicate() )
       {
-        Dune::ForEachValue< Tuple > forEach( tuple );
-        CheckPredicate< Predicate > check( predicate );
+        typedef typename Dune::ForEachType< ConstReferenceTypeEvaluator, Tuple >::Type IntermediaryTuple;
+        IntermediaryTuple intermediary = Dune::transformTuple< ConstReferenceTypeEvaluator >( tuple );
+        Dune::ForEachValue< IntermediaryTuple > forEach( intermediary );
+        CheckPredicateFunctor< Predicate > check( predicate );
         forEach.apply( check );
         return check;
       }
@@ -115,7 +126,7 @@ namespace Dune
    *  \returns \b true if predicate applies to all elements in tuple, \b false otherwise
    */
   template< class Predicate, class Tuple >
-  bool check_predicate_tuple ( Tuple tuple, const Predicate &predicate = Predicate() )
+  bool check_predicate_tuple ( const Tuple &tuple, const Predicate &predicate = Predicate() )
   {
     return CheckPredicateHelper< Tuple >::apply( tuple, predicate );
   }
