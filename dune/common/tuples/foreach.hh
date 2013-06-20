@@ -5,6 +5,7 @@
 #include <dune/common/forloop.hh>
 #include <dune/common/static_assert.hh>
 
+#include <dune/common/tuples/modifiers.hh>
 #include <dune/common/tuples/tuples.hh>
 
 namespace Dune
@@ -296,10 +297,10 @@ namespace Dune
               class Enumeration,
               int length = tuple_size< Enumeration >::value
             >
-    class GenericForEachElement
+    class ForEachElementHelper
     : public Operation<
         Value< 0, Enumeration >,
-        GenericForEachElement< Operation, Value, typename PopFrontTuple< Enumeration >::type >
+        ForEachElementHelper< Operation, Value, typename PopFrontTuple< Enumeration >::type >
       >
     {};
 
@@ -307,7 +308,7 @@ namespace Dune
               template< int, class > class Value,
               class Enumeration
             >
-    class GenericForEachElement< Operation, Value, Enumeration, 1 >
+    class ForEachElementHelper< Operation, Value, Enumeration, 1 >
     : public Value< 0, Enumeration >
     {};
 
@@ -315,7 +316,7 @@ namespace Dune
               template< int, class > class Value,
               class Enumeration
             >
-    class GenericForEachElement< Operation, Value, Enumeration, 0 >
+    class ForEachElementHelper< Operation, Value, Enumeration, 0 >
     {
     public:
       template< class... Args >
@@ -357,7 +358,7 @@ namespace Dune
    */
   template< template< int, class > class Operation, class Enumeration >
   class ForEachElement
-  : public GenericForEachElement< ForLoopHelper::Apply, Operation, Enumeration >
+  : public ForEachElementHelper< ForLoopHelper::Apply, Operation, Enumeration >
   {};
 
 } // namespace Dune
