@@ -2,6 +2,7 @@
 #define DUNE_COMMON_TUPLES_FOREACH_HH
 
 #include <dune/common/documentation.hh>
+#include <dune/common/forloop.hh>
 #include <dune/common/static_assert.hh>
 
 #include <dune/common/tuples/tuples.hh>
@@ -279,6 +280,85 @@ namespace Dune
     TupleType1& tuple1_;
     TupleType2& tuple2_;
   };
+
+
+
+#ifndef DOXYGEN
+
+  namespace
+  {
+
+    // ForEachElementHelper
+    // --------------------
+
+    template< template< class, class > class Operation,
+              template< int, class > class Value,
+              class Enumeration,
+              int length = tuple_size< Enumeration >::value
+            >
+    class GenericForEachElement
+    : public Operation<
+        Value< 0, Enumeration >,
+        GenericForEachElement< Operation, Value, typename PopFrontTuple< Enumeration >::type >
+      >
+    {};
+
+    template< template< class, class > class Operation,
+              template< int, class > class Value,
+              class Enumeration
+            >
+    class GenericForEachElement< Operation, Value, Enumeration, 1 >
+    : public Value< 0, Enumeration >
+    {};
+
+    template< template< class, class > class Operation,
+              template< int, class > class Value,
+              class Enumeration
+            >
+    class GenericForEachElement< Operation, Value, Enumeration, 0 >
+    {
+    public:
+      template< class... Args >
+      static void apply( const Args&... args )
+      {}
+    };
+
+  } // namespace
+
+#endif // #ifndef DOXYGEN
+
+
+
+  // ForEachElement
+  // --------------
+
+  /** \ingroup Tuples_MetaProgramming
+   *
+   *  \tparam  Operation    See documentation below.
+   *  \tparam  Enumeration  A tuple of integral_constant.
+   *
+   *  The first template parameter is expected to provide the
+   *  following method:
+   *  @code
+   *  template< int i, class Enumeration >
+   *  struct Operation
+   *  {
+   *    template< class... Arguments >
+   *    static void apply ( Arguments &... arguments );
+   *  };
+   *  @endcode
+   *
+   *  \note For setting up a tuple of integral constants, see Dune::IntegralConstantTuple.
+   *        For a enumeration (a sequence) of Dune::integral_constant types, see
+   *        Dune::EnumerationTuple.
+   *
+   *  \note The case <tt>Dune::tuple_size< Enumeration >::value == 0</tt>
+   *        is explicitely allowed.
+   */
+  template< template< int, class > class Operation, class Enumeration >
+  class ForEachElement
+  : public GenericForEachElement< ForLoopHelper::Apply, Operation, Enumeration >
+  {};
 
 } // namespace Dune
 

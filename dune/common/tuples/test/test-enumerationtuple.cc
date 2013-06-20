@@ -5,7 +5,7 @@
 #include <dune/common/forloop.hh>
 #include <dune/common/tuples/enumeration.hh>
 #include <dune/common/tuples/integralconstant.hh>
-#include <dune/common/tuples/forloop.hh>
+#include <dune/common/tuples/foreach.hh>
 #include <dune/common/tuples/tuples.hh>
 
 
@@ -27,7 +27,7 @@ template< class Enumeration, class Tuple >
 void print ( const Tuple &tuple, std::ostream &out = std::cout )
 {
   out << "(";
-  Dune::TupleForLoop< Print, Enumeration >::apply( tuple, out );
+  Dune::ForEachElement< Print, Enumeration >::apply( tuple, out );
   out << ")" << std::endl;
 }
 
