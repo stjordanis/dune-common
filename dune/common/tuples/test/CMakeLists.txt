@@ -1,5 +1,6 @@
 set(TESTPROGS
     test-densevectortuple
+    test-indextuple
     test-pointertuple
     test-subtuple)
 
@@ -8,6 +9,9 @@ add_dependencies(${_test_target} ${TESTPROGS})
 
 add_executable("test-densevectortuple" test-densevectortuple.cc)
 target_link_libraries(test-densevectortuple "dunecommon")
+
+add_executable("test-indextuple" test-indextuple.cc)
+target_link_libraries(test-indextuple "dunecommon")
 
 add_executable("test-pointertuple" test-pointertuple.cc)
 target_link_libraries(test-pointertuple "dunecommon")

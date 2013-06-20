@@ -7,6 +7,7 @@ tuplesinclude_HEADERS =	access.hh \
 			firstindex.hh \
 			foreach.hh \
 			fvector.hh \
+			indextuple.hh \
 			instantiate.hh \
 			integralconstant.hh \
 			modifiers.hh \
