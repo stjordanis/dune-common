@@ -217,7 +217,7 @@ namespace Dune
     {
       dune_static_assert( (begin+length <= Dune::tuple_size< Tuple >::value),
                           "Can not cut out tuple of given length" );
-      typedef typename Dune::PushBackTuple< StartType, Dune::tuple_element< begin, Tuple > >::type NextType;
+      typedef typename Dune::PushBackTuple< StartType, typename Dune::tuple_element< begin, Tuple >::type >::type NextType;
 
     public:
       typedef typename CutOutTuple< Tuple, (begin+1), (length-1), NextType >::type type;
