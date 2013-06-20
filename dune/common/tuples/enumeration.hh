@@ -1,9 +1,8 @@
 #ifndef DUNE_COMMON_TUPLES_ENUMERATION_HH
 #define DUNE_COMMON_TUPLES_ENUMERATION_HH
 
-#include <dune/common/typetraits.hh>
-#include <dune/common/tuples/namespace.hh>
 #include <dune/common/tuples/tuples.hh>
+#include <dune/common/typetraits.hh>
 
 namespace Dune
 {
@@ -71,31 +70,5 @@ namespace Dune
   };
 
 } // namespace Dune
-
-
-
-DUNE_OPEN_TUPLE_NAMESPACE
-
-  // tuple_element for EnumerationTuple
-  // ----------------------------------
-
-  template< size_t i, int length, int init >
-  struct tuple_element< i, Dune::EnumerationTuple< length, init > >
-  {
-    typedef Dune::integral_constant< int, init+i > type;
-  };
-
-
-
-  // tuple_size for EnumerationTuple
-  // -------------------------------
-
-  template< int length, int init >
-  struct tuple_size< Dune::EnumerationTuple< length, init > >
-  {
-    enum { value = (length >= 0) ? length : 0 };
-  };
-
-DUNE_CLOSE_TUPLE_NAMESPACE
 
 #endif // #ifndef DUNE_COMMON_TUPLES_ENUMERATION_HH
