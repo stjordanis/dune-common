@@ -26,6 +26,9 @@ namespace Dune
   //              Dune::integral_constant< int, 2 >,
   //              Dune::integral_constant< int, 3 > >
 \endcode
+   *
+   *  \note For <tt>length <= 0</tt> the resulting type is
+   *        <tt>Type = Dune::tuple<></tt>.
    */
   template< int length, int init = 0 >
   class EnumerationTuple
