@@ -4,14 +4,11 @@
 
 #include <dune/common/exceptions.hh>
 #include <dune/common/forloop.hh>
-#include <dune/common/parallel/mpihelper.hh>
 
 #include <dune/common/tuples/containstype.hh>
 #include <dune/common/tuples/firstindex.hh>
 #include <dune/common/tuples/integralconstant.hh>
 #include <dune/common/tuples/subtuple.hh>
-
-#include "printtuple.hh"
 
 
 template< class Tuple >
@@ -31,10 +28,31 @@ struct Find
 };
 
 
+template< int i >
+struct Print
+{
+  template< class Tuple >
+  static void apply ( const Tuple &tuple, std::ostream &out )
+  {
+    out << Dune::tuple_element< i, Tuple >::type::value;
+
+    if( i < Dune::tuple_size< Tuple >::value-1 )
+      out << ", ";
+  }
+};
+
+
+template< class Tuple >
+void print ( const Tuple &tuple, std::ostream &out = std::cout )
+{
+  out << "(";
+  Dune::ForLoop< Print, 0, Dune::tuple_size< Tuple >::value-1 >::apply( tuple, out );
+  out << ")" << std::endl;
+}
+
+
 int main ( int argc, char **argv )
 {
-  Dune::MPIHelper::instance( argc, argv );
-
   typedef Dune::IntegralConstantTuple< int, 1, 2, 3, 4 >::Type Tuple;
 
   Tuple tuple;
@@ -52,7 +70,6 @@ int main ( int argc, char **argv )
 
   typedef Dune::SubTuple< Tuple, Positions >::Type SubTuple;
   SubTuple subtuple = Dune::sub_tuple< Positions >( tuple );
-  // SubTuple subtuple = Dune::SubTuple< Tuple, Positions >::apply( tuple );
   std::cout << "results in subtuple = ";
   print( subtuple, std::cout );
 

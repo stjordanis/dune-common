@@ -9,7 +9,7 @@ check_PROGRAMS = $(TESTPROGS)
 noinst_HEADERS =
 
 testincludedir = $(includedir)/dune/common/test
-testinclude_HEADERS = printtuple.hh
+testinclude_HEADERS =
 
 test_densevectortuple_SOURCES = test-densevectortuple.cc
 

@@ -3,8 +3,6 @@ set(TESTPROGS
     test-pointertuple
     test-subtuple)
 
-set(SOURCES printtuple.hh)
-
 add_directory_test_target(_test_target)
 add_dependencies(${_test_target} ${TESTPROGS})
 
