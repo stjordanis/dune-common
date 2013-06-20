@@ -13,7 +13,7 @@ template< int i, class Enumeration >
 struct Print
 {
   template< class Tuple >
-  static void apply ( const Tuple &tuple, std::ostream &out )
+  static void apply ( Tuple &tuple, std::ostream &out )
   {
     out << Dune::get< Dune::tuple_element< i, Enumeration >::type::value >( tuple );
 
@@ -24,7 +24,7 @@ struct Print
 
 
 template< class Enumeration, class Tuple >
-void print ( const Tuple &tuple, std::ostream &out = std::cout )
+void print ( Tuple &tuple, std::ostream &out = std::cout )
 {
   out << "(";
   Dune::ForEachElement< Print, Enumeration >::apply( tuple, out );
@@ -36,7 +36,7 @@ template< int i >
 struct CallToPrint
 {
   template< class Tuple >
-  static void apply ( const Tuple &tuple )
+  static void apply ( Tuple &tuple )
   {
     print< typename Dune::EnumerationTuple< i >::Type >( tuple );
   }

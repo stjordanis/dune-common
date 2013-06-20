@@ -320,7 +320,7 @@ namespace Dune
     {
     public:
       template< class... Args >
-      static void apply( const Args&... args )
+      static void apply( Args&... args )
       {}
     };
 
