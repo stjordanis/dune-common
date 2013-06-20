@@ -36,18 +36,21 @@ namespace Dune
    *        implementations for older compilers, which limits
    *        the number of template values to 9.
    */
+  template< class T, T... w >
+  class IntegralConstantTuple;
+
   template< class T, T v, T... w >
-  class IntegralConstantTuple
+  class IntegralConstantTuple< T, v, w... >
   {
   public:
     typedef typename PushFrontTuple< typename IntegralConstantTuple< T, w... >::Type, integral_constant< T, v > >::type Type;
   };
 
-  template< class T, T v >
-  class IntegralConstantTuple< T, v >
+  template< class T >
+  class IntegralConstantTuple< T >
   {
   public:
-    typedef tuple< integral_constant< T, v > > Type;
+    typedef tuple<> Type;
   };
 
 #else // #if HAVE_VARIADIC_TEMPLATES
