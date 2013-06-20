@@ -3,15 +3,15 @@
 #include <iostream>
 
 #include <dune/common/forloop.hh>
-#include <dune/common/tuples/indextuple.hh>
+#include <dune/common/tuples/enumeration.hh>
 #include <dune/common/tuples/tuples.hh>
 
 
 template< class Tuple, bool empty = ( Dune::tuple_size< Tuple >::value <= 0 ) >
-struct PrintIndexTuple;
+struct PrintEnumerationTuple;
 
 template< class Tuple >
-struct PrintIndexTuple< Tuple, true >
+struct PrintEnumerationTuple< Tuple, true >
 {
   static void apply( std::ostream &out = std::cout )
   {
@@ -20,7 +20,7 @@ struct PrintIndexTuple< Tuple, true >
 };
 
 template< class Tuple >
-class PrintIndexTuple< Tuple, false >
+class PrintEnumerationTuple< Tuple, false >
 {
   template< int i >
   struct Operation
@@ -46,7 +46,7 @@ public:
 
 int main ( int argc, char **argv )
 {
-  typedef Dune::IndexTuple< 3, 1 > IndexTuple;
-  PrintIndexTuple< IndexTuple >::apply();
+  typedef Dune::EnumerationTuple< 6, 3 > EnumerationTuple;
+  PrintEnumerationTuple< EnumerationTuple >::apply();
   return 0;
 }

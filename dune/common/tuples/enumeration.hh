@@ -1,5 +1,5 @@
-#ifndef DUNE_COMMON_TUPLES_INDEXTUPLE_HH
-#define DUNE_COMMON_TUPLES_INDEXTUPLE_HH
+#ifndef DUNE_COMMON_TUPLES_ENUMERATION_HH
+#define DUNE_COMMON_TUPLES_ENUMERATION_HH
 
 #include <dune/common/typetraits.hh>
 #include <dune/common/tuples/namespace.hh>
@@ -8,8 +8,8 @@
 namespace Dune
 {
 
-  // IndexTuple
-  // ----------
+  // EnumerationTuple
+  // ----------------
 
   /** \ingroup Tuples_Traits
    *
@@ -20,7 +20,7 @@ namespace Dune
    *  \tparam  init    start value for enumeration (optional, defaults to 0)
    *
 \code
-  typedef typename Dune::IndexTuple< 3, 1 >::Type Type;
+  typedef typename Dune::EnumerationTuple< 3, 1 >::Type Type;
   // 'Type' corresponds to:
   // Dune::tuple< Dune::integral_constant< int, 1 >,
   //              Dune::integral_constant< int, 2 >,
@@ -28,7 +28,7 @@ namespace Dune
 \endcode
    */
   template< int length, int init = 0 >
-  class IndexTuple
+  class EnumerationTuple
   {
     template< int N, int M >
     struct Max
@@ -61,7 +61,7 @@ namespace Dune
     };
 
   private:
-    IndexTuple ();
+    EnumerationTuple ();
   };
 
 } // namespace Dune
@@ -70,26 +70,26 @@ namespace Dune
 
 DUNE_OPEN_TUPLE_NAMESPACE
 
-  // tuple_element for IndexTuple
-  // ----------------------------
+  // tuple_element for EnumerationTuple
+  // ----------------------------------
 
   template< size_t i, int length, int init >
-  struct tuple_element< i, Dune::IndexTuple< length, init > >
+  struct tuple_element< i, Dune::EnumerationTuple< length, init > >
   {
     typedef Dune::integral_constant< int, init+i > type;
   };
 
 
 
-  // tuple_size for IndexTuple
-  // -------------------------
+  // tuple_size for EnumerationTuple
+  // -------------------------------
 
   template< int length, int init >
-  struct tuple_size< Dune::IndexTuple< length, init > >
+  struct tuple_size< Dune::EnumerationTuple< length, init > >
   {
     enum { value = (length >= 0) ? length : 0 };
   };
 
 DUNE_CLOSE_TUPLE_NAMESPACE
 
-#endif // #ifndef DUNE_COMMON_TUPLES_INDEXTUPLE_HH
+#endif // #ifndef DUNE_COMMON_TUPLES_ENUMERATION_HH
