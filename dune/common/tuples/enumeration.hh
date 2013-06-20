@@ -60,6 +60,9 @@ namespace Dune
       typedef Dune::tuple< NonEmpty, Args... > Type;
     };
 
+  public:
+    typedef typename Create< (Max< length, 0 >::value)+init, init >::Type Type;
+
   private:
     EnumerationTuple ();
   };

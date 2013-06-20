@@ -4,49 +4,51 @@
 
 #include <dune/common/forloop.hh>
 #include <dune/common/tuples/enumeration.hh>
+#include <dune/common/tuples/integralconstant.hh>
+#include <dune/common/tuples/forloop.hh>
 #include <dune/common/tuples/tuples.hh>
 
 
-template< class Tuple, bool empty = ( Dune::tuple_size< Tuple >::value <= 0 ) >
-struct PrintEnumerationTuple;
-
-template< class Tuple >
-struct PrintEnumerationTuple< Tuple, true >
+template< int i, class Enumeration >
+struct Print
 {
-  static void apply( std::ostream &out = std::cout )
+  template< class Tuple >
+  static void apply ( const Tuple &tuple, std::ostream &out )
   {
-    out << "()" << std::endl;
+    out << Dune::get< Dune::tuple_element< i, Enumeration >::type::value >( tuple );
+
+    if( i < Dune::tuple_size< Enumeration >::value-1 )
+      out << ", ";
   }
 };
 
-template< class Tuple >
-class PrintEnumerationTuple< Tuple, false >
+
+template< class Enumeration, class Tuple >
+void print ( const Tuple &tuple, std::ostream &out = std::cout )
 {
-  template< int i >
-  struct Operation
-  {
-    static void apply ( std::ostream &out )
-    {
-      out << Dune::tuple_element< i, Tuple >::type::value;
+  out << "(";
+  Dune::TupleForLoop< Print, Enumeration >::apply( tuple, out );
+  out << ")" << std::endl;
+}
 
-      if( i < Dune::tuple_size< Tuple >::value-1 )
-        out << ", ";
-    }
-  };
 
-public:
-  static void apply( std::ostream &out = std::cout )
+template< int i >
+struct CallToPrint
+{
+  template< class Tuple >
+  static void apply ( const Tuple &tuple )
   {
-    out << "(";
-    Dune::ForLoop< Operation, 0, Dune::tuple_size< Tuple >::value-1 >::apply( out );
-    out << ")" << std::endl;
+    print< typename Dune::EnumerationTuple< i >::Type >( tuple );
   }
 };
 
 
 int main ( int argc, char **argv )
 {
-  typedef Dune::EnumerationTuple< 6, 3 > EnumerationTuple;
-  PrintEnumerationTuple< EnumerationTuple >::apply();
+  typedef Dune::IntegralConstantTuple< int, 1, 2, 3, 4 >::Type IntegralConstantTuple;
+  IntegralConstantTuple tuple;
+
+  Dune::ForLoop< CallToPrint, -1, Dune::tuple_size< IntegralConstantTuple>::value >::apply( tuple );
+
   return 0;
 }
