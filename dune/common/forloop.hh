@@ -29,6 +29,8 @@ namespace Dune
     : public Value< last >
   {};
 
+
+
   // ForLoopHelper
   // -------------
 
@@ -38,6 +40,17 @@ namespace Dune
     template< class A, class B >
     struct Apply
     {
+#if HAVE_VARIADIC_TEMPLATES
+
+      template< class... Args >
+      static void apply ( Args &... args )
+      {
+        A::apply( args... );
+        B::apply( args... );
+      }
+
+#else // #if HAVE_VARIADIC_TEMPLATES
+
       static void apply ()
       {
         A::apply();
@@ -151,9 +164,11 @@ namespace Dune
         A::apply( p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13 );
         B::apply( p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13 );
       }
+
+#endif // #else // #if HAVE_VARIADIC_TEMPLATES
     };
 
-  } // end namespace ForLoopHelper
+  } // namespace ForLoopHelper
 
 #endif
 
