@@ -36,109 +36,30 @@ namespace Dune
    *  \sa AddRefTypeEvaluator, AddPtrTypeEvaluator, genericTransformTuple(),
    *      and transformTuple().
    */
-  template <template <class> class TypeEvaluator, class TupleType>
-  class ForEachType {
-    dune_static_assert(AlwaysFalse<TupleType>::value, "Attempt to use the "
-                       "unspecialized version of ForEachType.  ForEachType "
-                       "needs to be specialized for each possible tuple "
-                       "size.  Naturally the number of pre-defined "
-                       "specializations is limited arbitrarily.  Maybe you "
-                       "need to raise this limit by defining some more "
-                       "specializations?");
-    struct ImplementationDefined {};
-  public:
+  template< template< class > class TypeEvaluator, class Tuple >
+  struct ForEachType
+  {
     //! type of the transformed tuple
     typedef ImplementationDefined Type;
+
+  private:
+    static_assert( AlwaysFalse< Tuple >::value,
+                   "ForEachType can must be used with a Dune::tuple." );
   };
 
 #ifndef DOXYGEN
-  template <template <class> class TE, class Tuple>
-  struct ForEachType<TE, const Tuple> {
-    typedef const typename ForEachType<TE, Tuple>::Type Type;
+  template< template< class > class TypeEvaluator, class Tuple >
+  struct ForEachType< TypeEvaluator, const Tuple >
+  {
+    typedef const typename ForEachType< TypeEvaluator, Tuple >::Type Type;
   };
 
-  template <template <class> class TE>
-  struct ForEachType<TE, tuple<> > {
-    typedef tuple<> Type;
+  template< template< class > class TypeEvaluator, class ...T >
+  struct ForEachType< TypeEvaluator, Dune::tuple< T... > >
+  {
+    typedef Dune::tuple< typename TypeEvaluator< T >::Type... > Type;
   };
-
-  template <template <class> class TE, class T0>
-  struct ForEachType<TE, tuple<T0> > {
-    typedef tuple<typename TE<T0>::Type> Type;
-  };
-
-  template <template <class> class TE, class T0, class T1>
-  struct ForEachType<TE, tuple<T0, T1> > {
-    typedef tuple<typename TE<T0>::Type, typename TE<T1>::Type> Type;
-  };
-
-  template <template <class> class TE, class T0, class T1, class T2>
-  struct ForEachType<TE, tuple<T0, T1, T2> > {
-    typedef tuple<typename TE<T0>::Type, typename TE<T1>::Type,
-        typename TE<T2>::Type> Type;
-  };
-
-  template <template <class> class TE, class T0, class T1, class T2, class T3>
-  struct ForEachType<TE, tuple<T0, T1, T2, T3> > {
-    typedef tuple<typename TE<T0>::Type, typename TE<T1>::Type,
-        typename TE<T2>::Type, typename TE<T3>::Type> Type;
-  };
-
-  template <template <class> class TE, class T0, class T1, class T2, class T3,
-      class T4>
-  struct ForEachType<TE, tuple<T0, T1, T2, T3, T4> > {
-    typedef tuple<typename TE<T0>::Type, typename TE<T1>::Type,
-        typename TE<T2>::Type, typename TE<T3>::Type,
-        typename TE<T4>::Type> Type;
-  };
-
-  template <template <class> class TE, class T0, class T1, class T2, class T3,
-      class T4, class T5>
-  struct ForEachType<TE, tuple<T0, T1, T2, T3, T4, T5> > {
-    typedef tuple<typename TE<T0>::Type, typename TE<T1>::Type,
-        typename TE<T2>::Type, typename TE<T3>::Type,
-        typename TE<T4>::Type, typename TE<T5>::Type> Type;
-  };
-
-  template <template <class> class TE, class T0, class T1, class T2, class T3,
-      class T4, class T5, class T6>
-  struct ForEachType<TE, tuple<T0, T1, T2, T3, T4, T5, T6> > {
-    typedef tuple<typename TE<T0>::Type, typename TE<T1>::Type,
-        typename TE<T2>::Type, typename TE<T3>::Type,
-        typename TE<T4>::Type, typename TE<T5>::Type,
-        typename TE<T6>::Type> Type;
-  };
-
-  template <template <class> class TE, class T0, class T1, class T2, class T3,
-      class T4, class T5, class T6, class T7>
-  struct ForEachType<TE, tuple<T0, T1, T2, T3, T4, T5, T6, T7> > {
-    typedef tuple<typename TE<T0>::Type, typename TE<T1>::Type,
-        typename TE<T2>::Type, typename TE<T3>::Type,
-        typename TE<T4>::Type, typename TE<T5>::Type,
-        typename TE<T6>::Type, typename TE<T7>::Type> Type;
-  };
-
-  template <template <class> class TE, class T0, class T1, class T2, class T3,
-      class T4, class T5, class T6, class T7, class T8>
-  struct ForEachType<TE, tuple<T0, T1, T2, T3, T4, T5, T6, T7, T8> > {
-    typedef tuple<typename TE<T0>::Type, typename TE<T1>::Type,
-        typename TE<T2>::Type, typename TE<T3>::Type,
-        typename TE<T4>::Type, typename TE<T5>::Type,
-        typename TE<T6>::Type, typename TE<T7>::Type,
-        typename TE<T8>::Type> Type;
-  };
-
-  // template <template <class> class TE, class T0, class T1, class T2, class T3,
-  //           class T4, class T5, class T6, class T7, class T8, class T9>
-  // struct ForEachType<TE, tuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9> > {
-  //   typedef tuple<typename TE<T0>::Type, typename TE<T1>::Type,
-  //                 typename TE<T2>::Type, typename TE<T3>::Type,
-  //                 typename TE<T4>::Type, typename TE<T5>::Type,
-  //                 typename TE<T6>::Type, typename TE<T7>::Type,
-  //                 typename TE<T8>::Type, typename TE<T9>::Type> Type;
-  // };
 #endif // !defined(DOXYGEN)
-
 
 
 #ifndef DOXYGEN
