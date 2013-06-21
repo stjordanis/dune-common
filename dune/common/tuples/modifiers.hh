@@ -149,7 +149,7 @@ namespace Dune
   template< class Tuple, int size = Dune::tuple_size< Tuple >::value >
   class PopBackTuple
   {
-    typedef typename Dune::EnumerationTuple< std::size_t, (Dune::tuple_size< Tuple >::value - 1), 0 >::Type Enumeration;
+    typedef typename Dune::EnumerationTuple< int, (Dune::tuple_size< Tuple >::value - 1), 0 >::Type Enumeration;
 
   public:
     typedef typename Dune::SubTuple< Enumeration, Tuple >::Type Type;
@@ -164,7 +164,7 @@ namespace Dune
   template< class Tuple >
   inline typename PopBackTuple< Tuple >::Type tuple_pop_back ( const Tuple &tuple )
   {
-    typedef typename Dune::EnumerationTuple< std::size_t, (Dune::tuple_size< Tuple >::value - 1), 0 >::Type Enumeration;
+    typedef typename Dune::EnumerationTuple< int, (Dune::tuple_size< Tuple >::value - 1), 0 >::Type Enumeration;
     return Dune::sub_tuple< Enumeration >( tuple );
   }
 
@@ -180,7 +180,7 @@ namespace Dune
   template< class Tuple >
   class PopFrontTuple
   {
-    typedef typename Dune::EnumerationTuple< std::size_t, (Dune::tuple_size< Tuple >::value - 1), 1 >::Type Enumeration;
+    typedef typename Dune::EnumerationTuple< int, (Dune::tuple_size< Tuple >::value - 1), 1 >::Type Enumeration;
 
   public:
     typedef typename Dune::SubTuple< Enumeration, Tuple >::Type Type;
@@ -195,7 +195,7 @@ namespace Dune
   template< class Tuple >
   inline typename PopFrontTuple< Tuple >::Type tuple_pop_front ( const Tuple &tuple )
   {
-    typedef typename Dune::EnumerationTuple< std::size_t, (Dune::tuple_size< Tuple >::value - 1), 0 >::Type Enumeration;
+    typedef typename Dune::EnumerationTuple< int, (Dune::tuple_size< Tuple >::value - 1), 0 >::Type Enumeration;
     return Dune::sub_tuple< Enumeration >( tuple );
   }
 
