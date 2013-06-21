@@ -90,6 +90,8 @@ namespace Dune
     return std::get< I >( tuple );
   }
 
+  /** @} */
+
 } // namespace Dune
 
 #endif // #ifndef DUNE_COMMON_TUPLES_TUPLES_HH
