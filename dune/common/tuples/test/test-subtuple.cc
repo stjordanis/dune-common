@@ -68,7 +68,7 @@ int main ( int argc, char **argv )
   std::cout << "  using ";
   print( Positions(), std::cout );
 
-  typedef Dune::SubTuple< Tuple, Positions >::Type SubTuple;
+  typedef Dune::SubTuple< Positions, Tuple >::Type SubTuple;
   SubTuple subtuple = Dune::sub_tuple< Positions >( tuple );
   std::cout << "results in subtuple = ";
   print( subtuple, std::cout );
