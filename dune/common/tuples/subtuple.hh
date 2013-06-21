@@ -1,7 +1,6 @@
 #ifndef DUNE_COMMON_TUPLES_SUBTUPLE_HH
 #define DUNE_COMMON_TUPLES_SUBTUPLE_HH
 
-#include <dune/common/tuples/modifiers.hh>
 #include <dune/common/tuples/tuples.hh>
 
 namespace Dune
