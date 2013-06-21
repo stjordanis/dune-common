@@ -1,6 +1,7 @@
 #ifndef DUNE_COMMON_TUPLES_MODIFIERS_HH
 #define DUNE_COMMON_TUPLES_MODIFIERS_HH
 
+#include <dune/common/deprecated.hh>
 #include <dune/common/documentation.hh>
 #include <dune/common/static_assert.hh>
 
@@ -44,6 +45,7 @@ namespace Dune
   struct PushBackTuple< Dune::tuple< U... >, T >
   {
     typedef Dune::tuple< U..., T > Type;
+    typedef Type type DUNE_DEPRECATED;
 
     static Type apply ( const Dune::tuple< U... > &tuple, T t )
     {
@@ -105,6 +107,7 @@ namespace Dune
   struct PushFrontTuple< Dune::tuple< U... >, T >
   {
     typedef Dune::tuple< T, U... > Type;
+    typedef Type type DUNE_DEPRECATED;
 
     static Type apply ( const Dune::tuple< U... > &tuple, T t )
     {
@@ -153,6 +156,7 @@ namespace Dune
 
   public:
     typedef typename Dune::SubTuple< Enumeration, Tuple >::Type Type;
+    typedef Type type DUNE_DEPRECATED;
   };
 
 
@@ -184,6 +188,7 @@ namespace Dune
 
   public:
     typedef typename Dune::SubTuple< Enumeration, Tuple >::Type Type;
+    typedef Type type DUNE_DEPRECATED;
   };
 
 
