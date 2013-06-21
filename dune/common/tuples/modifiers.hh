@@ -206,37 +206,6 @@ namespace Dune
 
 
 
-#ifndef DOXYGEN
-
-  namespace
-  {
-    // CutOutTuple
-    // -----------
-
-    template< class Tuple, int begin, int length,
-              class StartType = Dune::tuple<> >
-    class CutOutTuple
-    {
-      dune_static_assert( (begin+length <= Dune::tuple_size< Tuple >::value),
-                          "Can not cut out tuple of given length" );
-      typedef typename Dune::PushBackTuple< StartType, typename Dune::tuple_element< begin, Tuple >::type >::type NextType;
-
-    public:
-      typedef typename CutOutTuple< Tuple, (begin+1), (length-1), NextType >::type type;
-    };
-
-    template< class Tuple, int begin, class ResultType >
-    struct CutOutTuple< Tuple, begin, 0, ResultType >
-    {
-      typedef ResultType type;
-    };
-
-  } // namespace
-
-#endif // #ifndef DOXYGEN
-
-
-
   // PopFrontTuple
   // -------------
 
@@ -247,7 +216,7 @@ namespace Dune
   template< class Tuple >
   class PopFrontTuple
   {
-    typedef typename Dune::EnumerationTuple< int, 1, (Dune::tuple_size< Tuple >::value - 1) >::Type Enumeration;
+    typedef typename Dune::EnumerationTuple< std::size_t, (Dune::tuple_size< Tuple >::value - 1), 1 >::Type Enumeration;
 
   public:
     typedef typename Dune::SubTuple< Enumeration, Tuple >::Type type;
@@ -266,7 +235,7 @@ namespace Dune
   template< class Tuple, int size = Dune::tuple_size< Tuple >::value >
   class PopBackTuple
   {
-    typedef typename Dune::EnumerationTuple< int, 1, (Dune::tuple_size< Tuple >::value - 1) >::Type Enumeration;
+    typedef typename Dune::EnumerationTuple< std::size_t, (Dune::tuple_size< Tuple >::value - 1), 0 >::Type Enumeration;
 
   public:
     typedef typename Dune::SubTuple< Enumeration, Tuple >::Type type;
@@ -305,12 +274,12 @@ namespace Dune
   // tuple_pop_back
   // --------------
 
-  /** \brief Remove last element from tuple.
-   */
-  template< class T1, class T2, class T3, class T4, class T5, class T6, class T7, class T8, class T9 >
-  inline Dune::tuple< T1, T2, T3, T4, T5, T6, T7, T8 > tuple_pop_back ( const Dune::tuple< T1, T2, T3, T4, T5, T6, T7, T8, T9 > &t )
+  /** \brief Remove last element from tuple */
+  template< class Tuple >
+  inline typename PopBackTuple< Tuple >::type tuple_pop_back ( const Tuple &tuple )
   {
-    return Dune::tuple< T1, T2, T3, T4, T5, T6, T7, T8 >( get< 0 >( t ), get< 1 >( t ), get< 2 >( t ), get< 3 >( t ), get< 4 >( t ), get< 5 >( t ), get< 6 >( t ), get< 7 >( t ) );
+    typedef typename Dune::EnumerationTuple< std::size_t, (Dune::tuple_size< Tuple >::value - 1), 0 >::Type Enumeration;
+    return Dune::sub_tuple< Enumeration >( tuple );
   }
 
 
@@ -318,12 +287,12 @@ namespace Dune
   // tuple_pop_front
   // ---------------
 
-  /** \brief Remove first element from tuple.
-   */
-  template< class T1, class T2, class T3, class T4, class T5, class T6, class T7, class T8, class T9 >
-  inline Dune::tuple< T2, T3, T4, T5, T6, T7, T8, T9 > tuple_pop_front ( const Dune::tuple< T1, T2, T3, T4, T5, T6, T7, T8, T9 > &t )
+  /** \brief Remove first element from tuple */
+  template< class Tuple >
+  inline typename PopFrontTuple< Tuple >::type tuple_pop_front ( const Tuple &tuple )
   {
-    return Dune::tuple< T2, T3, T4, T5, T6, T7, T8, T9 >( get< 1 >( t ), get< 2 >( t ), get< 3 >( t ), get< 4 >( t ), get< 5 >( t ), get< 6 >( t ), get< 7 >( t ), get< 8 >( t ) );
+    typedef typename Dune::EnumerationTuple< std::size_t, (Dune::tuple_size< Tuple >::value - 1), 0 >::Type Enumeration;
+    return Dune::sub_tuple< Enumeration >( tuple );
   }
 
 
