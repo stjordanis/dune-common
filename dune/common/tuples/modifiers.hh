@@ -3,6 +3,8 @@
 
 #include <dune/common/static_assert.hh>
 
+#include <dune/common/tuples/enumeration.hh>
+#include <dune/common/tuples/subtuple.hh>
 #include <dune/common/tuples/tuples.hh>
 
 namespace Dune
@@ -241,26 +243,16 @@ namespace Dune
   /** \brief Remove first element from tuple type.
    *
    *  \tparam Tuple Tuple type to be modified.
-   *  \tparam size  (implementation internal)
    */
-  template< class Tuple, int size = Dune::tuple_size< Tuple >::value >
-  struct PopFrontTuple
-  {
-    dune_static_assert( (size == Dune::tuple_size< Tuple >::value),
-                        "The \"size\" template parameter of PopFrontTuple "
-                        "is an implementation detail and should never be "
-                        "set explicitly!" );
-
-    typedef typename CutOutTuple< Tuple, 1, (Dune::tuple_size< Tuple >::value - 1) >::type type;
-  };
-
-#ifndef DOXYGEN
   template< class Tuple >
-  struct PopFrontTuple< Tuple, 0 >
+  class PopFrontTuple
   {
-    typedef Tuple type;
+    typedef typename Dune::EnumerationTuple< int, 1, (Dune::tuple_size< Tuple >::value - 1) >::Type Enumeration;
+
+  public:
+    typedef typename Dune::SubTuple< Enumeration, Tuple >::Type type;
   };
-#endif // #ifndef DOXYGEN
+
 
 
   // PopBackTuple
@@ -272,23 +264,13 @@ namespace Dune
    *  \tparam size  (implementation internal)
    */
   template< class Tuple, int size = Dune::tuple_size< Tuple >::value >
-  struct PopBackTuple
+  class PopBackTuple
   {
-    dune_static_assert( (size == Dune::tuple_size< Tuple >::value),
-                        "The \"size\" template parameter of PopBackTuple "
-                        "is an implementation detail and should never be "
-                        "set explicitly!" );
+    typedef typename Dune::EnumerationTuple< int, 1, (Dune::tuple_size< Tuple >::value - 1) >::Type Enumeration;
 
-    typedef typename CutOutTuple< Tuple, 0, (Dune::tuple_size< Tuple >::value - 1) >::type type;
+  public:
+    typedef typename Dune::SubTuple< Enumeration, Tuple >::Type type;
   };
-
-#ifndef DOXYGEN
-  template< class Tuple >
-  struct PopBackTuple< Tuple, 0 >
-  {
-    typedef Tuple type;
-  };
-#endif // #ifndef DOXYGEN
 
 
 
