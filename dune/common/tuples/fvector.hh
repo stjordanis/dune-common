@@ -25,11 +25,19 @@ namespace Dune
   template< class K, int... Sizes >
   struct DenseVectorTupleTraits< FieldVectorTuple< K, Sizes... > >
   {
+  private:
+    // used for compatibility for gcc-4.3.6
+    template< int i >
+    struct TypeEvaluator
+    {
+      typedef Dune::FieldVector< K, i > Type;
+    };
+
+  public:
     // implementation type
     typedef FieldVectorTuple< K, Sizes... > derived_type;
-
     // raw tuple type
-    typedef Dune::tuple< Dune::FieldVector< K, Sizes >... > tuple;
+    typedef Dune::tuple< typename TypeEvaluator< Sizes >::Type... > tuple;
 
     // field type
     typedef K field_type;
