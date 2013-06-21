@@ -24,22 +24,18 @@ namespace Dune
    *  @endcode
    */
   template< class Tuple >
-  class NullPointerTuple
+  struct NullPointerTuple
   {
     static_assert( AlwaysFalse< Tuple >::value,
                    "NullPointerTuple only available for pointer tuples" );
   };
 
   template< class... T >
-  class NullPointerTuple< Dune::tuple< T *... > >
+  struct NullPointerTuple< Dune::tuple< T *... > >
   {
-    template< class U >
-    static U *null () { return nullptr; }
-
-  public:
     operator Dune::tuple< T *... > () const
     {
-      return Dune::tuple< T *... >( null< T >()... );
+      return Dune::tuple< T *... >( (T *)nullptr... );
     }
   };
 
