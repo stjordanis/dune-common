@@ -53,8 +53,15 @@ namespace Dune
 
   template< std::size_t I, class Tuple >
   struct tuple_element
-  : public std::tuple_element< I, Tuple >
-  {};
+  {
+    typedef typename std::tuple_element< I, Tuple >::type type;
+  };
+
+  template< std::size_t I, class Tuple >
+  struct tuple_element< I, const Tuple >
+  {
+    typedef typename std::tuple_element< I, Tuple >::type type;
+  };
 
 
 
@@ -72,13 +79,13 @@ namespace Dune
   // ---
 
   template< std::size_t I, class Tuple >
-  const typename tuple_element< I, Tuple >::type &get ( const Tuple &tuple ) noexcept
+  const typename tuple_element< I, Tuple >::type &get ( const Tuple &tuple ) throw()
   {
     return std::get< I >( tuple );
   }
 
   template< std::size_t I, class Tuple >
-  typename tuple_element< I, Tuple >::type &get ( Tuple &tuple ) noexcept
+  typename tuple_element< I, Tuple >::type &get ( Tuple &tuple ) throw()
   {
     return std::get< I >( tuple );
   }
