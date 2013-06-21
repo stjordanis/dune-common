@@ -40,12 +40,48 @@ namespace Dune
     typedef T& ParameterType;
   };
 
+
+
   using std::tuple;
-  using std::tuple_element;
-  using std::get;
-  using std::tuple_size;
-  using std::tie;
   using std::make_tuple;
+  using std::tie;
+
+
+
+  // tuple_element
+  // -------------
+
+  template< std::size_t I, class Tuple >
+  struct tuple_element
+  : public std::tuple_element< I, Tuple >
+  {};
+
+
+
+  // tuple_size
+  // ----------
+
+  template< class Tuple >
+  struct tuple_size
+  : public std::tuple_size< Tuple >
+  {};
+
+
+
+  // get
+  // ---
+
+  template< std::size_t I, class Tuple >
+  const typename tuple_element< I, Tuple >::type &get ( const Tuple &tuple ) noexcept
+  {
+    return std::get< I >( tuple );
+  }
+
+  template< std::size_t I, class Tuple >
+  typename tuple_element< I, Tuple >::type &get ( Tuple &tuple ) noexcept
+  {
+    return std::get< I >( tuple );
+  }
 
 } // namespace Dune
 
