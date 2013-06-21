@@ -4,9 +4,7 @@
 #include <dune/common/deprecated.hh>
 #include <dune/common/nullptr.hh>
 #include <dune/common/static_assert.hh>
-
-#include <dune/common/tuples/instantiate.hh>
-#include <dune/common/tuples/typetraits.hh>
+#include <dune/common/tuples/tuples.hh>
 
 namespace Dune
 {
@@ -26,15 +24,18 @@ namespace Dune
    *  @endcode
    */
   template< class Tuple >
-  class NullPointerTuple
+  struct NullPointerTuple
   {
-    dune_static_assert( Dune::TupleTypeTraits< Tuple >::isPointerTuple,
-                        "Argument tuple contains non-pointer types." );
+    static_assert( AlwaysFalse< Tuple >::value,
+                   "NullPointerTuple only available for pointer tuples" );
+  };
 
-  public:
-    operator Tuple () const
+  template< class... T >
+  struct NullPointerTuple< Dune::tuple< T *... > >
+  {
+    operator Dune::tuple< T *... > () const
     {
-      return Dune::InstantiateTuple< Tuple >::apply( nullptr );
+      return Dune::tuple< T *... >( static_cast< T * >( nullptr )... );
     }
   };
 
