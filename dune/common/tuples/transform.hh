@@ -81,8 +81,8 @@ namespace Dune
    * type of a tuple: it transforms the value using a user-provided policy
    * functor.
    *
-   * \param t The tuple value to transform.
-   * \param f The functor to use to transform the values.
+   * \param tuple The tuple value to transform.
+   * \param functor The functor to use to transform the values.
    *
    * The functor should have the following form:
    * \code
