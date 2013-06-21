@@ -130,7 +130,7 @@ namespace Dune
    *         to append at the beginning.
    */
   template< class T, class... U >
-  inline Dune::tuple< U..., T >
+  inline Dune::tuple< T, U... >
   tuple_push_front ( const Dune::tuple< U... > &tuple, T t )
   {
     return PushFrontTuple< Dune::tuple< U... >, T >::apply( tuple, t );
