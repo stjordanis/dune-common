@@ -3,10 +3,12 @@
 
 #include <dune/common/typetraits.hh>
 
+#include <dune/common/tuples/enumeration.hh>
 #include <dune/common/tuples/foreach.hh>
 #include <dune/common/tuples/tuples.hh>
 
-namespace Dune {
+namespace Dune
+{
 
   /** @addtogroup Tuples_MetaProgramming
    *
@@ -48,260 +50,27 @@ namespace Dune {
   // genericTransformTupleBackend() is an implementation detail -- hide it
   // from Doxygen
 #ifndef DOXYGEN
-  // 0-element tuple
-  // This is a special case: we touch neither the tuple nor the functor, so
-  // const references are sufficient and we don't need to overload
-  template<class Functor>
-  typename ForEachType<Functor::template TypeEvaluator,
-      tuple<> >::Type
-  genericTransformTupleBackend
-    (const tuple<>& t, const Functor& f)
+  template< class Tuple, class Functor, class ...T >
+  typename ForEachType< Functor::template TypeEvaluator, Tuple >::Type
+  genericTransformTupleBackend ( Tuple &tuple, Functor &functor, Dune::tuple< T... > )
   {
-    return typename ForEachType<Functor::template TypeEvaluator,
-        tuple<> >::Type
-             ();
+    typedef typename ForEachType< Functor::template TypeEvaluator, Tuple >::Type Result;
+    return Result( functor( Dune::get< T::value >( tuple ) )... );
   }
 
-  // 1-element tuple
-  template<class T0, class Functor>
-  typename ForEachType<Functor::template TypeEvaluator,
-      tuple<T0> >::Type
-  genericTransformTupleBackend
-    (tuple<T0>& t, Functor& f)
+  template< class Tuple, class Functor, class ...T >
+  typename ForEachType< Functor::template TypeEvaluator, Tuple >::Type
+  genericTransformTupleBackend ( const Tuple &tuple, Functor &functor, Dune::tuple< T... > )
   {
-    return typename ForEachType<Functor::template TypeEvaluator,
-        tuple<T0> >::Type
-             (f(get<0>(t)));
+    typedef typename ForEachType< Functor::template TypeEvaluator, Tuple >::Type Result;
+    return Result( functor( Dune::get< T::value >( tuple ) )... );
   }
-  template<class T0, class Functor>
-  typename ForEachType<Functor::template TypeEvaluator,
-      tuple<T0> >::Type
-  genericTransformTupleBackend
-    (const tuple<T0>& t, Functor& f)
-  {
-    return typename ForEachType<Functor::template TypeEvaluator,
-        tuple<T0> >::Type
-             (f(get<0>(t)));
-  }
-
-  // 2-element tuple
-  template<class T0, class T1, class Functor>
-  typename ForEachType<Functor::template TypeEvaluator,
-      tuple<T0, T1> >::Type
-  genericTransformTupleBackend
-    (tuple<T0, T1>& t, Functor& f)
-  {
-    return typename ForEachType<Functor::template TypeEvaluator,
-        tuple<T0, T1> >::Type
-             (f(get<0>(t)), f(get<1>(t)));
-  }
-  template<class T0, class T1, class Functor>
-  typename ForEachType<Functor::template TypeEvaluator,
-      tuple<T0, T1> >::Type
-  genericTransformTupleBackend
-    (const tuple<T0, T1>& t, Functor& f)
-  {
-    return typename ForEachType<Functor::template TypeEvaluator,
-        tuple<T0, T1> >::Type
-             (f(get<0>(t)), f(get<1>(t)));
-  }
-
-  // 3-element tuple
-  template<class T0, class T1, class T2, class Functor>
-  typename ForEachType<Functor::template TypeEvaluator,
-      tuple<T0, T1, T2> >::Type
-  genericTransformTupleBackend
-    (tuple<T0, T1, T2>& t, Functor& f)
-  {
-    return typename ForEachType<Functor::template TypeEvaluator,
-        tuple<T0, T1, T2> >::Type
-             (f(get<0>(t)), f(get<1>(t)), f(get<2>(t)));
-  }
-  template<class T0, class T1, class T2, class Functor>
-  typename ForEachType<Functor::template TypeEvaluator,
-      tuple<T0, T1, T2> >::Type
-  genericTransformTupleBackend
-    (const tuple<T0, T1, T2>& t, Functor& f)
-  {
-    return typename ForEachType<Functor::template TypeEvaluator,
-        tuple<T0, T1, T2> >::Type
-             (f(get<0>(t)), f(get<1>(t)), f(get<2>(t)));
-  }
-
-  // 4-element tuple
-  template<class T0, class T1, class T2, class T3, class Functor>
-  typename ForEachType<Functor::template TypeEvaluator,
-      tuple<T0, T1, T2, T3> >::Type
-  genericTransformTupleBackend
-    (tuple<T0, T1, T2, T3>& t, Functor& f)
-  {
-    return typename ForEachType<Functor::template TypeEvaluator,
-        tuple<T0, T1, T2, T3> >::Type
-             (f(get<0>(t)), f(get<1>(t)), f(get<2>(t)), f(get<3>(t)));
-  }
-  template<class T0, class T1, class T2, class T3, class Functor>
-  typename ForEachType<Functor::template TypeEvaluator,
-      tuple<T0, T1, T2, T3> >::Type
-  genericTransformTupleBackend
-    (const tuple<T0, T1, T2, T3>& t, Functor& f)
-  {
-    return typename ForEachType<Functor::template TypeEvaluator,
-        tuple<T0, T1, T2, T3> >::Type
-             (f(get<0>(t)), f(get<1>(t)), f(get<2>(t)), f(get<3>(t)));
-  }
-
-  // 5-element tuple
-  template<class T0, class T1, class T2, class T3, class T4, class Functor>
-  typename ForEachType<Functor::template TypeEvaluator,
-      tuple<T0, T1, T2, T3, T4> >::Type
-  genericTransformTupleBackend
-    (tuple<T0, T1, T2, T3, T4>& t, Functor& f)
-  {
-    return typename ForEachType<Functor::template TypeEvaluator,
-        tuple<T0, T1, T2, T3, T4> >::Type
-             (f(get<0>(t)), f(get<1>(t)), f(get<2>(t)), f(get<3>(t)), f(get<4>(t)));
-  }
-  template<class T0, class T1, class T2, class T3, class T4, class Functor>
-  typename ForEachType<Functor::template TypeEvaluator,
-      tuple<T0, T1, T2, T3, T4> >::Type
-  genericTransformTupleBackend
-    (const tuple<T0, T1, T2, T3, T4>& t, Functor& f)
-  {
-    return typename ForEachType<Functor::template TypeEvaluator,
-        tuple<T0, T1, T2, T3, T4> >::Type
-             (f(get<0>(t)), f(get<1>(t)), f(get<2>(t)), f(get<3>(t)), f(get<4>(t)));
-  }
-
-  // 6-element tuple
-  template<class T0, class T1, class T2, class T3, class T4, class T5,
-      class Functor>
-  typename ForEachType<Functor::template TypeEvaluator,
-      tuple<T0, T1, T2, T3, T4, T5> >::Type
-  genericTransformTupleBackend
-    (tuple<T0, T1, T2, T3, T4, T5>& t, Functor& f)
-  {
-    return typename ForEachType<Functor::template TypeEvaluator,
-        tuple<T0, T1, T2, T3, T4, T5> >::Type
-             (f(get<0>(t)), f(get<1>(t)), f(get<2>(t)), f(get<3>(t)), f(get<4>(t)),
-             f(get<5>(t)));
-  }
-  template<class T0, class T1, class T2, class T3, class T4, class T5,
-      class Functor>
-  typename ForEachType<Functor::template TypeEvaluator,
-      tuple<T0, T1, T2, T3, T4, T5> >::Type
-  genericTransformTupleBackend
-    (const tuple<T0, T1, T2, T3, T4, T5>& t, Functor& f)
-  {
-    return typename ForEachType<Functor::template TypeEvaluator,
-        tuple<T0, T1, T2, T3, T4, T5> >::Type
-             (f(get<0>(t)), f(get<1>(t)), f(get<2>(t)), f(get<3>(t)), f(get<4>(t)),
-             f(get<5>(t)));
-  }
-
-  // 7-element tuple
-  template<class T0, class T1, class T2, class T3, class T4, class T5,
-      class T6, class Functor>
-  typename ForEachType<Functor::template TypeEvaluator,
-      tuple<T0, T1, T2, T3, T4, T5, T6> >::Type
-  genericTransformTupleBackend
-    (tuple<T0, T1, T2, T3, T4, T5, T6>& t, Functor& f)
-  {
-    return typename ForEachType<Functor::template TypeEvaluator,
-        tuple<T0, T1, T2, T3, T4, T5, T6> >::Type
-             (f(get<0>(t)), f(get<1>(t)), f(get<2>(t)), f(get<3>(t)), f(get<4>(t)),
-             f(get<5>(t)), f(get<6>(t)));
-  }
-  template<class T0, class T1, class T2, class T3, class T4, class T5,
-      class T6, class Functor>
-  typename ForEachType<Functor::template TypeEvaluator,
-      tuple<T0, T1, T2, T3, T4, T5, T6> >::Type
-  genericTransformTupleBackend
-    (const tuple<T0, T1, T2, T3, T4, T5, T6>& t, Functor& f)
-  {
-    return typename ForEachType<Functor::template TypeEvaluator,
-        tuple<T0, T1, T2, T3, T4, T5, T6> >::Type
-             (f(get<0>(t)), f(get<1>(t)), f(get<2>(t)), f(get<3>(t)), f(get<4>(t)),
-             f(get<5>(t)), f(get<6>(t)));
-  }
-
-  // 8-element tuple
-  template<class T0, class T1, class T2, class T3, class T4, class T5,
-      class T6, class T7, class Functor>
-  typename ForEachType<Functor::template TypeEvaluator,
-      tuple<T0, T1, T2, T3, T4, T5, T6, T7> >::Type
-  genericTransformTupleBackend
-    (tuple<T0, T1, T2, T3, T4, T5, T6, T7>& t, Functor& f)
-  {
-    return typename ForEachType<Functor::template TypeEvaluator,
-        tuple<T0, T1, T2, T3, T4, T5, T6, T7> >::Type
-             (f(get<0>(t)), f(get<1>(t)), f(get<2>(t)), f(get<3>(t)), f(get<4>(t)),
-             f(get<5>(t)), f(get<6>(t)), f(get<7>(t)));
-  }
-  template<class T0, class T1, class T2, class T3, class T4, class T5,
-      class T6, class T7, class Functor>
-  typename ForEachType<Functor::template TypeEvaluator,
-      tuple<T0, T1, T2, T3, T4, T5, T6, T7> >::Type
-  genericTransformTupleBackend
-    (const tuple<T0, T1, T2, T3, T4, T5, T6, T7>& t, Functor& f)
-  {
-    return typename ForEachType<Functor::template TypeEvaluator,
-        tuple<T0, T1, T2, T3, T4, T5, T6, T7> >::Type
-             (f(get<0>(t)), f(get<1>(t)), f(get<2>(t)), f(get<3>(t)), f(get<4>(t)),
-             f(get<5>(t)), f(get<6>(t)), f(get<7>(t)));
-  }
-
-  // 9-element tuple
-  template<class T0, class T1, class T2, class T3, class T4, class T5,
-      class T6, class T7, class T8, class Functor>
-  typename ForEachType<Functor::template TypeEvaluator,
-      tuple<T0, T1, T2, T3, T4, T5, T6, T7, T8> >::Type
-  genericTransformTupleBackend
-    (tuple<T0, T1, T2, T3, T4, T5, T6, T7, T8>& t, Functor& f)
-  {
-    return typename ForEachType<Functor::template TypeEvaluator,
-        tuple<T0, T1, T2, T3, T4, T5, T6, T7, T8> >::Type
-             (f(get<0>(t)), f(get<1>(t)), f(get<2>(t)), f(get<3>(t)), f(get<4>(t)),
-             f(get<5>(t)), f(get<6>(t)), f(get<7>(t)), f(get<8>(t)));
-  }
-  template<class T0, class T1, class T2, class T3, class T4, class T5,
-      class T6, class T7, class T8, class Functor>
-  typename ForEachType<Functor::template TypeEvaluator,
-      tuple<T0, T1, T2, T3, T4, T5, T6, T7, T8> >::Type
-  genericTransformTupleBackend
-    (const tuple<T0, T1, T2, T3, T4, T5, T6, T7, T8>& t, Functor& f)
-  {
-    return typename ForEachType<Functor::template TypeEvaluator,
-        tuple<T0, T1, T2, T3, T4, T5, T6, T7, T8> >::Type
-             (f(get<0>(t)), f(get<1>(t)), f(get<2>(t)), f(get<3>(t)), f(get<4>(t)),
-             f(get<5>(t)), f(get<6>(t)), f(get<7>(t)), f(get<8>(t)));
-  }
-
-  // // 10-element tuple
-  // template<class T0, class T1, class T2, class T3, class T4, class T5,
-  //          class T6, class T7, class T8, class T9, class Functor>
-  // typename ForEachType<Functor::template TypeEvaluator,
-  //                      tuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9> >::Type
-  // genericTransformTupleBackend
-  // (tuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>& t, Functor& f)
-  // {
-  //   return typename ForEachType<Functor::template TypeEvaluator,
-  //     tuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9> >::Type
-  //     (f(get<0>(t)), f(get<1>(t)), f(get<2>(t)), f(get<3>(t)), f(get<4>(t)),
-  //      f(get<5>(t)), f(get<6>(t)), f(get<7>(t)), f(get<8>(t)), f(get<9>(t)));
-  // }
-  // template<class T0, class T1, class T2, class T3, class T4, class T5,
-  //          class T6, class T7, class T8, class T9, class Functor>
-  // typename ForEachType<Functor::template TypeEvaluator,
-  //                      tuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9> >::Type
-  // genericTransformTupleBackend
-  // (const tuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>& t, Functor& f)
-  // {
-  //   return typename ForEachType<Functor::template TypeEvaluator,
-  //     tuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9> >::Type
-  //     (f(get<0>(t)), f(get<1>(t)), f(get<2>(t)), f(get<3>(t)), f(get<4>(t)),
-  //      f(get<5>(t)), f(get<6>(t)), f(get<7>(t)), f(get<8>(t)), f(get<9>(t)));
-  // }
 #endif // ! defined(DOXYGEN)
+
+
+
+  // genericTransformTuple
+  // ---------------------
 
   //! transform a tuple object into another tuple object
   /**
@@ -345,28 +114,41 @@ namespace Dune {
    * arguments here.  These overloaded definitions are not documented
    * separately.
    */
-  template<class Tuple, class Functor>
-  typename ForEachType<Functor::template TypeEvaluator, Tuple>::Type
-  genericTransformTuple(Tuple& t, Functor& f) {
-    return genericTransformTupleBackend(t, f);
+  template< class Tuple, class Functor >
+  typename ForEachType< Functor::template TypeEvaluator, Tuple >::Type
+  genericTransformTuple ( Tuple &tuple, Functor &functor )
+  {
+    typedef typename EnumerationTuple< tuple_size< Tuple >::value >::Type Enumeration;
+    return genericTransformTupleBackend( tuple, functor, Enumeration() );
   }
+
 #ifndef DOXYGEN
-  template<class Tuple, class Functor>
-  typename ForEachType<Functor::template TypeEvaluator, Tuple>::Type
-  genericTransformTuple(const Tuple& t, Functor& f) {
-    return genericTransformTupleBackend(t, f);
+  template< class Tuple, class Functor >
+  typename ForEachType< Functor::template TypeEvaluator, Tuple >::Type
+  genericTransformTuple ( const Tuple &tuple, Functor &functor )
+  {
+    typedef typename EnumerationTuple< tuple_size< Tuple >::value >::Type Enumeration;
+    return genericTransformTupleBackend( tuple, functor, Enumeration() );
   }
-  template<class Tuple, class Functor>
-  typename ForEachType<Functor::template TypeEvaluator, Tuple>::Type
-  genericTransformTuple(Tuple& t, const Functor& f) {
-    return genericTransformTupleBackend(t, f);
+
+  template< class Tuple, class Functor >
+  typename ForEachType< Functor::template TypeEvaluator, Tuple >::Type
+  genericTransformTuple ( Tuple &tuple, const Functor &functor )
+  {
+    typedef typename EnumerationTuple< tuple_size< Tuple >::value >::Type Enumeration;
+    return genericTransformTupleBackend( tuple, functor, Enumeration() );
   }
-  template<class Tuple, class Functor>
-  typename ForEachType<Functor::template TypeEvaluator, Tuple>::Type
-  genericTransformTuple(const Tuple& t, const Functor& f) {
-    return genericTransformTupleBackend(t, f);
+
+  template< class Tuple, class Functor >
+  typename ForEachType< Functor::template TypeEvaluator, Tuple >::Type
+  genericTransformTuple ( const Tuple &tuple, const Functor &functor )
+  {
+    typedef typename EnumerationTuple< tuple_size< Tuple >::value >::Type Enumeration;
+    return genericTransformTupleBackend( tuple, functor, Enumeration() );
   }
-#endif // ! defined(DOXYGEN)
+#endif // #ifndef DOXYGEN
+
+
 
   ////////////////////////////////////////////////////////////////////////
   //
