@@ -7,7 +7,6 @@
 
 #include <dune/common/tuples/densevector.hh>
 #include <dune/common/tuples/foreach.hh>
-#include <dune/common/tuples/namespace.hh>
 #include <dune/common/tuples/uniqueelementtype.hh>
 
 namespace Dune
@@ -116,37 +115,39 @@ namespace Dune
 
 
 
+  // tuple_element for FieldVectorTuple
+  // ----------------------------------
+
+  template< std::size_t i, class Field, class Dimensions >
+  struct tuple_element< i, FieldVectorTuple< Field, Dimensions > >
+  {
+    typedef typename tuple_element< i, typename DenseVectorTupleTraits< FieldVectorTuple< Field, Dimensions > >::tuple >::type type;
+  };
+
+  template< std::size_t i, class Field, class Dimensions >
+  struct tuple_element< i, const FieldVectorTuple< Field, Dimensions > >
+  {
+    typedef typename tuple_element< i, typename DenseVectorTupleTraits< FieldVectorTuple< Field, Dimensions > >::tuple >::type type;
+  };
+
+
+
   // get for FieldVectorTuple
   // ------------------------
 
-  template< int i, class Field, class Dimensions >
-  typename tuple_element< i, typename DenseVectorTupleTraits< FieldVectorTuple< Field, Dimensions > >::tuple >::type &
-  get ( Dune::FieldVectorTuple< Field, Dimensions > &tuple )
-  {
-    return get< i >( static_cast< typename DenseVectorTupleTraits< FieldVectorTuple< Field, Dimensions > >::tuple & >( tuple ) );
-  }
-
-  template< int i, class Field, class Dimensions >
-  const typename tuple_element< i, typename DenseVectorTupleTraits< FieldVectorTuple< Field, Dimensions > >::tuple >::type &
-  get ( const Dune::FieldVectorTuple< Field, Dimensions > &tuple )
+  template< std::size_t i, class Field, class Dimensions >
+  const typename tuple_element< i, FieldVectorTuple< Field, Dimensions > >::type &
+  get ( const FieldVectorTuple< Field, Dimensions > &tuple ) throw()
   {
     return get< i >( static_cast< const typename DenseVectorTupleTraits< FieldVectorTuple< Field, Dimensions > >::tuple & >( tuple ) );
   }
 
-} // namespace Dune
-
-
-
-DUNE_OPEN_TUPLE_NAMESPACE
-
-  // tuple_element for FieldectorTuple
-  // ---------------------------------
-
-  template< size_t i, class Field, class Dimensions >
-  struct tuple_element< i, Dune::FieldVectorTuple< Field, Dimensions > >
+  template< std::size_t i, class Field, class Dimensions >
+  typename tuple_element< i, FieldVectorTuple< Field, Dimensions > >::type &
+  get ( FieldVectorTuple< Field, Dimensions > &tuple ) throw()
   {
-    typedef typename tuple_element< i, typename Dune::DenseVectorTupleTraits< Dune::FieldVectorTuple< Field, Dimensions > >::tuple >::type type;
-  };
+    return get< i >( static_cast< typename DenseVectorTupleTraits< FieldVectorTuple< Field, Dimensions > >::tuple & >( tuple ) );
+  }
 
 
 
@@ -154,11 +155,11 @@ DUNE_OPEN_TUPLE_NAMESPACE
   // -------------------------------
 
   template< class Field, class Dimensions >
-  struct tuple_size< Dune::FieldVectorTuple< Field, Dimensions > >
+  struct tuple_size< FieldVectorTuple< Field, Dimensions > >
   {
-    enum { value = Dune::FieldVectorTuple< Field, Dimensions >::tuple_size };
+    enum { value = tuple_size< typename DenseVectorTupleTraits< FieldVectorTuple< Field, Dimensions > >::tuple >::value };
   };
 
-DUNE_CLOSE_TUPLE_NAMESPACE
+} // namespace Dune
 
 #endif // #ifndef DUNE_COMMON_TUPLES_FVECTOR_HH

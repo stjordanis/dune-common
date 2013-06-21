@@ -2,7 +2,6 @@
 #define DUNE_COMMON_TUPLES_TYPEINDEXED_HH
 
 #include <dune/common/tuples/firstindex.hh>
-#include <dune/common/tuples/namespace.hh>
 #include <dune/common/tuples/tuples.hh>
 
 namespace Dune
@@ -78,41 +77,51 @@ namespace Dune
 
 
 
-  // get for TypeIndexedTuple
-  // ------------------------
+  // tuple_element
+  // -------------
 
-  template< int i, class Tuple, class Types >
-  typename tuple_element< i, Tuple >::type &
-  get ( Dune::TypeIndexedTuple< Tuple, Types > &tuple )
-  {
-    return get< i >( static_cast< Tuple & >( tuple ) );
-  }
-
-  template< int i, class Tuple, class Types >
-  const typename tuple_element< i, Tuple >::type &
-  get ( const Dune::TypeIndexedTuple< Tuple, Types > &tuple )
-  {
-    return get< i >( static_cast< const Tuple & >( tuple ) );
-  }
-
-} // namespace Dune
-
-
-
-// Some Specializations for Tuple Access
-// -------------------------------------
-
-DUNE_OPEN_TUPLE_NAMESPACE
-
-  // tuple_element for TypeIndexedTuple
-  // ----------------------------------
-
-  template< size_t i, class Tuple, class Types >
-  struct tuple_element< i, Dune::TypeIndexedTuple< Tuple, Types > >
+  template< std::size_t i, class Tuple, class Types >
+  struct tuple_element< i, TypeIndexedTuple< Tuple, Types > >
   {
     typedef typename tuple_element< i, Tuple >::type type;
   };
 
-DUNE_CLOSE_TUPLE_NAMESPACE
+  template< std::size_t i, class Tuple, class Types >
+  struct tuple_element< i, const TypeIndexedTuple< Tuple, Types > >
+  {
+    typedef typename tuple_element< i, Tuple >::type type;
+  };
+
+
+
+  // get for TypeIndexedTuple
+  // ------------------------
+
+  template< std::size_t i, class Tuple, class Types >
+  const typename tuple_element< i, TypeIndexedTuple< Tuple, Types > >::type &
+  get ( const TypeIndexedTuple< Tuple, Types > &tuple ) throw()
+  {
+    return get< i >( static_cast< const Tuple & >( tuple ) );
+  }
+
+  template< std::size_t i, class Tuple, class Types >
+  typename tuple_element< i, TypeIndexedTuple< Tuple, Types > >::type &
+  get ( TypeIndexedTuple< Tuple, Types > &tuple ) throw()
+  {
+    return get< i >( static_cast< Tuple & >( tuple ) );
+  }
+
+
+
+  // tuple_size for TypeIndexedTuple
+  // -------------------------------
+
+  template< class Tuple, class Types >
+  struct tuple_size< TypeIndexedTuple< Tuple, Types > >
+  {
+    enum { value = tuple_size< Tuple >::value };
+  };
+
+} // namespace Dune
 
 #endif // #ifndef DUNE_COMMON_TUPLES_TYPEINDEXED_HH

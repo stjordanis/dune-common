@@ -13,7 +13,6 @@ install( FILES
          integralconstant.hh
          iostream.hh
          modifiers.hh
-         namespace.hh
          nullptr.hh
          pointer.hh
          subtuple.hh
