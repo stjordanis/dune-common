@@ -123,7 +123,7 @@ namespace Dune
     // find element in pass id tuple
     typedef typename FirstTypeIndex< Tuple, Element >::type Position;
     // add value to seed
-    typedef typename PushBackTuple< Seed, Position >::type NextSeed;
+    typedef typename PushBackTuple< Seed, Position >::Type NextSeed;
 
   public:
     // result type is a tuple of integral constants

@@ -142,7 +142,7 @@ namespace Dune
     template< class, class, int, int > friend class DereferenceTuple;
 
     typedef typename Dune::TypeTraits< typename Dune::tuple_element< index, Tuple >::type >::PointeeType & AppendType;
-    typedef typename Dune::PushBackTuple< Seed, AppendType >::type AccumulatedType;
+    typedef typename Dune::PushBackTuple< Seed, AppendType >::Type AccumulatedType;
 
     typedef DereferenceTuple< Tuple, AccumulatedType, (index+1), size > NextType;
 

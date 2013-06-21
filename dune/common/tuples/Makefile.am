@@ -11,7 +11,6 @@ tuplesinclude_HEADERS =	access.hh \
 			instantiate.hh \
 			integralconstant.hh \
 			modifiers.hh \
-			modifiers_include.hh \
 			namespace.hh \
 			nullptr.hh \
 			pointer.hh \

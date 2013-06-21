@@ -1,7 +1,8 @@
 #ifndef DUNE_COMMON_TUPLES_UNIQUEELEMENTTYPE_HH
 #define DUNE_COMMON_TUPLES_UNIQUEELEMENTTYPE_HH
 
-#include <dune/common/tuples/modifiers.hh>
+#include <dune/common/tuples/enumeration.hh>
+#include <dune/common/tuples/foreach.hh>
 
 namespace Dune
 {
@@ -16,19 +17,20 @@ namespace Dune
    *
    * \tparam  T      type of each element in resulting tuple type
    * \tparam  size   size of resulting tuple type
-   * \tparam  Seed   implementation internal
-   * \tparm   index  implementation internal
    */
-  template< class T, int size, class Seed = Dune::tuple<>, int index = 0 >
-  struct UniqueElementTypeTuple
+  template< class T, int size >
+  class UniqueElementTypeTuple
   {
-    typedef typename UniqueElementTypeTuple< T, size, typename Dune::PushBackTuple< Seed, T >::type, (index+1) >::Type Type;
-  };
+    template< class U >
+    struct TypeEvaluator
+    {
+      typedef T Type;
+    };
 
-  template< class T, int size, class Seed >
-  struct UniqueElementTypeTuple< T, size, Seed, size >
-  {
-    typedef Seed Type;
+    typedef typename EnumerationTuple< int, size >::Type Enumeration;
+
+  public:
+    typedef typename ForEachType< TypeEvaluator, Enumeration >::Type Type;
   };
 
 } // namespace Dune

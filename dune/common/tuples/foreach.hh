@@ -221,7 +221,7 @@ namespace Dune
     class ForEachElementHelper
     : public Operation<
         Value< 0, Tuple >,
-        ForEachElementHelper< Operation, Value, typename PopFrontTuple< Tuple >::type >
+        ForEachElementHelper< Operation, Value, typename PopFrontTuple< Tuple >::Type >
       >
     {};
 

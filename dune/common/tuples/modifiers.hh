@@ -1,6 +1,7 @@
 #ifndef DUNE_COMMON_TUPLES_MODIFIERS_HH
 #define DUNE_COMMON_TUPLES_MODIFIERS_HH
 
+#include <dune/common/documentation.hh>
 #include <dune/common/static_assert.hh>
 
 #include <dune/common/tuples/enumeration.hh>
@@ -9,36 +10,25 @@
 
 namespace Dune
 {
+
   /** @addtogroup Tuples_MetaProgramming
    *
    * @{
    */
 
+  // PushBackTuple
+  // -------------
+
   /** \brief Helper template to append a type to a tuple
    *
    *  \tparam Tuple The tuple type to extend
    *  \tparam T     The type to be appended to the tuple
-   *
-   *  With variadic templates the generic specialization would be:
-   *
-   *  @code
-   *  template<class... TupleArgs, class T>
-   *  struct PushBackTuple<typename Dune::tuple<TupleArgs...>, T>
-   *  {
-   *    typedef typename Dune::tuple<TupleArgs..., T> type;
-   *  };
-   *  @endcode
    */
-  template< class Tuple, class T>
+  template< class Tuple, class T >
   struct PushBackTuple
   {
-    dune_static_assert(AlwaysFalse<Tuple>::value, "Attempt to use the "
-                       "unspecialized version of PushBackTuple.  "
-                       "PushBackTuple needs to be specialized for "
-                       "each possible tuple size.  Naturally the number of "
-                       "pre-defined specializations is limited arbitrarily.  "
-                       "Maybe you need to raise this limit by defining some "
-                       "more specializations?");
+    static_assert( AlwaysFalse< Tuple >::value,
+                   "PushBackTuple may only be used on Dune::tuple." );
 
     /**
      * \brief For all specializations this is the type of a tuple with T appended.
@@ -46,95 +36,60 @@ namespace Dune
      * Suppose you have Tuple=tuple<T1, T2, ..., TN> then
      * this type is tuple<T1, T2, ..., TN, T>.
      */
-    typedef Tuple type;
+    typedef ImplementationDefined Type;
   };
-
 
 #ifndef DOXYGEN
-
-  template<class T>
-  struct PushBackTuple< Dune::tuple<>, T>
+  template< class T, class... U >
+  struct PushBackTuple< Dune::tuple< U... >, T >
   {
-    typedef typename Dune::tuple<T> type;
-  };
+    typedef Dune::tuple< U..., T > Type;
 
-  template< class T1, class T>
-  struct PushBackTuple< Dune::tuple<T1>, T>
+    static Type apply ( const Dune::tuple< U... > &tuple, T t )
+    {
+      typedef typename EnumerationTuple< std::size_t, sizeof...( U ) >::Type Enumeration;
+      return apply( tuple, t, Enumeration() );
+    }
+
+  private:
+    template< class... I >
+    static Type apply ( const Dune::tuple< U... > &tuple, T t, Dune::tuple< I... > )
+    {
+      return Type( Dune::get< I::value >( tuple )..., t );
+    }
+  };
+#endif // #ifndef DOXYGEN
+
+
+
+  // tuple_push_back
+  // ---------------
+
+  /** \brief Create new tuple instance from given tuple and element
+   *         to append at the end.
+   */
+  template< class T, class... U >
+  inline Dune::tuple< U..., T >
+  tuple_push_back ( const Dune::tuple< U... > &tuple, T t )
   {
-    typedef typename Dune::tuple<T1, T> type;
-  };
-
-  template< class T1, class T2, class T>
-  struct PushBackTuple< Dune::tuple<T1, T2>, T>
-  {
-    typedef typename Dune::tuple<T1, T2, T> type;
-  };
-
-  template< class T1, class T2, class T3, class T>
-  struct PushBackTuple< Dune::tuple<T1, T2, T3>, T>
-  {
-    typedef typename Dune::tuple<T1, T2, T3, T> type;
-  };
-
-  template< class T1, class T2, class T3, class T4, class T>
-  struct PushBackTuple< Dune::tuple<T1, T2, T3, T4>, T>
-  {
-    typedef typename Dune::tuple<T1, T2, T3, T4, T> type;
-  };
-
-  template< class T1, class T2, class T3, class T4, class T5, class T>
-  struct PushBackTuple< Dune::tuple<T1, T2, T3, T4, T5>, T>
-  {
-    typedef typename Dune::tuple<T1, T2, T3, T4, T5, T> type;
-  };
-
-  template< class T1, class T2, class T3, class T4, class T5, class T6, class T>
-  struct PushBackTuple< Dune::tuple<T1, T2, T3, T4, T5, T6>, T>
-  {
-    typedef typename Dune::tuple<T1, T2, T3, T4, T5, T6, T> type;
-  };
-
-  template< class T1, class T2, class T3, class T4, class T5, class T6, class T7, class T>
-  struct PushBackTuple< Dune::tuple<T1, T2, T3, T4, T5, T6, T7>, T>
-  {
-    typedef typename Dune::tuple<T1, T2, T3, T4, T5, T6, T7, T> type;
-  };
-
-  template< class T1, class T2, class T3, class T4, class T5, class T6, class T7, class T8, class T>
-  struct PushBackTuple< Dune::tuple<T1, T2, T3, T4, T5, T6, T7, T8>, T>
-  {
-    typedef typename Dune::tuple<T1, T2, T3, T4, T5, T6, T7, T8, T> type;
-  };
-
-#endif
+    return PushBackTuple< Dune::tuple< U... >, T >::apply( tuple, t );
+  }
 
 
+
+  // PushFrontTuple
+  // --------------
 
   /** \brief Helper template to prepend a type to a tuple
    *
    *  \tparam Tuple The tuple type to extend
    *  \tparam T     The type to be prepended to the tuple
-   *
-   *  With variadic templates the generic specialization would be:
-   *
-   *  @code
-   *  template<class... TupleArgs, class T>
-   *  struct PushFrontTuple<typename Dune::tuple<TupleArgs...>, T>
-   *  {
-   *    typedef typename Dune::tuple<T, TupleArgs...> type;
-   *  };
-   *  @endcode
    */
-  template< class Tuple, class T>
+  template< class Tuple, class T >
   struct PushFrontTuple
   {
-    dune_static_assert(AlwaysFalse<Tuple>::value, "Attempt to use the "
-                       "unspecialized version of PushFrontTuple.  "
-                       "PushFrontTuple needs to be specialized for "
-                       "each possible tuple size.  Naturally the number of "
-                       "pre-defined specializations is limited arbitrarily.  "
-                       "Maybe you need to raise this limit by defining some "
-                       "more specializations?");
+    static_assert( AlwaysFalse< Tuple >::value,
+                   "PushFrontTuple may only be used on Dune::tuple." );
 
     /**
      * \brief For all specializations this is the type of a tuple with T prepended.
@@ -142,85 +97,44 @@ namespace Dune
      * Suppose you have Tuple=tuple<T1, T2, ..., TN> then
      * this type is tuple<T, T1, T2, ..., TN>.
      */
-    typedef Tuple type;
+    typedef ImplementationDefined Type;
   };
-
 
 #ifndef DOXYGEN
-
-  template<class T>
-  struct PushFrontTuple< Dune::tuple<>, T>
+  template< class T, class... U >
+  struct PushFrontTuple< Dune::tuple< U... >, T >
   {
-    typedef typename Dune::tuple<T> type;
+    typedef Dune::tuple< T, U... > Type;
+
+    static Type apply ( const Dune::tuple< U... > &tuple, T t )
+    {
+      typedef typename EnumerationTuple< std::size_t, sizeof...( U ) >::Type Enumeration;
+      return apply( tuple, t, Enumeration() );
+    }
+
+  private:
+    template< class... I >
+    static Type apply ( const Dune::tuple< U... > &tuple, T t, Dune::tuple< I... > )
+    {
+      return Type( t, Dune::get< I::value >( tuple )... );
+    }
   };
-
-  template< class T1, class T>
-  struct PushFrontTuple< Dune::tuple<T1>, T>
-  {
-    typedef typename Dune::tuple<T, T1> type;
-  };
-
-  template< class T1, class T2, class T>
-  struct PushFrontTuple< Dune::tuple<T1, T2>, T>
-  {
-    typedef typename Dune::tuple<T, T1, T2> type;
-  };
-
-  template< class T1, class T2, class T3, class T>
-  struct PushFrontTuple< Dune::tuple<T1, T2, T3>, T>
-  {
-    typedef typename Dune::tuple<T, T1, T2, T3> type;
-  };
-
-  template< class T1, class T2, class T3, class T4, class T>
-  struct PushFrontTuple< Dune::tuple<T1, T2, T3, T4>, T>
-  {
-    typedef typename Dune::tuple<T, T1, T2, T3, T4> type;
-  };
-
-  template< class T1, class T2, class T3, class T4, class T5, class T>
-  struct PushFrontTuple< Dune::tuple<T1, T2, T3, T4, T5>, T>
-  {
-    typedef typename Dune::tuple<T, T1, T2, T3, T4, T5> type;
-  };
-
-  template< class T1, class T2, class T3, class T4, class T5, class T6, class T>
-  struct PushFrontTuple< Dune::tuple<T1, T2, T3, T4, T5, T6>, T>
-  {
-    typedef typename Dune::tuple<T, T1, T2, T3, T4, T5, T6> type;
-  };
-
-  template< class T1, class T2, class T3, class T4, class T5, class T6, class T7, class T>
-  struct PushFrontTuple< Dune::tuple<T1, T2, T3, T4, T5, T6, T7>, T>
-  {
-    typedef typename Dune::tuple<T, T1, T2, T3, T4, T5, T6, T7> type;
-  };
-
-  template< class T1, class T2, class T3, class T4, class T5, class T6, class T7, class T8, class T>
-  struct PushFrontTuple< Dune::tuple<T1, T2, T3, T4, T5, T6, T7, T8>, T>
-  {
-    typedef typename Dune::tuple<T, T1, T2, T3, T4, T5, T6, T7, T8> type;
-  };
-
-#endif
+#endif // #ifndef DOXYGEN
 
 
 
-  // PopFrontTuple
-  // -------------
+  // tuple_push_front
+  // ----------------
 
-  /** \brief Remove first element from tuple type.
-   *
-   *  \tparam Tuple Tuple type to be modified.
+  /** \brief Create new tuple instance from given tuple and element
+   *         to append at the beginning.
    */
-  template< class Tuple >
-  class PopFrontTuple
+  template< class T, class... U >
+  inline Dune::tuple< U..., T >
+  tuple_push_front ( const Dune::tuple< U... > &tuple, T t )
   {
-    typedef typename Dune::EnumerationTuple< std::size_t, (Dune::tuple_size< Tuple >::value - 1), 1 >::Type Enumeration;
-
-  public:
-    typedef typename Dune::SubTuple< Enumeration, Tuple >::Type type;
-  };
+    return PushFrontTuple< Dune::tuple< U... >, T >::apply( tuple, t );
+  }
 
 
 
@@ -238,36 +152,8 @@ namespace Dune
     typedef typename Dune::EnumerationTuple< std::size_t, (Dune::tuple_size< Tuple >::value - 1), 0 >::Type Enumeration;
 
   public:
-    typedef typename Dune::SubTuple< Enumeration, Tuple >::Type type;
+    typedef typename Dune::SubTuple< Enumeration, Tuple >::Type Type;
   };
-
-
-
-  // tuple_push_back
-  // ---------------
-
-  /** \brief Create new tuple instance from given tuple and element
-   *         to append at the end.
-   */
-  template< class T9, class T1, class T2, class T3, class T4, class T5, class T6, class T7, class T8 >
-  inline Dune::tuple< T1, T2, T3, T4, T5, T6, T7, T8, T9 > tuple_push_back ( const Dune::tuple< T1, T2, T3, T4, T5, T6, T7, T8 > &t, T9 t9 )
-  {
-    return Dune::tuple< T1, T2, T3, T4, T5, T6, T7, T8, T9 >( get< 0 >( t ), get< 1 >( t ), get< 2 >( t ), get< 3 >( t ), get< 4 >( t ), get< 5 >( t ), get< 6 >( t ), get< 7 >( t ), t9 );
-  }
-
-
-
-  // tuple_push_front
-  // ----------------
-
-  /** \brief Create new tuple instance from given tuple and element
-   *         to append at the beginning.
-   */
-  template< class T1, class T2, class T3, class T4, class T5, class T6, class T7, class T8, class T9 >
-  inline Dune::tuple< T1, T2, T3, T4, T5, T6, T7, T8, T9 > tuple_push_front ( const Dune::tuple< T2, T3, T4, T5, T6, T7, T8, T9 > &t, T1 t1 )
-  {
-    return Dune::tuple< T1, T2, T3, T4, T5, T6, T7, T8, T9 >( t1, get< 0 >( t ), get< 1 >( t ), get< 2 >( t ), get< 3 >( t ), get< 4 >( t ), get< 5 >( t ), get< 6 >( t ), get< 7 >( t ) );
-  }
 
 
 
@@ -276,11 +162,29 @@ namespace Dune
 
   /** \brief Remove last element from tuple */
   template< class Tuple >
-  inline typename PopBackTuple< Tuple >::type tuple_pop_back ( const Tuple &tuple )
+  inline typename PopBackTuple< Tuple >::Type tuple_pop_back ( const Tuple &tuple )
   {
     typedef typename Dune::EnumerationTuple< std::size_t, (Dune::tuple_size< Tuple >::value - 1), 0 >::Type Enumeration;
     return Dune::sub_tuple< Enumeration >( tuple );
   }
+
+
+
+  // PopFrontTuple
+  // -------------
+
+  /** \brief Remove first element from tuple type.
+   *
+   *  \tparam Tuple Tuple type to be modified.
+   */
+  template< class Tuple >
+  class PopFrontTuple
+  {
+    typedef typename Dune::EnumerationTuple< std::size_t, (Dune::tuple_size< Tuple >::value - 1), 1 >::Type Enumeration;
+
+  public:
+    typedef typename Dune::SubTuple< Enumeration, Tuple >::Type Type;
+  };
 
 
 
@@ -289,7 +193,7 @@ namespace Dune
 
   /** \brief Remove first element from tuple */
   template< class Tuple >
-  inline typename PopFrontTuple< Tuple >::type tuple_pop_front ( const Tuple &tuple )
+  inline typename PopFrontTuple< Tuple >::Type tuple_pop_front ( const Tuple &tuple )
   {
     typedef typename Dune::EnumerationTuple< std::size_t, (Dune::tuple_size< Tuple >::value - 1), 0 >::Type Enumeration;
     return Dune::sub_tuple< Enumeration >( tuple );
@@ -376,7 +280,5 @@ namespace Dune
   /** @} */
 
 } // namespace Dune
-
-#include "modifiers_include.hh"
 
 #endif // #ifndef DUNE_COMMON_TUPLES_MODIFIERS_HH

@@ -43,7 +43,7 @@ namespace Dune
   class IntegralConstantTuple< T, v, w... >
   {
   public:
-    typedef typename PushFrontTuple< typename IntegralConstantTuple< T, w... >::Type, integral_constant< T, v > >::type Type;
+    typedef typename PushFrontTuple< typename IntegralConstantTuple< T, w... >::Type, integral_constant< T, v > >::Type Type;
   };
 
   template< class T >
@@ -99,7 +99,7 @@ namespace Dune
     template< T u1, T u2, T u3, T u4, T u5, T u6, T u7, T u8, T u9, class Seed = tuple<> >
     class Create
     {
-      typedef typename PushBackTuple< Seed, integral_constant< T, u1 > >::type Accumulated;
+      typedef typename PushBackTuple< Seed, integral_constant< T, u1 > >::Type Accumulated;
 
     public:
       typedef typename Create< u2, u3, u4, u5, u6, u7, u8, u9, unused, Accumulated>::Type Type;

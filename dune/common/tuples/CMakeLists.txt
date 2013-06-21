@@ -12,7 +12,6 @@ install( FILES
          instantiate.hh
          integralconstant.hh
          modifiers.hh
-         modifiers_include.hh
          namespace.hh
          nullptr.hh
          pointer.hh
