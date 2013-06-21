@@ -6,7 +6,6 @@
 #include <dune/common/fvector.hh>
 
 #include <dune/common/tuples/densevector.hh>
-#include <dune/common/tuples/foreach.hh>
 #include <dune/common/tuples/uniqueelementtype.hh>
 
 namespace Dune
@@ -15,7 +14,7 @@ namespace Dune
   // Internal forward declaration
   // ----------------------------
 
-  template< class Field, class Dimensions >
+  template< class K, int... Sizes >
   class FieldVectorTuple;
 
 
@@ -23,23 +22,17 @@ namespace Dune
   // DenseVectorTupleTraits
   // ----------------------
 
-  template< class Field, class Dimensions >
-  class DenseVectorTupleTraits< FieldVectorTuple< Field, Dimensions > >
+  template< class K, int... Sizes >
+  struct DenseVectorTupleTraits< FieldVectorTuple< K, Sizes... > >
   {
-    template< class T >
-    struct TypeEvaluator
-    {
-      typedef FieldVector< Field, T::value > Type;
-    };
-
-  public:
     // implementation type
-    typedef FieldVectorTuple< Field, Dimensions > derived_type;
+    typedef FieldVectorTuple< K, Sizes... > derived_type;
+
     // raw tuple type
-    typedef typename ForEachType< TypeEvaluator, Dimensions >::Type tuple;
+    typedef Dune::tuple< Dune::FieldVector< K, Sizes >... > tuple;
 
     // field type
-    typedef Field field_type;
+    typedef K field_type;
     // size type
     typedef std::size_t size_type;
     // field type tuple of equal length
@@ -57,16 +50,14 @@ namespace Dune
    *         Each element of Dune::FieldVectorTuple is of
    *         type Dune::FieldVector.
    *
-   *  \tparam  Field       Field type
-   *  \tparam  Dimensions  Tuple of integral constants using \c int.
-   *                       See Dune::IntegralConstantTuple for a
-   *                       convenient construction.
+   *  \tparam  K      Field type
+   *  \tparam  Sizes  List of integer values (variadic template parameter list)
    */
-  template< class Field, class Dimensions >
+  template< class K, int... Sizes >
   class FieldVectorTuple
-  : public DenseVectorTuple< FieldVectorTuple< Field, Dimensions > >
+  : public DenseVectorTuple< FieldVectorTuple< K, Sizes... > >
   {
-    typedef DenseVectorTuple< FieldVectorTuple< Field, Dimensions > > Base;
+    typedef DenseVectorTuple< FieldVectorTuple< K, Sizes... > > Base;
 
     template< class IntegralConstantTuple, int init = 0, std::size_t length = tuple_size< IntegralConstantTuple >::value >
     class Accumulate
@@ -84,13 +75,10 @@ namespace Dune
     };
 
   public:
-    struct Dimension
-    {
-      //! \brief export template parameter \c Dimensions
-      typedef Dimensions Type;
-      //! \brief overall dimension of dense vector tuple
-      static const int value = Accumulate< Type >::value;
-    };
+    //! \brief export template parameters \c Sizes
+    typedef tuple< Dune::integral_constant< int, Sizes >... > Dimensions;
+    //! \brief overall dimension of dense vector tuple
+    static const int dimension = Accumulate< Dimensions >::value;
 
     using Base::operator=;
 
@@ -103,7 +91,7 @@ namespace Dune
 
 #ifndef DOXYGEN
   protected:
-    friend class DenseVectorTuple< FieldVectorTuple< Field, Dimensions > >;
+    friend class DenseVectorTuple< FieldVectorTuple< K, Sizes... > >;
 
     typename Base::tuple &raw () { return tuple_; }
     const typename Base::tuple &raw () const { return tuple_; }
@@ -118,16 +106,16 @@ namespace Dune
   // tuple_element for FieldVectorTuple
   // ----------------------------------
 
-  template< std::size_t i, class Field, class Dimensions >
-  struct tuple_element< i, FieldVectorTuple< Field, Dimensions > >
+  template< std::size_t i, class K, int... Sizes >
+  struct tuple_element< i, FieldVectorTuple< K, Sizes... > >
   {
-    typedef typename tuple_element< i, typename DenseVectorTupleTraits< FieldVectorTuple< Field, Dimensions > >::tuple >::type type;
+    typedef typename tuple_element< i, typename DenseVectorTupleTraits< FieldVectorTuple< K, Sizes... > >::tuple >::type type;
   };
 
-  template< std::size_t i, class Field, class Dimensions >
-  struct tuple_element< i, const FieldVectorTuple< Field, Dimensions > >
+  template< std::size_t i, class K, int... Sizes >
+  struct tuple_element< i, const FieldVectorTuple< K, Sizes... > >
   {
-    typedef typename tuple_element< i, typename DenseVectorTupleTraits< FieldVectorTuple< Field, Dimensions > >::tuple >::type type;
+    typedef typename tuple_element< i, typename DenseVectorTupleTraits< FieldVectorTuple< K, Sizes... > >::tuple >::type type;
   };
 
 
@@ -135,18 +123,18 @@ namespace Dune
   // get for FieldVectorTuple
   // ------------------------
 
-  template< std::size_t i, class Field, class Dimensions >
-  const typename tuple_element< i, FieldVectorTuple< Field, Dimensions > >::type &
-  get ( const FieldVectorTuple< Field, Dimensions > &tuple ) throw()
+  template< std::size_t i, class K, int... Sizes >
+  const typename tuple_element< i, FieldVectorTuple< K, Sizes... > >::type &
+  get ( const FieldVectorTuple< K, Sizes... > &tuple ) throw()
   {
-    return get< i >( static_cast< const typename DenseVectorTupleTraits< FieldVectorTuple< Field, Dimensions > >::tuple & >( tuple ) );
+    return get< i >( static_cast< const typename DenseVectorTupleTraits< FieldVectorTuple< K, Sizes... > >::tuple & >( tuple ) );
   }
 
-  template< std::size_t i, class Field, class Dimensions >
-  typename tuple_element< i, FieldVectorTuple< Field, Dimensions > >::type &
-  get ( FieldVectorTuple< Field, Dimensions > &tuple ) throw()
+  template< std::size_t i, class K, int... Sizes >
+  typename tuple_element< i, FieldVectorTuple< K, Sizes... > >::type &
+  get ( FieldVectorTuple< K, Sizes... > &tuple ) throw()
   {
-    return get< i >( static_cast< typename DenseVectorTupleTraits< FieldVectorTuple< Field, Dimensions > >::tuple & >( tuple ) );
+    return get< i >( static_cast< typename DenseVectorTupleTraits< FieldVectorTuple< K, Sizes... > >::tuple & >( tuple ) );
   }
 
 
@@ -154,10 +142,10 @@ namespace Dune
   // tuple_size for FieldVectorTuple
   // -------------------------------
 
-  template< class Field, class Dimensions >
-  struct tuple_size< FieldVectorTuple< Field, Dimensions > >
+  template< class K, int... Sizes >
+  struct tuple_size< FieldVectorTuple< K, Sizes... > >
   {
-    enum { value = tuple_size< typename DenseVectorTupleTraits< FieldVectorTuple< Field, Dimensions > >::tuple >::value };
+    enum { value = tuple_size< typename DenseVectorTupleTraits< FieldVectorTuple< K, Sizes... > >::tuple >::value };
   };
 
 } // namespace Dune

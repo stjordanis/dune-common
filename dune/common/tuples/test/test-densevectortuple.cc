@@ -32,13 +32,13 @@ private:
 
 int main ( int argc, char **argv )
 {
-  typedef Dune::IntegralConstantTuple< int, 1, 2, 3 >::Type Dimensions;
-  typedef Dune::FieldVectorTuple< double, Dimensions > FieldVectorTuple;
+  // typedef Dune::IntegralConstantTuple< int, 1, 2, 3 >::Type Dimensions;
+  typedef Dune::FieldVectorTuple< double, 1, 2, 3 > FieldVectorTuple;
 
   typedef FieldVectorTuple::field_type field_type;
   typedef FieldVectorTuple::size_type size_type;
 
-  static const int dimension = FieldVectorTuple::Dimension::value;
+  static const int dimension = FieldVectorTuple::dimension;
 
   // creation
   FieldVectorTuple t1, t2;
@@ -68,7 +68,9 @@ int main ( int argc, char **argv )
   t1.for_each( function );
 
   // iterators
+  std::cout << t1 << std::endl;
   std::fill( t1.begin(), t1.end(), field_type( 0 ) );
+  std::cout << t1 << std::endl;
 
   // check norms
   t1.one_norm();
