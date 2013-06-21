@@ -15,11 +15,12 @@ namespace Dune
    *  \brief Convenient setup of an enumeration of
    *         Dune::integral_constant in a tuple.
    *
+   *  \tparam  T       integer type
    *  \tparam  length  size of index tuple
    *  \tparam  init    start value for enumeration (optional, defaults to 0)
    *
 \code
-  typedef typename Dune::EnumerationTuple< 3, 1 >::Type Type;
+  typedef typename Dune::EnumerationTuple< int, 3, 1 >::Type Type;
   // 'Type' corresponds to:
   // Dune::tuple< Dune::integral_constant< int, 1 >,
   //              Dune::integral_constant< int, 2 >,
@@ -29,37 +30,25 @@ namespace Dune
    *  \note For <tt>length <= 0</tt> the resulting type is
    *        <tt>Type = Dune::tuple<></tt>.
    */
-  template< int length, int init = 0 >
+  template< class T, T length, T init = 0 >
   class EnumerationTuple
   {
-    template< int N, int M >
+    template< T n, T m >
     struct Max
     {
-      static const int value = (N >= M) ? N : M;
+      static const T value = (n >= m) ? n : m;
     };
 
-    template< int N, int M, class... Args >
+    template< T n, T m, class... Args >
     struct Create
     {
-      typedef typename Create< N, M+1, Args..., Dune::integral_constant< int, M > >::Type Type;
+      typedef typename Create< n, m+1, Args..., Dune::integral_constant< T, m > >::Type Type;
     };
 
-    template< int N, int M >
-    struct Create< N, M >
+    template< T n, class... Args >
+    struct Create< n, n, Args... >
     {
-      typedef typename Create< N, M+1, Dune::integral_constant< int, M > >::Type Type;
-    };
-
-    template< int N >
-    struct Create< N, N >
-    {
-      typedef Dune::tuple<> Type;
-    };
-
-    template< int N, class NonEmpty, class... Args >
-    struct Create< N, N, NonEmpty, Args... >
-    {
-      typedef Dune::tuple< NonEmpty, Args... > Type;
+      typedef Dune::tuple< Args... > Type;
     };
 
   public:

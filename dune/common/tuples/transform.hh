@@ -118,7 +118,7 @@ namespace Dune
   typename ForEachType< Functor::template TypeEvaluator, Tuple >::Type
   genericTransformTuple ( Tuple &tuple, Functor &functor )
   {
-    typedef typename EnumerationTuple< tuple_size< Tuple >::value >::Type Enumeration;
+    typedef typename EnumerationTuple< std::size_t, tuple_size< Tuple >::value >::Type Enumeration;
     return genericTransformTupleBackend( tuple, functor, Enumeration() );
   }
 
@@ -127,7 +127,7 @@ namespace Dune
   typename ForEachType< Functor::template TypeEvaluator, Tuple >::Type
   genericTransformTuple ( const Tuple &tuple, Functor &functor )
   {
-    typedef typename EnumerationTuple< tuple_size< Tuple >::value >::Type Enumeration;
+    typedef typename EnumerationTuple< std::size_t, tuple_size< Tuple >::value >::Type Enumeration;
     return genericTransformTupleBackend( tuple, functor, Enumeration() );
   }
 
@@ -135,7 +135,7 @@ namespace Dune
   typename ForEachType< Functor::template TypeEvaluator, Tuple >::Type
   genericTransformTuple ( Tuple &tuple, const Functor &functor )
   {
-    typedef typename EnumerationTuple< tuple_size< Tuple >::value >::Type Enumeration;
+    typedef typename EnumerationTuple< std::size_t, tuple_size< Tuple >::value >::Type Enumeration;
     return genericTransformTupleBackend( tuple, functor, Enumeration() );
   }
 
@@ -143,7 +143,7 @@ namespace Dune
   typename ForEachType< Functor::template TypeEvaluator, Tuple >::Type
   genericTransformTuple ( const Tuple &tuple, const Functor &functor )
   {
-    typedef typename EnumerationTuple< tuple_size< Tuple >::value >::Type Enumeration;
+    typedef typename EnumerationTuple< std::size_t, tuple_size< Tuple >::value >::Type Enumeration;
     return genericTransformTupleBackend( tuple, functor, Enumeration() );
   }
 #endif // #ifndef DOXYGEN

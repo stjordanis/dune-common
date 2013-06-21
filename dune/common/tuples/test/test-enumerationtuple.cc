@@ -38,7 +38,7 @@ struct CallToPrint
   template< class Tuple >
   static void apply ( Tuple &tuple )
   {
-    print< typename Dune::EnumerationTuple< i >::Type >( tuple );
+    print< typename Dune::EnumerationTuple< int, i >::Type >( tuple );
   }
 };
 
