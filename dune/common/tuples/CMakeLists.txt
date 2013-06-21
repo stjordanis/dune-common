@@ -11,6 +11,7 @@ install( FILES
          indextuple.hh
          instantiate.hh
          integralconstant.hh
+         iostream.hh
          modifiers.hh
          namespace.hh
          nullptr.hh

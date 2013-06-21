@@ -10,6 +10,7 @@ tuplesinclude_HEADERS =	access.hh \
 			enumeration.hh \
 			instantiate.hh \
 			integralconstant.hh \
+			iostream.hh \
 			modifiers.hh \
 			namespace.hh \
 			nullptr.hh \
