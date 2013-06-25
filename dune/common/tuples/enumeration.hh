@@ -58,6 +58,19 @@ namespace Dune
     EnumerationTuple ();
   };
 
+
+
+  // ForEachType for EnumerationTuple
+  // --------------------------------
+
+  template< template< class > class TypeEvaluator, class Tuple >
+  struct ForEachType;
+
+  template< template< class > class TypeEvaluator, class T, T length, T init >
+  struct ForEachType< TypeEvaluator, EnumerationTuple< T, length, init > >
+  : public ForEachType< TypeEvaluator, typename EnumerationTuple< T, length, init >::Type >
+  {};
+
 } // namespace Dune
 
 #endif // #ifndef DUNE_COMMON_TUPLES_ENUMERATION_HH
