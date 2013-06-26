@@ -7,6 +7,7 @@
 #include <dune/common/tuples/checkpredicate.hh>
 #include <dune/common/tuples/foreach.hh>
 #include <dune/common/tuples/modifiers.hh>
+#include <dune/common/tuples/transform.hh>
 #include <dune/common/tuples/tuples.hh>
 #include <dune/common/tuples/typetraits.hh>
 
@@ -128,67 +129,35 @@ namespace Dune
    *         tuple of references.
    *
    *  \tparam Tuple A tuple consisting of pointer types
-   *  \tparam Seed  implementation internal
-   *  \tparam index implementation internal
-   *  \tparam size  implementation internal
    */
-  template< class Tuple,
-            class Seed = Dune::tuple<>,
-            int index = 0,
-            int size = Dune::tuple_size< Tuple >::value
-          >
-  class DereferenceTuple
+  template< class Tuple >
+  class DereferenceTuple;
+
+  template< class... T >
+  class DereferenceTuple< Dune::tuple< T... > >
   {
-    template< class, class, int, int > friend class DereferenceTuple;
+    struct Functor
+    {
+      template< class U >
+      struct TypeEvaluator
+      {
+        typedef typename TypeTraits< U >::PointeeType & Type;
+      };
 
-    typedef typename Dune::TypeTraits< typename Dune::tuple_element< index, Tuple >::type >::PointeeType & AppendType;
-    typedef typename Dune::PushBackTuple< Seed, AppendType >::Type AccumulatedType;
-
-    typedef DereferenceTuple< Tuple, AccumulatedType, (index+1), size > NextType;
+      template< class U >
+      typename TypeEvaluator< U * >::Type operator() ( U *u ) const
+      {
+        return *u;
+      }
+    };
 
   public:
-    typedef typename Dune::ReferenceTuple<
-        typename Dune::TupleTypeTraits< Tuple >::PointeeTupleType
-      >::Type Type;
+    typedef typename ForEachType< Functor::template TypeEvaluator, Dune::tuple< T... > >::Type Type;
 
-    static Type apply ( Tuple &tuple )
+    static Type apply ( Dune::tuple< T... > &tuple )
     {
-      Seed seed;
-      return append( tuple, seed );
+      return genericTransformTuple( tuple, Functor() );
     }
-
-  private:
-    static Type append ( Tuple &tuple, Seed &seed )
-    {
-      typename Dune::tuple_element< index, Tuple >::type pointer = Dune::get< index >( tuple );
-      AppendType append = *pointer;
-      AccumulatedType next = Dune::tuple_push_back< AppendType >( seed, append );
-      return NextType::append( tuple, next );
-    }
-  };
-
-  template< class Tuple,
-            class Seed,
-            int size
-          >
-  class DereferenceTuple< Tuple, Seed, size, size >
-  {
-    template< class, class, int, int > friend class DereferenceTuple;
-
-  public:
-    typedef typename Dune::ReferenceTuple<
-        typename Dune::TupleTypeTraits< Tuple >::PointeeTupleType
-      >::Type Type;
-
-    dune_static_assert( (Dune::is_same< Seed, Type >::value), "Failed to dereference pointer tuple." );
-
-    static Type apply ( Tuple & )
-    {
-      return Type();
-    }
-
-  private:
-    static Seed append ( Tuple &tuple, Seed &seed ) { return seed; }
   };
 
 } // namespace Dune
