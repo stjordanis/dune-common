@@ -160,6 +160,25 @@ namespace Dune
     }
   };
 
+
+
+  // dereference_tuple
+  // -----------------
+
+  /** \ingroup Tuples_Init
+   *
+   *  \brief Dereference pointer tuple and return
+   *         tuple of references.
+   *  \tparam Tuple A tuple consisting of pointer types
+   *
+   *  \param[in]  tuple  tuple of pointers
+   */
+  template< class Tuple >
+  typename Dune::DereferenceTuple< Tuple >::Type dereference_tuple ( Tuple &tuple )
+  {
+    return Dune::DereferenceTuple< Tuple >::apply( tuple );
+  }
+
 } // namespace Dune
 
 #endif // #ifndef DUNE_COMMON_TUPLES_POINTER_HH
