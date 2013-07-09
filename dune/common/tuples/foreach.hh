@@ -216,12 +216,12 @@ namespace Dune
     template< template< class, class > class Operation,
               template< int, class > class Value,
               class Tuple,
-              int length = tuple_size< Tuple >::value
+              class EnumerationTuple
             >
     class ForEachElementHelper
     : public Operation<
-        Value< 0, Tuple >,
-        ForEachElementHelper< Operation, Value, typename PopFrontTuple< Tuple >::Type >
+        Value< Dune::tuple_element< 0, EnumerationTuple >::type::value, Tuple >,
+        ForEachElementHelper< Operation, Value, Tuple, typename PopFrontTuple< EnumerationTuple >::Type >
       >
     {};
 
@@ -229,15 +229,7 @@ namespace Dune
               template< int, class > class Value,
               class Tuple
             >
-    class ForEachElementHelper< Operation, Value, Tuple, 1 >
-    : public Value< 0, Tuple >
-    {};
-
-    template< template< class, class > class Operation,
-              template< int, class > class Value,
-              class Tuple
-            >
-    class ForEachElementHelper< Operation, Value, Tuple, 0 >
+    class ForEachElementHelper< Operation, Value, Tuple, Dune::tuple<> >
     {
     public:
       template< class... Args >
@@ -275,7 +267,7 @@ namespace Dune
    */
   template< template< int, class > class Operation, class Tuple >
   class ForEachElement
-  : public ForEachElementHelper< ForLoopHelper::Apply, Operation, Tuple >
+  : public ForEachElementHelper< ForLoopHelper::Apply, Operation, Tuple, typename Dune::EnumerationTuple< int, tuple_size< Tuple >::value >::Type >
   {};
 
 } // namespace Dune
