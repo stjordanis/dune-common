@@ -44,7 +44,9 @@ namespace Dune
 
   using std::tuple;
   using std::make_tuple;
+  using std::forward_as_tuple;
   using std::tie;
+  using std::tuple_cat;
 
 
 
