@@ -3,6 +3,7 @@
 
 #include <dune/common/tuples/firstindex.hh>
 #include <dune/common/tuples/tuples.hh>
+#include <dune/common/tuples/typetraits.hh>
 
 namespace Dune
 {
@@ -65,61 +66,26 @@ namespace Dune
       return at< T >();
     }
 
-    //! \brief cast to Tuple
-    operator Tuple & () { return tuple_; }
-
-    //! \brief cast to const Tuple
-    operator const Tuple & () const { return tuple_; }
-
   private:
+    friend class RawTuple< TypeIndexedTuple< Tuple, Types > >;
+
     Tuple tuple_;
   };
 
 
 
-  // tuple_element
-  // -------------
-
-  template< std::size_t i, class Tuple, class Types >
-  struct tuple_element< i, TypeIndexedTuple< Tuple, Types > >
-  {
-    typedef typename tuple_element< i, Tuple >::type type;
-  };
-
-  template< std::size_t i, class Tuple, class Types >
-  struct tuple_element< i, const TypeIndexedTuple< Tuple, Types > >
-  {
-    typedef typename tuple_element< i, Tuple >::type type;
-  };
-
-
-
-  // get for TypeIndexedTuple
-  // ------------------------
-
-  template< std::size_t i, class Tuple, class Types >
-  const typename tuple_element< i, TypeIndexedTuple< Tuple, Types > >::type &
-  get ( const TypeIndexedTuple< Tuple, Types > &tuple ) throw()
-  {
-    return get< i >( static_cast< const Tuple & >( tuple ) );
-  }
-
-  template< std::size_t i, class Tuple, class Types >
-  typename tuple_element< i, TypeIndexedTuple< Tuple, Types > >::type &
-  get ( TypeIndexedTuple< Tuple, Types > &tuple ) throw()
-  {
-    return get< i >( static_cast< Tuple & >( tuple ) );
-  }
-
-
-
-  // tuple_size for TypeIndexedTuple
-  // -------------------------------
+  // RawTuple< TypeIndexedTuple >
+  // ----------------------------
 
   template< class Tuple, class Types >
-  struct tuple_size< TypeIndexedTuple< Tuple, Types > >
+  struct RawTuple< TypeIndexedTuple< Tuple, Types > >
   {
-    enum { value = tuple_size< Tuple >::value };
+    typedef Tuple Type;
+
+    static Type &raw ( TypeIndexedTuple< Tuple, Types > &typeIndexedTuple )
+    {
+      return typeIndexedTuple.tuple_;
+    }
   };
 
 } // namespace Dune
