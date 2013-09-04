@@ -97,15 +97,12 @@ namespace Dune
       (*this) = alpha;
     }
 
-#ifndef DOXYGEN
   private:
     friend class RawTuple< FieldVectorTuple< K, Sizes... > >;
 
     typename Base::tuple &raw () { return tuple_; }
     const typename Base::tuple &raw () const { return tuple_; }
-#endif // #ifndef DOXYGEN
 
-  private:
     typename Base::tuple tuple_;
   };
 

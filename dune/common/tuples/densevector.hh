@@ -88,17 +88,7 @@ namespace Dune
    *  \tparam  Imp  Implementation type
    *
    *  \note For implementors: The implementation is
-   *        expected to provide the following methods:
-   *  @code
-   *  class DenseVectorTupleImp
-   *  {
-   *  protected:
-   *    friend class Dune::DenseVectorTuple< DenseVectorTupleImp >;
-   *
-   *    typename DenseVectorTupleTraits< DenseVectorTupleImp >::tuple &raw ();
-   *    const typename DenseVectorTupleTraits< DenseVectorTupleImp >::tuple &raw () const;
-   *  };
-   *  @endcode
+   *        required to specialize Dune::RawTuple.
    */
   template< class Imp >
   class DenseVectorTuple
