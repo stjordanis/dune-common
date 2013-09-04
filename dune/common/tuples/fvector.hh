@@ -98,8 +98,8 @@ namespace Dune
     }
 
 #ifndef DOXYGEN
-  protected:
-    friend class DenseVectorTuple< FieldVectorTuple< K, Sizes... > >;
+  private:
+    friend class RawTuple< FieldVectorTuple< K, Sizes... > >;
 
     typename Base::tuple &raw () { return tuple_; }
     const typename Base::tuple &raw () const { return tuple_; }
@@ -111,49 +111,18 @@ namespace Dune
 
 
 
-  // tuple_element for FieldVectorTuple
-  // ----------------------------------
-
-  template< std::size_t i, class K, int... Sizes >
-  struct tuple_element< i, FieldVectorTuple< K, Sizes... > >
-  {
-    typedef typename tuple_element< i, typename DenseVectorTupleTraits< FieldVectorTuple< K, Sizes... > >::tuple >::type type;
-  };
-
-  template< std::size_t i, class K, int... Sizes >
-  struct tuple_element< i, const FieldVectorTuple< K, Sizes... > >
-  {
-    typedef typename tuple_element< i, typename DenseVectorTupleTraits< FieldVectorTuple< K, Sizes... > >::tuple >::type type;
-  };
-
-
-
-  // get for FieldVectorTuple
-  // ------------------------
-
-  template< std::size_t i, class K, int... Sizes >
-  const typename tuple_element< i, FieldVectorTuple< K, Sizes... > >::type &
-  get ( const FieldVectorTuple< K, Sizes... > &tuple ) throw()
-  {
-    return get< i >( static_cast< const typename DenseVectorTupleTraits< FieldVectorTuple< K, Sizes... > >::tuple & >( tuple ) );
-  }
-
-  template< std::size_t i, class K, int... Sizes >
-  typename tuple_element< i, FieldVectorTuple< K, Sizes... > >::type &
-  get ( FieldVectorTuple< K, Sizes... > &tuple ) throw()
-  {
-    return get< i >( static_cast< typename DenseVectorTupleTraits< FieldVectorTuple< K, Sizes... > >::tuple & >( tuple ) );
-  }
-
-
-
-  // tuple_size for FieldVectorTuple
-  // -------------------------------
+  // RawTuple< FieldVectorTuple >
+  // ----------------------------
 
   template< class K, int... Sizes >
-  struct tuple_size< FieldVectorTuple< K, Sizes... > >
+  struct RawTuple< FieldVectorTuple< K, Sizes... > >
   {
-    enum { value = tuple_size< typename DenseVectorTupleTraits< FieldVectorTuple< K, Sizes... > >::tuple >::value };
+    typedef typename DenseVectorTupleTraits< FieldVectorTuple< K, Sizes... > >::tuple Type;
+
+    static Type &raw ( FieldVectorTuple< K, Sizes... > &fieldVectorTuple )
+    {
+      return fieldVectorTuple.raw();
+    }
   };
 
 } // namespace Dune

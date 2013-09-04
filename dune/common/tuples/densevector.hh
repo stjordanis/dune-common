@@ -10,9 +10,34 @@
 #include <dune/common/nullptr.hh>
 
 #include <dune/common/tuples/tuples.hh>
+#include <dune/common/tuples/typetraits.hh>
 
 namespace Dune
 {
+
+  // Internal forward declaration
+  // ----------------------------
+
+  template< class Imp >
+  struct DenseVectorTuple;
+
+
+
+  // RawTuple< DenseVectorTuple >
+  // ----------------------------
+
+  template< class Imp >
+  struct RawTuple< DenseVectorTuple< Imp > >
+  {
+    typedef typename RawTuple< Imp >::Type Type;
+
+    static Type &raw ( DenseVectorTuple< Imp > &denseVectorTuple )
+    {
+      return raw_tuple( static_cast< Imp & >( denseVectorTuple ) );
+    }
+  };
+
+
 
   // DenseVectorTupleTraits
   // ----------------------
@@ -46,6 +71,7 @@ namespace Dune
    */
   template< class Imp >
   struct DenseVectorTupleTraits;
+
 
 
 
@@ -125,7 +151,7 @@ namespace Dune
     //! \brief assignment from scalar
     derived_type &operator= ( const field_type &alpha )
     {
-      ForLoop< AssignFunctor, 0, tuple_size-1 >::apply( static_cast< tuple & >( *this ), alpha );
+      ForLoop< AssignFunctor, 0, tuple_size-1 >::apply( raw_tuple( *this ), alpha );
       return asImp();
     }
 
@@ -194,7 +220,7 @@ namespace Dune
     Function for_each ( Function function )
     {
       int i = 0;
-      ForLoop< ApplyFunctor, 0, tuple_size-1 >::apply( static_cast< tuple & >( *this ), function, i );
+      ForLoop< ApplyFunctor, 0, tuple_size-1 >::apply( raw_tuple( *this ), function, i );
       return function;
     }
 
@@ -219,7 +245,7 @@ namespace Dune
     Function for_each ( Function function ) const
     {
       int i = 0;
-      ForLoop< ApplyFunctor, 0, tuple_size-1 >::apply( static_cast< const tuple & >( *this ), function, i );
+      ForLoop< ApplyFunctor, 0, tuple_size-1 >::apply( raw_tuple( *this ), function, i );
       return function;
     }
 
@@ -276,7 +302,7 @@ namespace Dune
     size_type size () const
     {
       size_type size = size_type( 0 );
-      ForLoop< SizeFunctor, 0, tuple_size-1 >::apply( static_cast< const tuple & >( *this ), size );
+      ForLoop< SizeFunctor, 0, tuple_size-1 >::apply( raw_tuple( *this ), size );
       return size;
     }
 
@@ -355,7 +381,7 @@ namespace Dune
     //! \brief \f$x *= \alpha\f$
     derived_type &operator*= ( const field_type &alpha )
     {
-      ForLoop< ScaleFunctor, 0, tuple_size-1 >::apply( static_cast< tuple & >( *this ), alpha );
+      ForLoop< ScaleFunctor, 0, tuple_size-1 >::apply( raw_tuple( *this ), alpha );
       return asImp();
     }
 
@@ -369,7 +395,7 @@ namespace Dune
     template< class Other >
     derived_type &axpy ( const field_type &alpha, const DenseVectorTuple< Other > &other )
     {
-      ForLoop< AxpyFunctor, 0, tuple_size-1 >::apply( static_cast< tuple & >( *this ), alpha, static_cast< const typename DenseVectorTuple< Other >::tuple & >( other ) );
+      ForLoop< AxpyFunctor, 0, tuple_size-1 >::apply( raw_tuple( *this ), alpha, raw_tuple( other ) );
       return asImp();
     }
 
@@ -429,7 +455,7 @@ namespace Dune
     field_type_tuple norm ( const Norm &type ) const
     {
       field_type_tuple ret;
-      ForLoop< NormFunctor, 0, tuple_size-1 >::apply( static_cast< const tuple & >( *this ), ret, type );
+      ForLoop< NormFunctor, 0, tuple_size-1 >::apply( raw_tuple( *this ), ret, type );
       return ret;
     }
 
@@ -447,74 +473,9 @@ namespace Dune
     //! \brief return infinity norm, result is real
     field_type_tuple infinity_norm_real () const { return norm( InfinityNormReal() ); }
 
-
-    /////////////////////////
-    // cast to Dune::tuple //
-    /////////////////////////
-
-    //! \brief cast to Dune::tuple
-    operator tuple & ()
-    {
-      CHECK_INTERFACE_IMPLEMENTATION( (asImp().raw()) );
-      return asImp().raw();
-    }
-    //! \brief cast to const Dune::tuple
-    operator const tuple & () const
-    {
-      CHECK_INTERFACE_IMPLEMENTATION( (asImp().raw()) );
-      return asImp().raw();
-    }
-
   private:
     Imp &asImp() { return static_cast< Imp & >( *this ); }
     const Imp &asImp() const { return static_cast< const Imp & >( *this ); }
-  };
-
-
-
-  // tuple_element
-  // -------------
-
-  template< std::size_t i, class Imp >
-  struct tuple_element< i, DenseVectorTuple< Imp > >
-  {
-    typedef typename tuple_element< i, typename DenseVectorTupleTraits< Imp >::tuple >::type type;
-  };
-
-  template< std::size_t i, class Imp >
-  struct tuple_element< i, const DenseVectorTuple< Imp > >
-  {
-    typedef typename tuple_element< i, typename DenseVectorTupleTraits< Imp >::tuple >::type type;
-  };
-
-
-
-  // get for DenseVectorTuple
-  // ------------------------
-
-  template< std::size_t i, class Imp >
-  const typename tuple_element< i, DenseVectorTuple< Imp > >::type &
-  get ( const DenseVectorTuple< Imp > &tuple ) throw()
-  {
-    return get< i >( static_cast< const typename DenseVectorTupleTraits< Imp >::tuple & >( tuple ) );
-  }
-
-  template< std::size_t i, class Imp >
-  typename tuple_element< i, DenseVectorTuple< Imp > >::type &
-  get ( DenseVectorTuple< Imp > &tuple ) throw()
-  {
-    return get< i >( static_cast< typename DenseVectorTupleTraits< Imp >::tuple & >( tuple ) );
-  }
-
-
-
-  // tuple_size for DenseVectorTuple
-  // -------------------------------
-
-  template< class Imp >
-  struct tuple_size< DenseVectorTuple< Imp > >
-  {
-    enum { value = tuple_size< typename DenseVectorTupleTraits< Imp >::tuple >::value };
   };
 
 
@@ -542,7 +503,7 @@ namespace Dune
   std::ostream &operator<< ( std::ostream& out, const DenseVectorTuple< Imp > &tuple )
   {
     ForLoop< PrintFunctor, 0, DenseVectorTuple< Imp >::tuple_size-1 >
-      ::apply( out, static_cast< const typename DenseVectorTupleTraits< Imp >::tuple & >( tuple ) );
+      ::apply( out, raw_tuple( tuple ) );
     return out;
   }
 
