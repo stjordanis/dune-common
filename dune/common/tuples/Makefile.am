@@ -20,6 +20,7 @@ tuplesinclude_HEADERS =	access.hh \
 			typeindexed.hh \
 			typetraits.hh \
 			uniqueelementtype.hh \
+			unique_ptr.hh \
 			utility.hh
 
 SUBDIRS = test
