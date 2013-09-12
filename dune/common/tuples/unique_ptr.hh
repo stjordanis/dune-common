@@ -16,6 +16,12 @@ namespace Dune
   // UniquePointerTuple
   // ------------------
 
+  /** \ingroup Tuples_Init
+   *
+   *  \brief A tuple of std::unique_ptr to different types.
+   *
+   *  \tparam  T  Variadic list of elements
+   */
   template< class... T >
   class UniquePointerTuple
   {
@@ -179,53 +185,6 @@ namespace Dune
     }
 
     tuple< std::unique_ptr< T >... > tuple_;
-  };
-
-
-
-  // tuple_element< UniquePointerTuple >
-  // -----------------------------------
-
-  template< std::size_t i, class... T >
-  struct tuple_element< i, UniquePointerTuple< T... > >
-  {
-    typedef typename tuple_element< i, tuple< std::unique_ptr< T >... > >::type type;
-  };
-
-  template< std::size_t i, class... T >
-  struct tuple_element< i, const UniquePointerTuple< T... > >
-  {
-    typedef typename tuple_element< i, tuple< std::unique_ptr< T >... > >::type type;
-  };
-
-
-
-  // get< UniquePointerTuple >
-  // -------------------------
-
-  template< std::size_t i, class... T >
-  typename tuple_element< i, UniquePointerTuple< T... > >::type &
-  get ( UniquePointerTuple< T... > &t ) throw ()
-  {
-    return get< i >( static_cast< tuple< std::unique_ptr< T >... > & >( t ) );
-  }
-
-  template< std::size_t i, class... T >
-  const typename tuple_element< i, UniquePointerTuple< T... > >::type &
-  get ( const UniquePointerTuple< T... > &t ) throw ()
-  {
-    return get< i >( static_cast< const tuple< std::unique_ptr< T >... > & >( t ) );
-  }
-
-
-
-  // tuple_size< UniquePointerTuple >
-  // --------------------------------
-
-  template< class... T >
-  struct tuple_size< UniquePointerTuple< T... > >
-  {
-    enum { value = sizeof...( T ) };
   };
 
 
