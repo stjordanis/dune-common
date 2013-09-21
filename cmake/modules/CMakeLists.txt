@@ -22,6 +22,7 @@ set(modules
   FindMProtect.cmake
   FindParMETIS.cmake
   FindSharedPtr.cmake
+  Headercheck.cmake
   LanguageSupport.cmake
   UseInkscape.cmake
   UseLATEX.cmake)
