@@ -15,7 +15,7 @@
 #include <dune/common/precision.hh>
 #include <dune/common/static_assert.hh>
 #include <dune/common/classname.hh>
-
+#include <dune/common/sfinae.hh>
 
 namespace Dune
 {
@@ -71,6 +71,23 @@ namespace Dune
 #endif
 
 #ifndef DOXYGEN
+  template<typename M, typename T>
+  struct DenseMatrixAssignable : public SFINAEBase
+  {
+    template<typename C>
+    static C& get_ref();
+
+    template<typename C>
+    static yes test(decltype(istl_assign_to_fmatrix(get_ref<M>(),get_ref<C>()))*);
+    template<typename C>
+    static no  test(...);
+
+    enum {
+      /** @brief True if T can be assigned to DenseMatrix<M>. */
+      value = sizeof(test<const T>(0)) == sizeof(yes)
+    };
+  };
+
   template<bool b>
   struct DenseMatrixAssigner
   {
