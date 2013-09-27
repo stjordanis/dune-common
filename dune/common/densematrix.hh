@@ -92,11 +92,27 @@ namespace Dune
   struct DenseMatrixAssigner
   {
     template<typename M, typename T>
-    static void assign(DenseMatrix<M>& fm, const T& t)
+    static void assign(DenseMatrix<M>& m, const T& t)
     {
-      istl_assign_to_fmatrix(fm, t);
+      dune_static_assert((DenseMatrixAssignable<M,T>::value),
+        "No conversion to DenseMatrix found. You have to specialize istl_assign_to_fmatrix");
+      delegateAssign(m, t, bool());
     }
 
+  private:
+    typedef int less_than_bool;
+    // no conversion available
+    template <typename M, typename T>
+    static void delegateAssign(DenseMatrix<M>& m, const T& t, less_than_bool)
+    {
+    }
+    // assign from an other matrix via istl_assign_to_fmatrix
+    template <typename M, typename T>
+    static void delegateAssign(DenseMatrix<M>& m, const T& t,
+      typename enable_if<DenseMatrixAssignable<M,T>::value,bool>::type)
+    {
+      istl_assign_to_fmatrix(m, t);
+    }
   };
 
   template<>
