@@ -79,6 +79,7 @@ commoninclude_HEADERS = 			\
 	propertymap.hh				\
 	reservedvector.hh			\
 	shared_ptr.hh				\
+	shared_from_this.hh			\
 	singleton.hh				\
 	sllist.hh				\
 	static_assert.hh			\

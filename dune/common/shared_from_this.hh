@@ -1,12 +1,17 @@
 // -*- tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 2 -*-
 // vi: set et ts=4 sw=2 sts=2:
-#ifndef DUNE_FUNCTIONS_COMMON_SHARED_FROM_THIS_HH
-#define DUNE_FUNCTIONS_COMMON_SHARED_FROM_THIS_HH
+#ifndef DUNE_COMMON_SHARED_FROM_THIS_HH
+#define DUNE_COMMON_SHARED_FROM_THIS_HH
 
 #include <memory>
 #include <dune/common/shared_ptr.hh>
 
 namespace Dune {
+
+  /** @addtogroup Common
+   *
+   * @{
+   */
 
   /* \brief Mixin class similar to std::enable_shared_from_this, but compatible with stack-allocated objects.
    *
@@ -78,6 +83,7 @@ namespace Dune {
     mutable shared_ptr<T> _local_ptr;
   };
 
+  /** @} */
 } // end of namespace Dune
 
-#endif // DUNE_FUNCTIONS_COMMON_SHARED_FROM_THIS_HH
+#endif // DUNE_COMMON_SHARED_FROM_THIS_HH
