@@ -61,17 +61,14 @@ namespace Dune
      representing a field and a compile-time given number of rows and columns.
    */
 
+#ifdef DOXYGEN
   /**
      \brief you have to specialize this function for any type T that should be assignable to a DenseMatrix
      \tparam M Type of the matrix implementation class implementing the dense matrix
    */
   template<typename M, typename T>
-  void istl_assign_to_fmatrix(DenseMatrix<M>& f, const T& t)
-  {
-    DUNE_THROW(NotImplemented, "You need to specialise the method istl_assign_to_fmatrix(DenseMatrix<M>& f, const T& t) "
-               << "(with M being " << className<M>() << ") "
-               << "for T == " << className<T>() << "!");
-  }
+  void istl_assign_to_fmatrix(DenseMatrix<M>& f, const T& t);
+#endif
 
   namespace
   {
