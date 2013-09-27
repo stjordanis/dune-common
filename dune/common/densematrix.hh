@@ -101,6 +101,91 @@ namespace Dune
   /** @brief Error thrown if operations of a FieldMatrix fail. */
   class FMatrixError : public Exception {};
 
+#ifdef DOYXGEN
+  class ConstDenseMatrix
+  {
+    typedef DenseMatVecTraits<MAT> Traits;
+
+  public:
+    //===== type definitions and constants
+
+    //! export the type representing the field
+    typedef typename Traits::value_type field_type;
+
+    //! The type used for the index access and size operation
+    typedef typename Traits::size_type size_type;
+
+    //===== linear maps
+
+    //! y = A x
+    template<class X, class Y>
+    void mv (const X& x, Y& y) const;
+
+    //! y = A^T x
+    template< class X, class Y >
+    void mtv ( const X &x, Y &y ) const;
+
+    //! y += A x
+    template<class X, class Y>
+    void umv (const X& x, Y& y) const;
+
+    //! y += A^T x
+    template<class X, class Y>
+    void umtv (const X& x, Y& y) const;
+
+    //! y += A^H x
+    template<class X, class Y>
+    void umhv (const X& x, Y& y) const;
+
+    //! y -= A x
+    template<class X, class Y>
+    void mmv (const X& x, Y& y) const;
+
+    //! y -= A^T x
+    template<class X, class Y>
+    void mmtv (const X& x, Y& y) const;
+
+    //! y -= A^H x
+    template<class X, class Y>
+    void mmhv (const X& x, Y& y) const;
+
+    //! y += alpha A x
+    template<class X, class Y>
+    void usmv (const field_type& alpha, const X& x, Y& y) const;
+
+    //! y += alpha A^T x
+    template<class X, class Y>
+    void usmtv (const field_type& alpha, const X& x, Y& y) const;
+
+    //! y += alpha A^H x
+    template<class X, class Y>
+    void usmhv (const field_type& alpha, const X& x, Y& y) const;
+
+    //===== norms
+
+    //! frobenius norm: sqrt(sum over squared values of entries)
+    typename FieldTraits<value_type>::real_type frobenius_norm () const;
+
+    //! square of frobenius norm, need for block recursion
+    typename FieldTraits<value_type>::real_type frobenius_norm2 () const;
+
+    //! infinity norm (row sum norm, how to generalize for blocks?)
+    typename FieldTraits<value_type>::real_type infinity_norm () const;
+
+    //! simplified infinity norm (uses Manhattan norm for complex values)
+    typename FieldTraits<value_type>::real_type infinity_norm_real () const;
+
+    // Wishlist (Martin)
+    // typename FieldTraits<value_type>::real_type sqrt_det_ATA () const;
+
+    //===== allow cast to FieldMatrix
+
+    //! cast to FieldMatrix
+    operator FieldMatrix<K,N,M> () const;
+
+  };
+#endif
+
   /**
       @brief A dense n x m matrix.
 
