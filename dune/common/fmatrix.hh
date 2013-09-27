@@ -96,10 +96,11 @@ namespace Dune
     }
 
     template<typename T>
-    explicit FieldMatrix (const T& t)
+    FieldMatrix (const T& t, typename enable_if<DenseMatrixAssignable<FieldMatrix,T>::value,void*>::type = 0)
     {
-      DenseMatrixAssigner<Conversion<T,K>::exists>::assign(*this, t);
+      DenseMatrixAssigner<false>::assign(*this, t);
     }
+
 
     //===== assignment
     using Base::operator=;
