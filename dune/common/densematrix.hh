@@ -70,30 +70,28 @@ namespace Dune
   void istl_assign_to_fmatrix(DenseMatrix<M>& f, const T& t);
 #endif
 
-  namespace
+#ifndef DOXYGEN
+  template<bool b>
+  struct DenseMatrixAssigner
   {
-    template<bool b>
-    struct DenseMatrixAssigner
+    template<typename M, typename T>
+    static void assign(DenseMatrix<M>& fm, const T& t)
     {
-      template<typename M, typename T>
-      static void assign(DenseMatrix<M>& fm, const T& t)
-      {
-        istl_assign_to_fmatrix(fm, t);
-      }
+      istl_assign_to_fmatrix(fm, t);
+    }
 
-    };
+  };
 
-
-    template<>
-    struct DenseMatrixAssigner<true>
+  template<>
+  struct DenseMatrixAssigner<true>
+  {
+    template<typename M, typename T>
+    static void assign(DenseMatrix<M>& fm, const T& t)
     {
-      template<typename M, typename T>
-      static void assign(DenseMatrix<M>& fm, const T& t)
-      {
-        fm = static_cast<const typename DenseMatVecTraits<M>::value_type>(t);
-      }
-    };
-  }
+      fm = static_cast<const typename DenseMatVecTraits<M>::value_type>(t);
+    }
+  };
+#endif
 
   /** @brief Error thrown if operations of a FieldMatrix fail. */
   class FMatrixError : public Exception {};
