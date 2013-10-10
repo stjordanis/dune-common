@@ -1,4 +1,5 @@
 add_subdirectory("parallel")
+add_subdirectory("std")
 add_subdirectory("tuples")
 add_subdirectory("test" EXCLUDE_FROM_ALL)
 
@@ -87,6 +88,7 @@ install(FILES
         sllist.hh
         static_assert.hh
         stdstreams.hh
+        stringutility.hh
         timer.hh
         tuples.hh
         tupleutility.hh

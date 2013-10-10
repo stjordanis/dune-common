@@ -1,6 +1,6 @@
 # $Id$
 
-SUBDIRS = . test parallel tuples
+SUBDIRS = . test parallel std tuples
 
 # the standard debug streams are put into the libdune
 noinst_LTLIBRARIES = libcommon.la
@@ -83,6 +83,7 @@ commoninclude_HEADERS = 			\
 	sllist.hh				\
 	static_assert.hh			\
 	stdstreams.hh				\
+	stringutility.hh			\
 	timer.hh				\
 	tuples.hh				\
 	tupleutility.hh                         \
