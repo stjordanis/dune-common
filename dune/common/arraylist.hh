@@ -8,7 +8,7 @@
 #include <cassert>
 #include <vector>
 #include "shared_ptr.hh"
-#include "array.hh"
+#include <dune/common/std/array.hh>
 #include "iteratorfacades.hh"
 
 namespace Dune

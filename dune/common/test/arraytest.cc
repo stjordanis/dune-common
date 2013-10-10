@@ -9,9 +9,9 @@
 #include <iostream>
 #include <ostream>
 
-#include <dune/common/array.hh>
 #include <dune/common/classname.hh>
 #include <dune/common/fvector.hh>
+#include <dune/common/std/array.hh>
 
 template<class T, std::size_t n>
 void f(const Dune::array<T, n> &a) {

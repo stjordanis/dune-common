@@ -11,11 +11,11 @@
 #include <cstring>
 #include <utility>
 
+#include <dune/common/std/array.hh>
 #include <dune/common/std/constexpr.hh>
 
 #include "typetraits.hh"
 #include "exceptions.hh"
-#include "array.hh"
 #include "densevector.hh"
 #include "static_assert.hh"
 

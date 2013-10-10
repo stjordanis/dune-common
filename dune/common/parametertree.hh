@@ -20,10 +20,10 @@
 #include <algorithm>
 #include <cctype>
 
-#include <dune/common/array.hh>
 #include <dune/common/exceptions.hh>
 #include <dune/common/fvector.hh>
 #include <dune/common/classname.hh>
+#include <dune/common/std/array.hh>
 
 namespace Dune {
 

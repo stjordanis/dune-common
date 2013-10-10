@@ -20,7 +20,6 @@ libcommon_la_LIBADD = $(LAPACK_LIBS) $(BLAS_LIBS) $(LIBS) $(FLIBS)
 commonincludedir = $(includedir)/dune/common
 commoninclude_HEADERS = 			\
 	alignment.hh				\
-	array.hh				\
 	arraylist.hh				\
 	bartonnackmanifcheck.hh			\
 	bigunsignedint.hh			\

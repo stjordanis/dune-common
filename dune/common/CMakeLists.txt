@@ -24,7 +24,6 @@ dune_add_library("dunecommon"
 #install headers
 install(FILES
         alignment.hh
-        array.hh
         arraylist.hh
         bartonnackmanifcheck.hh
         bigunsignedint.hh
