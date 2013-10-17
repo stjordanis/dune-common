@@ -90,7 +90,8 @@ commoninclude_HEADERS = 			\
 	tupleutility.hh                         \
 	typetraits.hh				\
 	unused.hh				\
-	version.hh
+	version.hh				\
+        visibility.hh
 
 include $(top_srcdir)/am/global-rules
 
