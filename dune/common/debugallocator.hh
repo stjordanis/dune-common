@@ -10,6 +10,8 @@
 #include <cstring>
 #include <cstdlib>
 #include <new>
+#include <limits>
+
 #if HAVE_SYS_MMAN_H and HAVE_MPROTECT
 #include <sys/mman.h>
 #else
@@ -286,6 +288,91 @@ namespace Dune
     {
       p->~T();
     }
+  };
+
+    template <class T>
+  class InitAllocator
+  {
+    public:
+      // type definitions
+      typedef T        value_type;
+      typedef T*       pointer;
+      typedef const T* const_pointer;
+      typedef T&       reference;
+      typedef const T& const_reference;
+      typedef std::size_t    size_type;
+      typedef std::ptrdiff_t difference_type;
+
+      // rebind allocator to type U
+      template <class U>
+      struct rebind
+      {
+        typedef InitAllocator<U> other;
+      };
+
+      // return address of values
+      pointer address (reference value) const
+      {
+        return &value;
+      }
+
+      const_pointer address (const_reference value) const
+      {
+        return &value;
+      }
+
+      /* constructors and destructor
+       * - nothing to do because the allocator has no state
+       */
+      InitAllocator() throw() {}
+
+      InitAllocator(const InitAllocator&) throw() {}
+
+      template <class U>
+      InitAllocator(const InitAllocator<U>&) throw() {}
+
+      ~InitAllocator() throw() {}
+
+      // return maximum number of elements that can be allocated
+      size_type max_size () const throw()
+      {
+        return std::numeric_limits<std::size_t>::max() / sizeof(T);
+      }
+
+      // allocate but don't initialize num elements of type T
+      pointer allocate (size_type num, const void* = 0)
+      {
+        srand(time(NULL));
+        pointer ret = (pointer)(::operator new(num*sizeof(T)));
+        for (size_type i=0; i<num; i++)
+        {
+          char c[sizeof(T)];
+          for (size_type j=0; j<sizeof(T); j++)
+            c[j] = rand()%256;
+          new(ret+i) value_type(*reinterpret_cast<pointer>(c));
+        }
+        return ret;
+      }
+
+      // initialize elements of allocated storage p with value value
+      void construct (pointer p, const T& value)
+      {
+        // initialize memory with placement new
+        new((void*)p)T(value);
+      }
+
+      // destroy elements of initialized storage p
+      void destroy (pointer p)
+      {
+        // destroy objects by calling their destructor
+        p->~T();
+      }
+
+      // deallocate storage p of deleted elements
+      void deallocate (pointer p, size_type num)
+      {
+        ::operator delete((void*)p);
+      }
   };
 }
 
