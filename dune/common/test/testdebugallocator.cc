@@ -87,10 +87,21 @@ void new_delete_tests()
   z4 = 0;
 }
 
+void init_tests()
+{
+  Dune::InitAllocator<int> a;
+  int* x = a.allocate(10);
+  for (int i=0; i<10; i++)
+    std::cout << x[i] << " ";
+  std::cout << std::endl;
+  a.deallocate(x,10);
+}
+
 int main(int argc, char** argv)
 {
   basic_tests();
   allocator_tests();
   new_delete_tests();
+  init_tests();
   return 0;
 }
