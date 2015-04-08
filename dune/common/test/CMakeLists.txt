@@ -67,7 +67,6 @@ target_link_libraries("bigunsignedinttest" "dunecommon")
 
 add_executable("bitsetvectortest" bitsetvectortest.cc)
 add_executable("calloncetest" calloncetest.cc)
-target_link_libraries("calloncetest" "dunecommon")
 add_executable("check_fvector_size" check_fvector_size.cc)
 add_executable("check_fvector_size_fail1" EXCLUDE_FROM_ALL check_fvector_size_fail.cc)
 set_target_properties(check_fvector_size_fail1 PROPERTIES COMPILE_FLAGS "-DDIM=1")
@@ -76,26 +75,20 @@ set_target_properties(check_fvector_size_fail2 PROPERTIES COMPILE_FLAGS "-DDIM=3
 add_executable("conversiontest" conversiontest.cc)
 
 add_executable("dynmatrixtest" dynmatrixtest.cc)
-target_link_libraries("dynmatrixtest" "dunecommon")
 
 add_executable("dynvectortest" dynvectortest.cc)
 
 add_executable("eigenvaluestest" eigenvaluestest.cc)
-target_link_libraries(eigenvaluestest dunecommon)
-target_link_libraries(eigenvaluestest ${LAPACK_LIBRARIES})
 
 add_executable("diagonalmatrixtest" diagonalmatrixtest.cc)
-target_link_libraries("diagonalmatrixtest" "dunecommon")
 
 add_executable("enumsettest" enumsettest.cc)
 
 add_executable("testfloatcmp" testfloatcmp.cc)
-target_link_libraries("testfloatcmp" "dunecommon")
 
 # we provide an empty fortran file to force the linker
 # to link to the fortran libraries (needed for static linking)
 add_executable("fmatrixtest" fmatrixtest.cc dummy.f)
-target_link_libraries("fmatrixtest" "dunecommon")
 add_executable("fvectortest" fvectortest.cc)
 add_executable("gcdlcmtest" gcdlcmtest.cc)
 add_executable("genericiterator_compile_fail" EXCLUDE_FROM_ALL genericiterator_compile_fail.cc)
@@ -103,38 +96,24 @@ add_executable("integersequence" integersequence.cc)
 add_executable("iteratorfacadetest2" iteratorfacadetest2.cc)
 add_executable("iteratorfacadetest" iteratorfacadetest.cc)
 add_executable("lrutest" lrutest.cc)
-target_link_libraries("lrutest" "dunecommon")
 add_executable("mpiguardtest" mpiguardtest.cc)
-target_link_libraries("mpiguardtest" "dunecommon")
-add_DUNE_MPI_flags(mpiguardtest)
 
 add_executable("mpicollectivecommunication" mpicollectivecommunication.cc)
-target_link_libraries(mpicollectivecommunication "dunecommon")
-add_DUNE_MPI_flags(mpicollectivecommunication)
 
 add_executable("mpihelpertest" mpihelpertest.cc)
-target_link_libraries(mpihelpertest "dunecommon")
-add_DUNE_MPI_flags(mpihelpertest)
 
 add_executable("mpihelpertest2" mpihelpertest.cc)
-target_link_libraries(mpihelpertest2 "dunecommon")
-add_DUNE_MPI_flags(mpihelpertest2)
 set_target_properties(mpihelpertest2 PROPERTIES COMPILE_FLAGS "-DMPIHELPER_PREINITIALIZE")
 
 add_executable("nullptr_test" nullptr-test.cc nullptr-test2.cc)
-target_link_libraries(nullptr_test "dunecommon")
 add_executable("nullptr_test_fail" EXCLUDE_FROM_ALL nullptr-test.cc)
-target_link_libraries(nullptr_test_fail "dunecommon")
 set_target_properties(nullptr_test_fail PROPERTIES COMPILE_FLAGS "-DFAIL")
 
 add_executable("parametertreelocaletest" parametertreelocaletest.cc)
-target_link_libraries("parametertreelocaletest" "dunecommon")
 
 add_executable("parametertreetest" parametertreetest.cc)
-target_link_libraries("parametertreetest" "dunecommon")
 
 add_executable("pathtest" pathtest.cc)
-target_link_libraries("pathtest" "dunecommon")
 
 add_executable("poolallocatortest" poolallocatortest.cc)
 add_executable("shared_ptrtest_config" shared_ptrtest.cc)
@@ -142,24 +121,17 @@ add_executable("singletontest" singletontest.cc)
 add_executable("sllisttest" EXCLUDE_FROM_ALL sllisttest.cc)
 
 add_executable("streamtest" streamtest.cc)
-target_link_libraries("streamtest" "dunecommon")
 
 add_executable("testdebugallocator" testdebugallocator.cc)
-target_link_libraries(testdebugallocator dunecommon)
 add_executable("testdebugallocator_fail1" testdebugallocator.cc)
-target_link_libraries(testdebugallocator_fail1 dunecommon)
 set_target_properties(testdebugallocator_fail1 PROPERTIES COMPILE_DEFINITIONS "FAILURE1;EXPECTED_SIGNAL=SIGSEGV")
 add_executable("testdebugallocator_fail2" testdebugallocator.cc)
-target_link_libraries(testdebugallocator_fail2 dunecommon)
 set_target_properties(testdebugallocator_fail2 PROPERTIES COMPILE_DEFINITIONS "FAILURE2;EXPECTED_SIGNAL=SIGABRT")
 add_executable("testdebugallocator_fail3" testdebugallocator.cc)
-target_link_libraries(testdebugallocator_fail3 dunecommon)
 set_target_properties(testdebugallocator_fail3 PROPERTIES COMPILE_DEFINITIONS "FAILURE3;EXPECTED_SIGNAL=SIGABRT")
 add_executable("testdebugallocator_fail4" testdebugallocator.cc)
-target_link_libraries(testdebugallocator_fail4 dunecommon)
 set_target_properties(testdebugallocator_fail4 PROPERTIES COMPILE_DEFINITIONS "FAILURE4;DEBUG_ALLOCATOR_KEEP=1;EXPECTED_SIGNAL=SIGSEGV")
 add_executable("testdebugallocator_fail5" testdebugallocator.cc)
-target_link_libraries(testdebugallocator_fail5 dunecommon)
 set_target_properties(testdebugallocator_fail5 PROPERTIES COMPILE_DEFINITIONS "FAILURE5;EXPECTED_SIGNAL=SIGSEGV")
 
 add_executable("tuplestest_config" tuplestest.cc)

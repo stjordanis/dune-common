@@ -2,14 +2,9 @@ add_subdirectory("parallel")
 add_subdirectory("std")
 add_subdirectory("test" EXCLUDE_FROM_ALL)
 
-#build the library dunecommon
-if(LAPACK_FOUND)
-  set(_additional_libs ${LAPACK_LIBRARIES})
-elseif(BLAS_FOUND)
-  set(_additional_libs ${BLAS_LIBRARIES})
-endif(LAPACK_FOUND)
-
-dune_add_library("dunecommon"
+dune_library_add_sources(
+  "dunecommon"
+  SOURCES
   debugallocator.cc
   dynmatrixev.cc
   exceptions.cc
@@ -20,7 +15,7 @@ dune_add_library("dunecommon"
   path.cc
   stdstreams.cc
   stdthread.cc
-  ADD_LIBS "${_additional_libs}")
+  )
 
 #install headers
 install(FILES

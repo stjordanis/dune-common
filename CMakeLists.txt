@@ -16,6 +16,10 @@ include(DuneMacros)
 # start a dune project with information from dune.module
 dune_project()
 
+dune_enable_all_packages(
+  MODULE_LIBRARIES dunecommon
+  )
+
 # add subdirectories to execute CMakeLists.txt there
 add_subdirectory("lib")
 add_subdirectory("share")
