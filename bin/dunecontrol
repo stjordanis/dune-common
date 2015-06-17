@@ -181,6 +181,14 @@ load_opts() {
           BUILDDIR="$OPTS_FILE_BUILDDIR"
         fi
       fi
+      if test -z "$KEEP_CMAKE_CACHE"; then
+        # no KEEP_CMAKE_CACHE set yet, use options from opts file if set
+        # Note: if --keep-cache is used KEEP_CMAKE_CACHE will be set already
+        OPTS_FILE_KEEP_CMAKE_CACHE="$(eval KEEP_CMAKE_CACHE=""; . $DUNE_OPTS_FILE; eval echo \$KEEP_CMAKE_CACHE)"
+        if test -n "$OPTS_FILE_KEEP_CMAKE_CACHE"; then
+			KEEP_CMAKE_CACHE="$OPTS_FILE_KEEP_CMAKE_CACHE"
+        fi
+      fi
       if test -z "$USE_CMAKE"; then
         # no USE_CMAKE set yet, use USE_CMAKE from opts file if set
         # Note: if --use-cmake is used USE_CMAKE will be set already
@@ -720,7 +728,9 @@ run_default_configure () {
           echo "Error: your build directory $ABS_BUILDDIR contains libtool built libraries, please cleanup" && \
           exit 1
       # cleanup cmake generated files
-      rm -rf CMake* cmake*
+      if test "x$KEEP_CMAKE_CACHE" != "xyes"; then
+          rm -rf CMake* cmake*
+	  fi
       # do the actual check
       echo "$PREPARAMS $CMAKE -DCMAKE_MODULE_PATH=\"$CMAKE_MODULE_PATH\" $CMAKE_PARAMS $CMAKE_FLAGS \"$SRCDIR\""
       eval $PREPARAMS $CMAKE "-DCMAKE_MODULE_PATH=\"$CMAKE_MODULE_PATH\" $CMAKE_PARAMS $CMAKE_FLAGS \"$SRCDIR\"" || exit 1
@@ -814,6 +824,10 @@ usage () {
     echo "      --debug         enable debug output of this script"
     echo "      --use-cmake     use CMake instead of autotools for building"
     echo "      --no-cmake      use autotools instead of CMake for building"
+    echo "      --keep-cache    keep the CMake cache when calling configure"
+    echo "                      (by default the cache is clear to avoid problems"
+    echo "                      caused by aggressive CMake caching)"
+    echo "      --clear-cache   clear the CMake cache when calling configure (default)."
     echo "      --module=mod    apply the actions on module mod"
     echo "                      and all modules it depends on"
     echo "      --only=mod      only apply the actions on module mod"
@@ -1047,6 +1061,12 @@ while test $# -gt 0; do
     ;;
     --no-cmake)
       export DUNE_USE_CMAKE=no
+    ;;
+    --keep-cache)
+      export KEEP_CMAKE_CACHE=yes
+    ;;
+    --clear-cache)
+      export KEEP_CMAKE_CACHE=no
     ;;
     --debug) true ;; # ignore this option, it is handled right at the beginning
     --*)
