@@ -70,6 +70,7 @@ _dunecontrol_complete ()
   # the usual dunecontrol options
   COMPREPLY=( $(compgen -W "
      -h --help --use-cmake --current --current-dep --resume --skipfirst
+     --keep-cache --clear-cache
      --module= --only=
      --opts=
      --builddir=
