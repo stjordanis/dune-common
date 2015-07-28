@@ -137,4 +137,6 @@
 #include "FC.h"
 #define FC_FUNC FC_GLOBAL_
 
+@DUNE_COMMON_INIT_CONFIG_H@
+
 /* end dune-common */

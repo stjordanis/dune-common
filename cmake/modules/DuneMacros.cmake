@@ -867,6 +867,39 @@ endif()
   #install pkg-config files
   create_and_install_pkconfig(${DUNE_INSTALL_LIBDIR})
 
+  # generate the part of config.h that injects the init mechanism code
+  set(DUNE_COMMON_INIT_CONFIG_H "/* Include those headers needed in the setup mechanism")
+  foreach(module ${${CMAKE_PROJECT_NAME}_DEPENDS} ${${CMAKE_PROJECT_NAME}_SUGGESTS} ${CMAKE_PROJECT_NAME})
+    foreach(include ${${module}_INCLUDE})
+      set(DUNE_COMMON_INIT_CONFIG_H
+        "${DUNE_COMMON_INIT_CONFIG_H}
+#include ${include}
+      ")
+    endforeach()
+  endforeach()
+
+  set(DUNE_COMMON_INIT_CONFIG_H
+        "${DUNE_COMMON_INIT_CONFIG_H}
+/* Write the init function for this executable */
+void dune_init(int argc, char** argv)
+{
+      ")
+
+  foreach(module ${${CMAKE_PROJECT_NAME}_DEPENDS} ${${CMAKE_PROJECT_NAME}_SUGGESTS} ${CMAKE_PROJECT_NAME})
+    foreach(function ${${module}_FUNCTION})
+      set(DUNE_COMMON_INIT_CONFIG_H
+        "${DUNE_COMMON_INIT_CONFIG_H}
+  ${function}(argc, argv);
+      ")
+    endforeach()
+  endforeach()
+
+
+  set(DUNE_COMMON_INIT_CONFIG_H
+        "${DUNE_COMMON_INIT_CONFIG_H}
+}
+      ")
+
   if("${ARGC}" EQUAL "1")
     message(STATUS "Adding custom target for config.h generation")
     dune_regenerate_config_cmake()
