@@ -610,15 +610,16 @@ namespace Dune {
       using std::max;
       typedef typename FieldTraits<value_type>::real_type real_type;
 
-      if (size() == 0)
-        return 0.0;
+      real_type max_val = 0.0;
+      real_type collect_nan = 1.0;
+      for (const auto &v : *this)
+      {
+        max_val = max(real_type(abs(v)), max_val);
+        collect_nan += abs(v);
+      }
 
-      ConstIterator it = begin();
-      real_type max_val = abs(*it);
-      for (it = it + 1; it != end(); ++it)
-        max_val = max(max_val, real_type(abs(*it)));
-
-      return max_val;
+      collect_nan /= collect_nan;
+      return max_value*collect_nan;
     }
 
     //! simplified infinity norm (uses Manhattan norm for complex values)

@@ -569,15 +569,21 @@ namespace Dune
     //! infinity norm (row sum norm, how to generalize for blocks?)
     typename FieldTraits<value_type>::real_type infinity_norm () const
     {
-      if (size() == 0)
-        return 0.0;
+      using std::abs;
+      using std::max;
+      typedef typename FieldTraits<value_type>::real_type real_type;
 
-      ConstIterator it = begin();
-      typename remove_const< typename FieldTraits<value_type>::real_type >::type max = (*it).one_norm();
-      for (it = it + 1; it != end(); ++it)
-        max = std::max(max, (*it).one_norm());
+      real_type max_val = 0.0;
+      real_type collect_nan = 1.0;
+      for (const auto & row : *this)
+      {
+        auto v = row.one_norm();
+        max_value = max(v, max_value);
+        collect_nan += v;
+      }
 
-      return max;
+      collect_nan /= collect_nan;
+      return max_value*collect_nan;
     }
 
     //! simplified infinity norm (uses Manhattan norm for complex values)
