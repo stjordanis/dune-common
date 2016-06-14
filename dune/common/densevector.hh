@@ -645,7 +645,12 @@ namespace Dune {
 
       real_type norm = 0;
       real_type isNaN = 1;
-      for (auto const &x : *this) {
+      // Do not turn into a range-based (or iterator-based) for.  That seems
+      // to crash icpc (up to 2017 beta update 2) in certain situations.  See
+      // <https://software.intel.com/en-us/forums/intel-c-compiler/topic/639836>
+      // The bug was triggered by fmatrixtest.cc.
+      for (size_type i = 0; i < size(); ++i) {
+        auto const &x = (*this)[i];
         real_type const a = abs(x);
         norm = max(a, norm);
         isNaN += a;
