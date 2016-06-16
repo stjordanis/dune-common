@@ -61,6 +61,9 @@ namespace Dune {
    * The result of the check is encoded in the
    * base class of type std::integral_constant<bool, result>.
    */
+  // Don't use `IsTypeList<T>()` instead of `IsTypeList<T>::value` here --
+  // icpc 2016 update 1 does not accept the former as a constant expression in
+  // this context.  Fixed in icpc 2017 beta update 2 (at least).
   template<class T>
   struct IsEmptyTypeList : std::integral_constant<bool, IsTypeList<T>::value and std::is_same<T, TypeList<> >::value > {};
 
