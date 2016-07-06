@@ -257,8 +257,15 @@ macro(find_dune_package module)
         "${${module}_PREFIX}/lib64/dunecontrol/${module}/dune.module")
     endif(NOT ${module}_dune_module)
     if(module_version_wrong)
-      message(FATAL_ERROR "Could not find requested version of module ${module}. "
-        "Requested version was ${DUNE_FIND_VERSION}, found version is ${DUNE_FIND_MOD_VERSION_STRING}")
+      if(required)
+        message(FATAL_ERROR "Could not find requested version of module ${module}. "
+          "Requested version was ${DUNE_FIND_VERSION}, found version is ${DUNE_FIND_MOD_VERSION_STRING}")
+      else()
+        set(${module}_FOUND "${module}-version-mismatch-NOTFOUND")
+        message(STATUS "Could not find requested version of suggested module ${module}. "
+          "Requested version was ${DUNE_FIND_VERSION}, found version is ${DUNE_FIND_MOD_VERSION_STRING}. "
+          "Skipping suggested dependency.")
+      endif()
     endif()
   else(${module}_FOUND)
     if(required)
