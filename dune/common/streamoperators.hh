@@ -28,8 +28,8 @@ namespace Dune
     stream<<"[";
     if(sizeof...(Ts)>0)
     {
-      Hybrid::forEach(Std::make_index_sequence<sizeof...(Ts)-1>{},
-        [&](auto i){stream<<std::get<i>(t)<<",";});
+      Hybrid::forEach(Std::make_index_sequence<sizeof...(Ts)-1>(),
+        [&](auto i){stream<<Hybrid::elementAt(t, i)<<",";});
       stream<<std::get<sizeof...(Ts)-1>(t);
     }
     stream<<"]";
@@ -40,8 +40,8 @@ namespace Dune
   template<typename Stream, typename... Ts>
   inline Stream& operator>>(Stream& stream, std::tuple<Ts...>& t)
   {
-    Hybrid::forEach(Std::make_index_sequence<sizeof...(Ts)>{},
-      [&](auto i){stream>>std::get<i>(t);});
+    Hybrid::forEach(Std::make_index_sequence<sizeof...(Ts)>(),
+      [&](auto i){stream>>Hybrid::elementAt(t, i);});
     return stream;
   }
 
