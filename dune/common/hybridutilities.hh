@@ -26,7 +26,7 @@ namespace Impl {
   }
 
   // Try if we have an instance of std::integer_sequence
-  template<class T, T... t, class Index>
+  template<class T, T... t>
   constexpr auto size(std::integer_sequence<T, t...>, PriorityTag<4>)
   {
     using sizeAsType = std::tuple_size<decltype(std::make_tuple(t...))>;
